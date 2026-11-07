@@ -1,1 +1,244 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description" content="Kerjiva Malaysia - Find the right job for you. Discover job opportunities and connect with companies across Malaysia.">
+
+  <meta name="theme-color" content="#123b6d">
+
+  <title>Kerjiva Malaysia - Find the Right Job for You</title>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="container header-content">
+
+      <a href="index.html" class="logo">
+        <span>Kerjiva</span>
+        <small>Malaysia</small>
+      </a>
+
+      <nav class="main-nav">
+        <a href="#home">Home</a>
+        <a href="#jobs">Find Jobs</a>
+        <a href="#companies">Companies</a>
+        <a href="#about">About Us</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="login.html" class="login-btn">Log In</a>
+        <a href="register.html" class="register-btn">Sign Up</a>
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- HERO SECTION -->
+  <main>
+
+    <section class="hero-section" id="home">
+      <div class="container hero-content">
+
+        <div class="hero-text">
+          <span class="hero-label">YOUR CAREER STARTS HERE</span>
+
+          <h1>Find the Right Job for You.</h1>
+
+          <p>
+            Discover new career opportunities and connect
+            with companies across Malaysia.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#jobs" class="primary-btn">Explore Jobs</a>
+            <a href="register.html" class="secondary-btn">Create an Account</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- JOB SEARCH -->
+    <section class="search-section">
+      <div class="container">
+
+        <div class="search-box">
+
+          <div class="search-field">
+            <label for="keyword">Job Title or Keyword</label>
+            <input
+              type="text"
+              id="keyword"
+              placeholder="e.g. Marketing Executive"
+            >
+          </div>
+
+          <div class="search-field">
+            <label for="location">Location</label>
+            <select id="location">
+              <option value="">All Locations</option>
+              <option>Kuala Lumpur</option>
+              <option>Selangor</option>
+              <option>Johor</option>
+              <option>Penang</option>
+              <option>Perak</option>
+              <option>Melaka</option>
+              <option>Negeri Sembilan</option>
+              <option>Pahang</option>
+              <option>Terengganu</option>
+              <option>Kelantan</option>
+              <option>Kedah</option>
+              <option>Perlis</option>
+              <option>Sabah</option>
+              <option>Sarawak</option>
+              <option>Putrajaya</option>
+              <option>Labuan</option>
+            </select>
+          </div>
+
+          <button type="button" id="searchJobsBtn" class="search-btn">
+            Search Jobs
+          </button>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- LATEST JOBS -->
+    <section class="jobs-section" id="jobs">
+      <div class="container">
+
+        <div class="section-heading">
+          <div>
+            <span class="section-label">CAREER OPPORTUNITIES</span>
+            <h2>Latest Job Opportunities</h2>
+            <p>Explore the latest opportunities from companies in Malaysia.</p>
+          </div>
+
+          <a href="jobs.html" class="view-all-link">View All Jobs →</a>
+        </div>
+
+        <div id="jobsGrid" class="jobs-grid">
+
+          <div class="empty-jobs">
+            <h3>No Jobs Available Yet</h3>
+            <p>New job opportunities will appear here soon.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- JOB SEEKER SECTION -->
+    <section class="career-section" id="jobseekers">
+      <div class="container career-content">
+
+        <div class="career-text">
+          <span class="section-label">FOR JOB SEEKERS</span>
+
+          <h2>Build Your Career with Kerjiva</h2>
+
+          <p>
+            Create your profile, explore job opportunities,
+            and connect with companies that match your career goals.
+          </p>
+
+          <a href="register.html" class="primary-btn">
+            Find Your Next Job
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- COMPANY SECTION -->
+    <section class="company-section" id="companies">
+      <div class="container company-content">
+
+        <div class="company-text">
+          <span class="section-label">FOR COMPANIES</span>
+
+          <h2>Find the Right Talent for Your Business</h2>
+
+          <p>
+            Connect with qualified candidates and discover
+            new talent for your company's future.
+          </p>
+
+          <a href="register.html" class="primary-btn">
+            Register Your Company
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ABOUT SECTION -->
+    <section class="about-section" id="about">
+      <div class="container">
+
+        <span class="section-label">ABOUT KERJIVA</span>
+
+        <h2>Connecting People with Opportunities</h2>
+
+        <p>
+          Kerjiva Malaysia is a career platform designed to
+          connect job seekers with companies and make finding
+          the right career opportunity easier.
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <div class="container footer-content">
+
+      <div class="footer-brand">
+        <h2>Kerjiva Malaysia</h2>
+        <p>Find the Right Job for You.</p>
+      </div>
+
+      <div class="footer-links">
+        <h3>Explore</h3>
+        <a href="#home">Home</a>
+        <a href="#jobs">Find Jobs</a>
+        <a href="#companies">Companies</a>
+        <a href="#about">About Us</a>
+      </div>
+
+      <div class="footer-links">
+        <h3>Information</h3>
+        <a href="contact.html">Contact Us</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms & Conditions</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 Kerjiva Malaysia. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
+

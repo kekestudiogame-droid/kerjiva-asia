@@ -1771,6 +1771,206 @@ select {
 }
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   JOBSEEKER MY PROFILE FORM
+   ===================================================== */
+
+#jobseekerProfile .jobseeker-profile-panel {
+  padding: 30px;
+}
+
+#jobseekerProfile .jobseeker-profile-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--border);
+}
+
+#jobseekerProfile .jobseeker-profile-top h2 {
+  margin-bottom: 5px;
+}
+
+#jobseekerProfile .jobseeker-profile-top p {
+  font-size: 13px;
+}
+
+#jobseekerProfile .jobseeker-profile-form fieldset {
+  min-width: 0;
+  border: none;
+}
+
+#jobseekerProfile .jobseeker-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 22px;
+  row-gap: 4px;
+}
+
+#jobseekerProfile .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+  margin-bottom: 19px;
+}
+
+#jobseekerProfile .form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+#jobseekerProfile .form-group label {
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#jobseekerProfile .form-group input,
+#jobseekerProfile .form-group select,
+#jobseekerProfile .form-group textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 13px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--white);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#jobseekerProfile .form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+#jobseekerProfile .form-group input:focus,
+#jobseekerProfile .form-group select:focus,
+#jobseekerProfile .form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(18, 59, 109, 0.08);
+}
+
+#jobseekerProfile .form-group input:disabled,
+#jobseekerProfile .form-group select:disabled,
+#jobseekerProfile .form-group textarea:disabled {
+  background: #f8fafc;
+  color: #475569;
+  cursor: default;
+  opacity: 1;
+}
+
+#jobseekerProfile #profileEmailInput {
+  background: #f1f5f9;
+  cursor: not-allowed;
+}
+
+#jobseekerProfile .profile-edit-btn,
+#jobseekerProfile #saveJobseekerProfileBtn,
+#jobseekerProfile #cancelJobseekerProfileBtn {
+  min-height: 42px;
+  padding: 10px 19px;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#jobseekerProfile .profile-edit-btn,
+#jobseekerProfile #saveJobseekerProfileBtn {
+  background: var(--primary);
+  color: var(--white);
+}
+
+#jobseekerProfile .profile-edit-btn:hover,
+#jobseekerProfile #saveJobseekerProfileBtn:hover {
+  background: var(--primary-dark);
+}
+
+#jobseekerProfile #cancelJobseekerProfileBtn {
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--text);
+}
+
+#jobseekerProfile #cancelJobseekerProfileBtn:hover {
+  background: #f1f5f9;
+}
+
+#jobseekerProfile .jobseeker-profile-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+#jobseekerProfile #jobseekerProfileStatus {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+#jobseekerProfile .jobseeker-profile-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+#jobseekerProfile button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 650px) {
+
+  #jobseekerProfile .jobseeker-profile-panel {
+    padding: 19px;
+  }
+
+  #jobseekerProfile .jobseeker-profile-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #jobseekerProfile .profile-edit-btn {
+    width: 100%;
+  }
+
+  #jobseekerProfile .jobseeker-profile-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  #jobseekerProfile .form-group.full-width {
+    grid-column: auto;
+  }
+
+  #jobseekerProfile .jobseeker-profile-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  #jobseekerProfile .jobseeker-profile-buttons {
+    flex-direction: column;
+  }
+
+  #jobseekerProfile .jobseeker-profile-buttons button {
+    width: 100%;
+  }
+
+}
+
+
+
 
 
 

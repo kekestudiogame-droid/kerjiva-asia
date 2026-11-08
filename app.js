@@ -316,7 +316,118 @@ document.addEventListener("DOMContentLoaded", function () {
 
   });
 
+    });
+
+   
+/* =====================================================
+   KERJIVA MALAYSIA
+   USER LOGIN
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const loginForm = document.getElementById("loginForm");
+
+  if (!loginForm) return;
+
+  const loginEmail = document.getElementById("loginEmail");
+  const loginPassword = document.getElementById("loginPassword");
+  const loginSubmitBtn = document.getElementById("loginSubmitBtn");
+  const loginStatus = document.getElementById("loginStatus");
+
+  if (!loginEmail || !loginPassword || !loginSubmitBtn || !loginStatus) {
+    return;
+  }
+
+  loginForm.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+    if (!loginForm.checkValidity()) {
+      loginForm.reportValidity();
+      return;
+    }
+
+    const email = loginEmail.value.trim();
+    const password = loginPassword.value;
+
+    const originalButtonText = loginSubmitBtn.textContent;
+
+    loginSubmitBtn.disabled = true;
+    loginSubmitBtn.textContent = "Signing In...";
+    loginStatus.textContent = "Please wait...";
+
+    try {
+
+      const { data, error } = await supabaseAuth.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      if (error) throw error;
+
+      const user = data.user;
+
+      if (!user) {
+        throw new Error("Unable to identify your account.");
+      }
+
+      const { data: jobseeker, error: jobseekerError } =
+        await supabaseAuth
+          .from("jobseeker_profiles")
+          .select("id")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+      if (jobseekerError) throw jobseekerError;
+
+      const { data: company, error: companyError } =
+        await supabaseAuth
+          .from("companies")
+          .select("id")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+      if (companyError) throw companyError;
+
+      if (jobseeker && !company) {
+
+        window.location.href = "index.html?dashboard=jobseeker";
+
+      } else if (company && !jobseeker) {
+
+        window.location.href = "index.html?dashboard=company";
+
+      } else {
+
+        await supabaseAuth.auth.signOut();
+
+        throw new Error(
+          "Your account profile could not be identified. Please contact support."
+        );
+
+      }
+
+    } catch (error) {
+
+      console.error("Kerjiva Malaysia Login Error:", error);
+
+      loginStatus.textContent =
+        error.message || "Login failed. Please try again.";
+
+    } finally {
+
+      loginSubmitBtn.disabled = false;
+      loginSubmitBtn.textContent = originalButtonText;
+
+    }
+
+  });
+
 });
+
+
+
 
 
 

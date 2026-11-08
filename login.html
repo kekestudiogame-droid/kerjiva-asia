@@ -1,1 +1,118 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description" content="Log in to your Kerjiva Malaysia account and manage your career or company.">
+
+  <meta name="theme-color" content="#123b6d">
+
+  <title>Log In - Kerjiva Malaysia</title>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="auth-page">
+
+  <main class="auth-container">
+
+    <div class="auth-card">
+
+      <!-- BRAND -->
+      <div class="auth-brand">
+        <a href="index.html" class="logo">
+          Kerjiva
+          <small>Malaysia</small>
+        </a>
+
+        <p>Your Career Starts Here.</p>
+      </div>
+
+
+      <!-- LOGIN HEADING -->
+      <div class="auth-heading">
+        <h1>Welcome Back</h1>
+        <p>Log in to continue to your Kerjiva account.</p>
+      </div>
+
+
+      <!-- LOGIN FORM -->
+      <form id="loginForm">
+
+        <div class="auth-form-group">
+          <label for="loginEmail">Email Address</label>
+
+          <input
+            type="email"
+            id="loginEmail"
+            name="email"
+            placeholder="Enter your email address"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+
+        <div class="auth-form-group">
+          <label for="loginPassword">Password</label>
+
+          <input
+            type="password"
+            id="loginPassword"
+            name="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+
+        <div class="auth-forgot-password">
+          <a href="forgot-password.html">
+            Forgot Password?
+          </a>
+        </div>
+
+
+        <button
+          type="submit"
+          id="loginSubmitBtn"
+          class="auth-submit-btn"
+        >
+          Log In
+        </button>
+
+        <p
+          id="loginStatus"
+          class="auth-status"
+          aria-live="polite"
+        ></p>
+
+      </form>
+
+
+      <!-- REGISTER LINK -->
+      <div class="auth-footer">
+        <p>
+          Don't have an account?
+          <a href="register.html">Create an Account</a>
+        </p>
+      </div>
+
+
+      <!-- BACK TO HOME -->
+      <div class="auth-back-home">
+        <a href="index.html">
+          ← Back to Home
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+</body>
+</html>
+

@@ -74,3 +74,59 @@ document.addEventListener("DOMContentLoaded", function () {
   console.warn("Invalid dashboard preview parameter.");
 });
 
+
+/* =====================================================
+   KERJIVA MALAYSIA
+   REGISTER ROLE SWITCHING
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const registerRole = document.getElementById("registerRole");
+  const jobseekerFields = document.getElementById("jobseekerRegisterFields");
+  const companyFields = document.getElementById("companyRegisterFields");
+
+  if (!registerRole || !jobseekerFields || !companyFields) {
+    return;
+  }
+
+  function toggleRegisterFields() {
+
+    const selectedRole = registerRole.value;
+
+    if (selectedRole === "company") {
+
+      jobseekerFields.hidden = true;
+      companyFields.hidden = false;
+
+      jobseekerFields.querySelectorAll("input, textarea, select").forEach(input => {
+        input.disabled = true;
+      });
+
+      companyFields.querySelectorAll("input, textarea, select").forEach(input => {
+        input.disabled = false;
+      });
+
+    } else {
+
+      jobseekerFields.hidden = false;
+      companyFields.hidden = true;
+
+      jobseekerFields.querySelectorAll("input, textarea, select").forEach(input => {
+        input.disabled = false;
+      });
+
+      companyFields.querySelectorAll("input, textarea, select").forEach(input => {
+        input.disabled = true;
+      });
+
+    }
+  }
+
+  registerRole.addEventListener("change", toggleRegisterFields);
+
+  toggleRegisterFields();
+
+});
+
+

@@ -1742,6 +1742,35 @@ select {
 
 }
 
+/* REGISTER TEXTAREA */
+
+#registerForm .auth-form-group textarea {
+  width: 100%;
+  min-height: 90px;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #1e293b;
+  font: inherit;
+  font-size: 14px;
+  resize: vertical;
+}
+
+#registerForm .auth-form-group textarea:focus {
+  outline: none;
+  border-color: #123b6d;
+  box-shadow: 0 0 0 3px rgba(18, 59, 109, 0.1);
+}
+
+#registerForm .auth-form-group textarea:disabled {
+  background: #f1f5f9;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+
 
 
 

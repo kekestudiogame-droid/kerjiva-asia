@@ -1969,6 +1969,45 @@ select {
 
 }
 
+/* PASSWORD SHOW / HIDE */
+
+.password-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 48px;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.toggle-password-btn:hover {
+  color: #123b6d;
+}
+
+.toggle-password-btn .eye-icon {
+  width: 21px;
+  height: 21px;
+}
+
+
 
 
 

@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description" content="Create your Kerjiva Malaysia account as a jobseeker or company.">
+
+  <meta name="theme-color" content="#123b6d">
+
+  <title>Create Account - Kerjiva Malaysia</title>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="auth-page">
+
+  <main class="auth-container">
+
+    <div class="auth-card">
+
+      <!-- BRAND -->
+      <div class="auth-brand">
+        <a href="index.html" class="logo">
+          Kerjiva
+          <small>Malaysia</small>
+        </a>
+
+        <p>Your Career Starts Here.</p>
+      </div>
+
+
+      <!-- REGISTER HEADING -->
+      <div class="auth-heading">
+        <h1>Create Your Account</h1>
+        <p>Register to start your journey with Kerjiva Malaysia.</p>
+      </div>
+
+
+      <!-- ACCOUNT ROLE -->
+      <div class="auth-form-group">
+
+        <label for="registerRole">Account Type</label>
+
+        <select id="registerRole" name="role" required>
+          <option value="jobseeker" selected>Jobseeker</option>
+          <option value="company">Company</option>
+        </select>
+
+      </div>
+
+
+      <!-- REGISTER FORM -->
+      <form id="registerForm">
+
+        <!-- JOBSEEKER INFORMATION -->
+        <div id="jobseekerRegisterFields">
+
+          <h2>Jobseeker Information</h2>
+
+          <div class="auth-form-group">
+            <label for="registerFullName">Full Name</label>
+
+            <input
+              type="text"
+              id="registerFullName"
+              name="full_name"
+              placeholder="Enter your full name"
+              autocomplete="name"
+              required
+            >
+          </div>
+
+          <div class="auth-form-group">
+            <label for="jobseekerRegisterEmail">Email Address</label>
+
+            <input
+              type="email"
+              id="jobseekerRegisterEmail"
+              name="jobseeker_email"
+              placeholder="Enter your email address"
+              autocomplete="email"
+              required
+            >
+          </div>
+
+          <div class="auth-form-group">
+            <label for="jobseekerRegisterPhone">Phone Number</label>
+
+            <input
+              type="tel"
+              id="jobseekerRegisterPhone"
+              name="jobseeker_phone"
+              placeholder="Enter your phone number"
+              autocomplete="tel"
+              required
+            >
+          </div>
+
+        </div>
+
+
+        <!-- COMPANY INFORMATION -->
+        <div id="companyRegisterFields" hidden>
+
+          <h2>Company Information</h2>
+
+          <div class="auth-form-group">
+            <label for="registerCompanyName">Company Name</label>
+
+            <input
+              type="text"
+              id="registerCompanyName"
+              name="company_name"
+              placeholder="Enter your registered company name"
+              required
+              disabled
+            >
+          </div>
+
+          <div class="auth-form-group">
+            <label for="companyRegistrationNumber">
+              SSM Registration Number
+            </label>
+
+            <input
+              type="text"
+              id="companyRegistrationNumber"
+              name="registration_number"
+              placeholder="Enter your SSM registration number"
+              required
+              disabled
+            >
+          </div>
+
+          <div class="auth-form-group">
+            <label for="companyContactPerson">Contact Person Name</label>
+
+            <input
+              type="text"
+              id="companyContactPerson"
+              name="contact_person"
+              placeholder="Enter the contact person's full name"
+              autocomplete="name"
+              required
+              disabled
+            >
+          </div>
+
+          <div class="auth-form-group">
+            <label for="companyRegisterEmail">Company Email Address</label>
+
+            <input
+              type="email"
+              id="companyRegisterEmail"
+              name="company_email"
+              placeholder="Enter your company email address"
+              autocomplete="email"
+              required
+              disabled
+            >
+          </div>
+
+          <div class="auth-form-group">
+            <label for="companyRegisterPhone">Company Phone Number</label>
+
+            <input
+              type="tel"
+              id="companyRegisterPhone"
+              name="company_phone"
+              placeholder="Enter your company phone number"
+              autocomplete="tel"
+              required
+              disabled
+            >
+          </div>
+
+          <div class="auth-form-group">
+            <label for="companyWebsite">
+              Company Website (Optional)
+            </label>
+
+            <input
+              type="url"
+              id="companyWebsite"
+              name="website"
+              placeholder="https://www.example.com"
+              disabled
+            >
+          </div>
+
+        </div>
+
+
+        <!-- ACCOUNT PASSWORD -->
+        <div class="auth-register-password">
+
+          <h2>Account Security</h2>
+
+          <div class="auth-form-group">
+            <label for="registerPassword">Password</label>
+
+            <input
+              type="password"
+              id="registerPassword"
+              name="password"
+              placeholder="Create your password"
+              autocomplete="new-password"
+              minlength="8"
+              required
+            >
+          </div>
+
+          <div class="auth-form-group">
+            <label for="confirmRegisterPassword">
+              Confirm Password
+            </label>
+
+            <input
+              type="password"
+              id="confirmRegisterPassword"
+              name="confirm_password"
+              placeholder="Re-enter your password"
+              autocomplete="new-password"
+              minlength="8"
+              required
+            >
+          </div>
+
+        </div>
+
+
+        <!-- SUBMIT -->
+        <button
+          type="submit"
+          id="registerSubmitBtn"
+          class="auth-submit-btn"
+        >
+          Create Account
+        </button>
+
+        <p
+          id="registerStatus"
+          class="auth-status"
+          aria-live="polite"
+        ></p>
+
+      </form>
+
+
+      <!-- LOGIN LINK -->
+      <div class="auth-footer">
+
+        <p>
+          Already have an account?
+          <a href="login.html">Log In</a>
+        </p>
+
+      </div>
+
+
+      <!-- BACK TO HOME -->
+      <div class="auth-back-home">
+
+        <a href="index.html">
+          ← Back to Home
+        </a>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</body>
+</html>

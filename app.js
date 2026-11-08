@@ -223,33 +223,34 @@ document.addEventListener("DOMContentLoaded", function () {
         .getElementById("companyRegisterEmail")
         .value.trim();
 
-      metadata = {
-        role: "company",
+    
+metadata = {
+  role: "company",
 
-        company_name: document
-          .getElementById("registerCompanyName")
-          .value.trim(),
+  company_name: document
+    .getElementById("registerCompanyName")
+    .value.trim(),
 
-        registration_number: document
-          .getElementById("companyRegistrationNumber")
-          .value.trim(),
+  registration_number: document
+    .getElementById("companyRegistrationNumber")
+    .value.trim(),
 
-        contact_person: document
-          .getElementById("companyContactPerson")
-          .value.trim(),
+  contact_person: document
+    .getElementById("companyContactPerson")
+    .value.trim(),
 
-        company_phone: document
-          .getElementById("companyRegisterPhone")
-          .value.trim(),
+  phone: document
+    .getElementById("companyRegisterPhone")
+    .value.trim(),
 
-        company_address: document
-          .getElementById("companyAddress")
-          .value.trim(),
+  address: document
+    .getElementById("companyAddress")
+    .value.trim(),
 
-        website: document
-          .getElementById("companyWebsite")
-          .value.trim()
-      };
+  website: document
+    .getElementById("companyWebsite")
+    .value.trim()
+};
 
     }
 

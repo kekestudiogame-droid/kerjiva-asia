@@ -239,11 +239,11 @@ metadata = {
     .getElementById("companyContactPerson")
     .value.trim(),
 
-  phone: document
+  company_phone: document
     .getElementById("companyRegisterPhone")
     .value.trim(),
 
-  address: document
+  company_address: document
     .getElementById("companyAddress")
     .value.trim(),
 
@@ -251,6 +251,7 @@ metadata = {
     .getElementById("companyWebsite")
     .value.trim()
 };
+
 
     }
 

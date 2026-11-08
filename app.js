@@ -573,6 +573,343 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   JOBSEEKER MY PROFILE
+   LOAD, EDIT, SAVE & CANCEL
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", async function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  // Jalankan hanya pada dashboard Jobseeker yang sebenarnya.
+  if (params.get("dashboard") !== "jobseeker" || params.has("preview")) {
+    return;
+  }
+
+  const profileForm = document.getElementById("jobseekerProfileForm");
+
+  if (!profileForm) return;
+
+  const profileFields = profileForm.querySelectorAll("fieldset");
+  const editBtn = document.getElementById("editJobseekerProfileBtn");
+  const saveBtn = document.getElementById("saveJobseekerProfileBtn");
+  const cancelBtn = document.getElementById("cancelJobseekerProfileBtn");
+  const statusEl = document.getElementById("jobseekerProfileStatus");
+
+  if (!editBtn || !saveBtn || !cancelBtn || !statusEl) return;
+
+  let originalProfile = null;
+
+  const profileInputs = {
+    full_name: "profileFullNameInput",
+    email: "profileEmailInput",
+    phone: "profilePhoneInput",
+    address: "profileAddressInput",
+    state: "profileStateInput",
+    city: "profileCityInput",
+    headline: "profileHeadlineInput",
+    about_me: "profileAboutInput",
+    education_level: "profileEducationInput",
+    field_of_study: "profileFieldOfStudyInput",
+    institution: "profileInstitutionInput",
+    graduation_year: "profileGraduationYearInput",
+    experience_years: "profileExperienceInput",
+    skills: "profileSkillsInput",
+    employment_type: "profileEmploymentTypeInput",
+    expected_salary_min: "profileSalaryMinInput",
+    expected_salary_max: "profileSalaryMaxInput",
+    linkedin_url: "profileLinkedinInput",
+    portfolio_url: "profilePortfolioInput",
+    salary_currency: "profileSalaryCurrencyInput"
+  };
+
+  function setProfileMode(editing) {
+
+    profileFields.forEach(fieldset => {
+      fieldset.disabled = !editing;
+    });
+
+    editBtn.hidden = editing;
+    saveBtn.hidden = !editing;
+    cancelBtn.hidden = !editing;
+
+  }
+
+  function fillProfile(profile) {
+
+    Object.entries(profileInputs).forEach(([column, elementId]) => {
+
+      const input = document.getElementById(elementId);
+
+      if (!input) return;
+
+      const value = profile[column];
+
+      input.value = value === null || value === undefined
+        ? (column === "salary_currency" ? "MYR" : "")
+        : value;
+
+    });
+
+  }
+
+  function getNumericValue(elementId) {
+
+    const input = document.getElementById(elementId);
+
+    if (!input || input.value.trim() === "") {
+      return null;
+    }
+
+    const value = Number(input.value);
+
+    return Number.isFinite(value) ? value : null;
+
+  }
+
+  // =========================================
+  // LOAD PROFILE FROM SUPABASE
+  // =========================================
+
+  async function loadJobseekerProfile() {
+
+    statusEl.textContent = "Loading profile...";
+
+    try {
+
+      const { data: sessionData, error: sessionError } =
+        await supabaseAuth.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      const session = sessionData.session;
+
+      if (!session || !session.user) {
+        throw new Error("Please sign in again to view your profile.");
+      }
+
+      const { data, error } = await supabaseAuth
+        .from("jobseeker_profiles")
+        .select(`
+          full_name,
+          email,
+          phone,
+          address,
+          state,
+          city,
+          headline,
+          about_me,
+          education_level,
+          field_of_study,
+          institution,
+          graduation_year,
+          experience_years,
+          skills,
+          employment_type,
+          expected_salary_min,
+          expected_salary_max,
+          salary_currency,
+          linkedin_url,
+          portfolio_url
+        `)
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (!data) {
+        throw new Error("Jobseeker profile was not found.");
+      }
+
+      originalProfile = { ...data };
+
+      fillProfile(originalProfile);
+
+      setProfileMode(false);
+
+      statusEl.textContent = "";
+
+    } catch (error) {
+
+      console.error("Load Jobseeker Profile Error:", error);
+
+      statusEl.textContent =
+        error.message || "Unable to load your profile.";
+
+    }
+
+  }
+
+  // =========================================
+  // EDIT PROFILE
+  // =========================================
+
+  editBtn.addEventListener("click", function () {
+
+    if (!originalProfile) return;
+
+    setProfileMode(true);
+
+    statusEl.textContent = "";
+
+  });
+
+  // =========================================
+  // CANCEL PROFILE EDITING
+  // =========================================
+
+  cancelBtn.addEventListener("click", function () {
+
+    if (!originalProfile) return;
+
+    fillProfile(originalProfile);
+
+    setProfileMode(false);
+
+    statusEl.textContent = "Changes have been cancelled.";
+
+  });
+
+  // =========================================
+  // SAVE PROFILE TO SUPABASE
+  // =========================================
+
+  profileForm.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+    if (!profileForm.checkValidity()) {
+      profileForm.reportValidity();
+      return;
+    }
+
+    const minimumSalary = getNumericValue("profileSalaryMinInput");
+    const maximumSalary = getNumericValue("profileSalaryMaxInput");
+
+    if (
+      minimumSalary !== null &&
+      maximumSalary !== null &&
+      minimumSalary > maximumSalary
+    ) {
+
+      statusEl.textContent =
+        "Minimum salary cannot be greater than maximum salary.";
+
+      return;
+
+    }
+
+    const updatedProfile = {
+
+      full_name: document.getElementById("profileFullNameInput").value.trim(),
+
+      phone: document.getElementById("profilePhoneInput").value.trim(),
+
+      address: document.getElementById("profileAddressInput").value.trim(),
+
+      state: document.getElementById("profileStateInput").value.trim(),
+
+      city: document.getElementById("profileCityInput").value.trim(),
+
+      headline: document.getElementById("profileHeadlineInput").value.trim(),
+
+      about_me: document.getElementById("profileAboutInput").value.trim(),
+
+      education_level: document.getElementById("profileEducationInput").value.trim(),
+
+      field_of_study: document.getElementById("profileFieldOfStudyInput").value.trim(),
+
+      institution: document.getElementById("profileInstitutionInput").value.trim(),
+
+      graduation_year: getNumericValue("profileGraduationYearInput"),
+
+      experience_years: getNumericValue("profileExperienceInput"),
+
+      skills: document.getElementById("profileSkillsInput").value.trim(),
+
+      employment_type: document.getElementById("profileEmploymentTypeInput").value,
+
+      expected_salary_min: minimumSalary,
+
+      expected_salary_max: maximumSalary,
+
+      salary_currency: "MYR",
+
+      linkedin_url: document.getElementById("profileLinkedinInput").value.trim(),
+
+      portfolio_url: document.getElementById("profilePortfolioInput").value.trim()
+
+    };
+
+    const originalButtonText = saveBtn.textContent;
+
+    saveBtn.disabled = true;
+    cancelBtn.disabled = true;
+    saveBtn.textContent = "Saving...";
+    statusEl.textContent = "Saving your profile...";
+
+    try {
+
+      const { data: sessionData, error: sessionError } =
+        await supabaseAuth.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      const session = sessionData.session;
+
+      if (!session || !session.user) {
+        throw new Error("Your session has expired. Please sign in again.");
+      }
+
+      const { data, error } = await supabaseAuth
+        .from("jobseeker_profiles")
+        .update({
+          ...updatedProfile,
+          updated_at: new Date().toISOString()
+        })
+        .eq("user_id", session.user.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      originalProfile = {
+        ...originalProfile,
+        ...data
+      };
+
+      fillProfile(originalProfile);
+
+      setProfileMode(false);
+
+      statusEl.textContent = "Profile saved successfully.";
+
+    } catch (error) {
+
+      console.error("Save Jobseeker Profile Error:", error);
+
+      statusEl.textContent =
+        error.message || "Unable to save your profile.";
+
+    } finally {
+
+      saveBtn.disabled = false;
+      cancelBtn.disabled = false;
+      saveBtn.textContent = originalButtonText;
+
+    }
+
+  });
+
+  // Load profile when Jobseeker Dashboard opens.
+  await loadJobseekerProfile();
+
+});
+
+
+
 
 
 

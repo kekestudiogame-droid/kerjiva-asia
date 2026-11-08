@@ -130,3 +130,193 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   USER REGISTRATION
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const registerForm = document.getElementById("registerForm");
+
+  if (!registerForm) return;
+
+  const registerRole = document.getElementById("registerRole");
+  const registerPassword = document.getElementById("registerPassword");
+  const confirmPassword = document.getElementById("confirmRegisterPassword");
+  const registerSubmitBtn = document.getElementById("registerSubmitBtn");
+  const registerStatus = document.getElementById("registerStatus");
+
+  if (
+    !registerRole ||
+    !registerPassword ||
+    !confirmPassword ||
+    !registerSubmitBtn ||
+    !registerStatus
+  ) return;
+
+  registerForm.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+    if (!registerForm.checkValidity()) {
+      registerForm.reportValidity();
+      return;
+    }
+
+    const role = registerRole.value;
+    const password = registerPassword.value;
+    const confirmPasswordValue = confirmPassword.value;
+
+    registerStatus.textContent = "";
+
+    if (password.length < 8) {
+      registerStatus.textContent =
+        "Password must contain at least 8 characters.";
+      return;
+    }
+
+    if (password !== confirmPasswordValue) {
+      registerStatus.textContent =
+        "Password and Confirm Password do not match.";
+      confirmPassword.focus();
+      return;
+    }
+
+    let email = "";
+    let metadata = {};
+
+    // =========================================
+    // JOBSEEKER REGISTRATION DATA
+    // =========================================
+
+    if (role === "jobseeker") {
+
+      email = document
+        .getElementById("jobseekerRegisterEmail")
+        .value.trim();
+
+      metadata = {
+        role: "jobseeker",
+        full_name: document
+          .getElementById("registerFullName")
+          .value.trim(),
+
+        phone: document
+          .getElementById("jobseekerRegisterPhone")
+          .value.trim(),
+
+        address: document
+          .getElementById("jobseekerAddress")
+          .value.trim()
+      };
+
+    }
+
+    // =========================================
+    // COMPANY REGISTRATION DATA
+    // =========================================
+
+    else if (role === "company") {
+
+      email = document
+        .getElementById("companyRegisterEmail")
+        .value.trim();
+
+      metadata = {
+        role: "company",
+
+        company_name: document
+          .getElementById("registerCompanyName")
+          .value.trim(),
+
+        registration_number: document
+          .getElementById("companyRegistrationNumber")
+          .value.trim(),
+
+        contact_person: document
+          .getElementById("companyContactPerson")
+          .value.trim(),
+
+        company_phone: document
+          .getElementById("companyRegisterPhone")
+          .value.trim(),
+
+        company_address: document
+          .getElementById("companyAddress")
+          .value.trim(),
+
+        website: document
+          .getElementById("companyWebsite")
+          .value.trim()
+      };
+
+    }
+
+    else {
+
+      registerStatus.textContent =
+        "Please select a valid account type.";
+      return;
+
+    }
+
+    // =========================================
+    // SUBMIT REGISTRATION TO SUPABASE
+    // =========================================
+
+    const originalButtonText = registerSubmitBtn.textContent;
+
+    registerSubmitBtn.disabled = true;
+    registerSubmitBtn.textContent = "Creating Account...";
+    registerStatus.textContent = "Please wait...";
+
+    try {
+
+      const { data, error } = await supabaseAuth.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: metadata
+        }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      if (data.user) {
+
+        registerStatus.textContent =
+          "Registration successful! Please check your email and click the verification link before logging in.";
+
+        registerForm.reset();
+
+        // Restore the default Jobseeker form
+        if (registerRole) {
+          registerRole.value = "jobseeker";
+          registerRole.dispatchEvent(new Event("change"));
+        }
+
+      }
+
+    } catch (error) {
+
+      console.error("Kerjiva Malaysia Registration Error:", error);
+
+      registerStatus.textContent =
+        error.message || "Registration failed. Please try again.";
+
+    } finally {
+
+      registerSubmitBtn.disabled = false;
+      registerSubmitBtn.textContent = originalButtonText;
+
+    }
+
+  });
+
+});
+
+
+

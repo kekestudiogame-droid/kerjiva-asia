@@ -1640,6 +1640,110 @@ select {
 }
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   REGISTER PAGE STYLES
+   ===================================================== */
+
+/* REGISTER CARD */
+
+.auth-page:has(#registerForm) .auth-container {
+  max-width: 540px;
+}
+
+.auth-page:has(#registerForm) .auth-card {
+  padding: 38px 35px;
+}
+
+
+/* REGISTER SECTION */
+
+#registerForm h2,
+.auth-register-password h2 {
+  margin: 25px 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #123b6d;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+#registerForm h2:first-child {
+  margin-top: 10px;
+}
+
+
+/* ACCOUNT TYPE SELECT */
+
+#registerRole {
+  width: 100%;
+  min-height: 47px;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #1e293b;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#registerRole:focus {
+  outline: none;
+  border-color: #123b6d;
+  box-shadow: 0 0 0 3px rgba(18, 59, 109, 0.1);
+}
+
+
+/* REGISTER INPUTS */
+
+#registerForm .auth-form-group input {
+  width: 100%;
+}
+
+#registerForm input:disabled {
+  background: #f1f5f9;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+
+/* PASSWORD SECTION */
+
+.auth-register-password {
+  margin-top: 25px;
+}
+
+.auth-register-password h2 {
+  margin-top: 0;
+}
+
+
+/* REGISTER BUTTON */
+
+#registerSubmitBtn {
+  margin-top: 8px;
+}
+
+
+/* REGISTER RESPONSIVE */
+
+@media (max-width: 480px) {
+
+  .auth-page:has(#registerForm) .auth-card {
+    padding: 30px 22px;
+  }
+
+  #registerForm h2,
+  .auth-register-password h2 {
+    font-size: 16px;
+  }
+
+}
+
+
+
 
 
 

@@ -215,44 +215,75 @@
         </div>
 
 
-        <!-- ACCOUNT PASSWORD -->
-        <div class="auth-register-password">
+      
+<!-- ACCOUNT PASSWORD -->
+<div class="auth-register-password">
 
-          <h2>Account Security</h2>
+  <h2>Account Security</h2>
 
-          <div class="auth-form-group">
-            <label for="registerPassword">Password</label>
+  <div class="auth-form-group">
+    <label for="registerPassword">Password</label>
 
-            <input
-              type="password"
-              id="registerPassword"
-              name="password"
-              placeholder="Create your password"
-              autocomplete="new-password"
-              minlength="8"
-              required
-            >
-          </div>
+    <div class="password-input-wrapper">
+      <input
+        type="password"
+        id="registerPassword"
+        name="password"
+        placeholder="Create your password"
+        autocomplete="new-password"
+        minlength="8"
+        required
+      >
 
-          <div class="auth-form-group">
-            <label for="confirmRegisterPassword">
-              Confirm Password
-            </label>
+      <button
+        type="button"
+        class="toggle-password-btn"
+        data-target="registerPassword"
+        aria-label="Show password"
+        aria-pressed="false"
+      >
+        <svg class="eye-icon" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      </button>
+    </div>
+  </div>
 
-            <input
-              type="password"
-              id="confirmRegisterPassword"
-              name="confirm_password"
-              placeholder="Re-enter your password"
-              autocomplete="new-password"
-              minlength="8"
-              required
-            >
-          </div>
-        
+  <div class="auth-form-group">
+    <label for="confirmRegisterPassword">Confirm Password</label>
 
-        </div>
+    <div class="password-input-wrapper">
+      <input
+        type="password"
+        id="confirmRegisterPassword"
+        name="confirm_password"
+        placeholder="Re-enter your password"
+        autocomplete="new-password"
+        minlength="8"
+        required
+      >
 
+      <button
+        type="button"
+        class="toggle-password-btn"
+        data-target="confirmRegisterPassword"
+        aria-label="Show password"
+        aria-pressed="false"
+      >
+        <svg class="eye-icon" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+</div>
 
         <!-- SUBMIT -->
         <button

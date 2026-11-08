@@ -238,6 +238,590 @@
       <p>© 2026 Kerjiva Malaysia. All rights reserved.</p>
     </div>
   </footer>
+  
+<!-- =====================================================
+     KERJIVA MALAYSIA
+     JOBSEEKER DASHBOARD
+     ===================================================== -->
+
+<section id="jobseekerDashboard" class="dashboard-page" hidden>
+
+  <!-- DASHBOARD HEADER -->
+  <header class="dashboard-header">
+    <div class="dashboard-brand">
+      <a href="#home" class="logo">
+        Kerjiva
+        <small>MALAYSIA</small>
+      </a>
+    </div>
+
+    <div class="dashboard-header-right">
+      <span id="jobseekerWelcome">Welcome, Job Seeker</span>
+
+      <button type="button" id="jobseekerNotificationBtn">
+        Notifications
+      </button>
+
+      <button type="button" id="jobseekerLogoutBtn">
+        Logout
+      </button>
+    </div>
+  </header>
+
+
+  <div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="dashboard-sidebar">
+
+      <div class="sidebar-profile">
+        <div class="profile-avatar" id="jobseekerAvatar">
+          JS
+        </div>
+
+        <h3 id="jobseekerSidebarName">Job Seeker</h3>
+        <p>Job Seeker Account</p>
+      </div>
+
+      <nav class="dashboard-menu">
+
+        <a href="#jobseekerOverview" class="dashboard-menu-link active">
+          Dashboard
+        </a>
+
+        <a href="#jobseekerProfile" class="dashboard-menu-link">
+          My Profile
+        </a>
+
+        <a href="#jobseekerDocuments" class="dashboard-menu-link">
+          My Documents
+        </a>
+
+        <a href="#jobseekerFindJobs" class="dashboard-menu-link">
+          Find Jobs
+        </a>
+
+        <a href="#jobseekerApplications" class="dashboard-menu-link">
+          My Applications
+        </a>
+
+        <a href="#jobseekerInterviews" class="dashboard-menu-link">
+          Interview Invitations
+        </a>
+
+        <a href="#jobseekerSettings" class="dashboard-menu-link">
+          Account Settings
+        </a>
+
+      </nav>
+
+      <div class="sidebar-footer">
+        <p>Kerjiva Malaysia</p>
+        <small>Your Career Partner</small>
+      </div>
+
+    </aside>
+
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="dashboard-main">
+
+      <!-- OVERVIEW -->
+      <section id="jobseekerOverview" class="dashboard-content-section">
+
+        <div class="dashboard-page-heading">
+          <div>
+            <span class="section-label">JOBSEEKER PORTAL</span>
+            <h1>My Dashboard</h1>
+            <p>Manage your career, applications and job opportunities.</p>
+          </div>
+
+          <a href="#jobseekerFindJobs" class="primary-btn">
+            Find a Job
+          </a>
+        </div>
+
+
+        <!-- STATISTICS -->
+        <div class="dashboard-stats">
+
+          <div class="dashboard-stat-card">
+            <span>Total Applications</span>
+            <h2 id="totalApplications">0</h2>
+            <p>Applications submitted</p>
+          </div>
+
+          <div class="dashboard-stat-card">
+            <span>Under Review</span>
+            <h2 id="pendingApplications">0</h2>
+            <p>Applications being reviewed</p>
+          </div>
+
+          <div class="dashboard-stat-card">
+            <span>Interview Invitations</span>
+            <h2 id="totalInterviews">0</h2>
+            <p>Invitations received</p>
+          </div>
+
+          <div class="dashboard-stat-card">
+            <span>Saved Jobs</span>
+            <h2 id="totalSavedJobs">0</h2>
+            <p>Jobs saved for later</p>
+          </div>
+
+        </div>
+
+
+        <!-- PROFILE COMPLETION -->
+        <div class="dashboard-panel profile-completion">
+
+          <div class="panel-heading">
+            <h2>Profile Completion</h2>
+            <span id="profileCompletionPercent">0%</span>
+          </div>
+
+          <div class="completion-progress">
+            <div
+              id="profileCompletionBar"
+              class="completion-progress-bar"
+            ></div>
+          </div>
+
+          <p>
+            Complete your profile to help companies learn more about you.
+          </p>
+
+          <a href="#jobseekerProfile" class="view-all-link">
+            Complete My Profile
+          </a>
+
+        </div>
+
+
+        <!-- RECENT APPLICATIONS -->
+        <div class="dashboard-panel">
+
+          <div class="panel-heading">
+            <h2>Recent Applications</h2>
+
+            <a href="#jobseekerApplications" class="view-all-link">
+              View All
+            </a>
+          </div>
+
+          <div id="dashboardRecentApplications">
+
+            <div class="dashboard-empty-state">
+              <h3>No Applications Yet</h3>
+              <p>
+                Your submitted job applications will appear here.
+              </p>
+
+              <a href="#jobseekerFindJobs" class="primary-btn">
+                Explore Jobs
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- UPCOMING INTERVIEWS -->
+        <div class="dashboard-panel">
+
+          <div class="panel-heading">
+            <h2>Upcoming Interviews</h2>
+
+            <a href="#jobseekerInterviews" class="view-all-link">
+              View All
+            </a>
+          </div>
+
+          <div id="dashboardUpcomingInterviews">
+
+            <div class="dashboard-empty-state">
+              <h3>No Upcoming Interviews</h3>
+              <p>
+                Your interview invitations will appear here.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- MY PROFILE -->
+      <section
+        id="jobseekerProfile"
+        class="dashboard-content-section"
+      >
+
+        <div class="dashboard-page-heading">
+          <div>
+            <h1>My Profile</h1>
+            <p>Manage your personal and professional information.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-panel">
+
+          <div class="panel-heading">
+            <h2>Personal Information</h2>
+
+            <button type="button" id="editJobseekerProfileBtn">
+              Edit Profile
+            </button>
+          </div>
+
+          <div id="jobseekerProfileDetails">
+
+            <p><strong>Full Name:</strong>
+              <span id="profileFullName">Not provided</span>
+            </p>
+
+            <p><strong>Email:</strong>
+              <span id="profileEmail">Not provided</span>
+            </p>
+
+            <p><strong>Phone Number:</strong>
+              <span id="profilePhone">Not provided</span>
+            </p>
+
+            <p><strong>MyKad Number:</strong>
+              <span id="profileMyKad">Not provided</span>
+            </p>
+
+            <p><strong>Country:</strong> Malaysia</p>
+
+            <p><strong>State:</strong>
+              <span id="profileState">Not provided</span>
+            </p>
+
+            <p><strong>City:</strong>
+              <span id="profileCity">Not provided</span>
+            </p>
+
+            <p><strong>Address:</strong>
+              <span id="profileAddress">Not provided</span>
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-panel">
+
+          <h2>Professional Information</h2>
+
+          <div id="jobseekerProfessionalDetails">
+
+            <p><strong>Education:</strong>
+              <span id="profileEducation">Not provided</span>
+            </p>
+
+            <p><strong>Experience:</strong>
+              <span id="profileExperience">Not provided</span>
+            </p>
+
+            <p><strong>Skills:</strong>
+              <span id="profileSkills">Not provided</span>
+            </p>
+
+            <p><strong>Career Interests:</strong>
+              <span id="profileCareerInterests">Not provided</span>
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- MY DOCUMENTS -->
+      <section
+        id="jobseekerDocuments"
+        class="dashboard-content-section"
+      >
+
+        <div class="dashboard-page-heading">
+          <div>
+            <h1>My Documents</h1>
+            <p>Upload and manage your personal and career documents.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-panel">
+
+          <div class="panel-heading">
+            <h2>My Document Collection</h2>
+          </div>
+
+          <p>
+            Keep your documents updated so you can use them when applying
+            for jobs.
+          </p>
+
+          <div id="jobseekerDocumentList">
+
+            <div class="dashboard-empty-state">
+              <h3>No Documents Uploaded</h3>
+              <p>
+                Your uploaded documents will appear here.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-panel">
+
+          <h2>Upload New Document</h2>
+
+          <div class="document-upload-form">
+
+            <div class="search-field">
+              <label for="jobseekerDocumentType">
+                Document Type
+              </label>
+
+              <select id="jobseekerDocumentType">
+                <option value="">Select Document Type</option>
+                <option value="cv">CV / Resume</option>
+                <option value="certificate">Certificate</option>
+                <option value="education">Education Certificate</option>
+                <option value="experience">Work Experience Letter</option>
+                <option value="mykad">MyKad</option>
+                <option value="passport">Passport</option>
+                <option value="driving_license">Driving Licence</option>
+                <option value="other">Other Documents</option>
+              </select>
+            </div>
+
+            <div class="search-field">
+              <label for="jobseekerDocumentFile">
+                Select File
+              </label>
+
+              <input
+                type="file"
+                id="jobseekerDocumentFile"
+                accept=".pdf,.jpg,.jpeg,.png"
+              >
+            </div>
+
+            <button
+              type="button"
+              id="uploadJobseekerDocumentBtn"
+              class="primary-btn"
+            >
+              Upload Document
+            </button>
+
+            <p id="jobseekerDocumentStatus"></p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- FIND JOBS -->
+      <section
+        id="jobseekerFindJobs"
+        class="dashboard-content-section"
+      >
+
+        <div class="dashboard-page-heading">
+          <div>
+            <h1>Find Jobs</h1>
+            <p>Discover job opportunities across Malaysia.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-panel">
+
+          <div class="search-box">
+
+            <div class="search-field">
+              <label for="dashboardJobKeyword">
+                Job Title or Keyword
+              </label>
+
+              <input
+                type="text"
+                id="dashboardJobKeyword"
+                placeholder="e.g. Marketing Executive"
+              >
+            </div>
+
+            <div class="search-field">
+              <label for="dashboardJobLocation">
+                State / City
+              </label>
+
+              <input
+                type="text"
+                id="dashboardJobLocation"
+                placeholder="e.g. Kuala Lumpur"
+              >
+            </div>
+
+            <button
+              type="button"
+              id="dashboardJobSearchBtn"
+              class="search-btn"
+            >
+              Search Jobs
+            </button>
+
+          </div>
+
+        </div>
+
+        <div id="jobseekerJobResults" class="jobs-grid">
+
+          <div class="empty-jobs">
+            <h3>No Jobs Available</h3>
+            <p>
+              Available job opportunities will appear here.
+            </p>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- MY APPLICATIONS -->
+      <section
+        id="jobseekerApplications"
+        class="dashboard-content-section"
+      >
+
+        <div class="dashboard-page-heading">
+          <div>
+            <h1>My Applications</h1>
+            <p>Track the status of your job applications.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-panel">
+
+          <div class="panel-heading">
+            <h2>Application History</h2>
+          </div>
+
+          <div id="jobseekerApplicationsList">
+
+            <div class="dashboard-empty-state">
+              <h3>No Applications Yet</h3>
+              <p>
+                You have not submitted any job applications.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- INTERVIEW INVITATIONS -->
+      <section
+        id="jobseekerInterviews"
+        class="dashboard-content-section"
+      >
+
+        <div class="dashboard-page-heading">
+          <div>
+            <h1>Interview Invitations</h1>
+            <p>View interview invitations from companies.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-panel">
+
+          <div id="jobseekerInterviewList">
+
+            <div class="dashboard-empty-state">
+              <h3>No Interview Invitations</h3>
+              <p>
+                Interview invitations from companies will appear here.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ACCOUNT SETTINGS -->
+      <section
+        id="jobseekerSettings"
+        class="dashboard-content-section"
+      >
+
+        <div class="dashboard-page-heading">
+          <div>
+            <h1>Account Settings</h1>
+            <p>Manage your account preferences and security.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-panel">
+
+          <h2>Account Information</h2>
+
+          <p>
+            <strong>Email:</strong>
+            <span id="settingsJobseekerEmail">Not provided</span>
+          </p>
+
+          <p>
+            <strong>Account Type:</strong> Job Seeker
+          </p>
+
+          <p>
+            <strong>Country:</strong> Malaysia
+          </p>
+
+        </div>
+
+        <div class="dashboard-panel">
+
+          <h2>Security</h2>
+
+          <button
+            type="button"
+            id="jobseekerChangePasswordBtn"
+          >
+            Change Password
+          </button>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+</section>
+
+<!-- END JOBSEEKER DASHBOARD -->
+
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>

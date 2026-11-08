@@ -29,3 +29,48 @@ window.supabaseAuth = supabaseAuth;
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Supabase initialized successfully.");
 });
+
+
+/* =========================================================
+   TEMPORARY DASHBOARD PREVIEW
+   KERJIVA MALAYSIA
+   REMOVE AFTER LOGIN SYSTEM IS COMPLETED
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const params = new URLSearchParams(window.location.search);
+  const preview = params.get("preview");
+
+  const mainHeader = document.querySelector(".main-header");
+  const mainContent = document.querySelector("body > main");
+  const mainFooter = document.querySelector(".main-footer");
+
+  const jobseekerDashboard = document.getElementById("jobseekerDashboard");
+  const companyDashboard = document.getElementById("companyDashboard");
+
+  // Tidak melakukan apa pun jika bukan mode preview
+  if (!preview) return;
+
+  // Sembunyikan halaman utama
+  if (mainHeader) mainHeader.hidden = true;
+  if (mainContent) mainContent.hidden = true;
+  if (mainFooter) mainFooter.hidden = true;
+
+  // Preview Dashboard Pencari Kerja
+  if (preview === "jobseeker" && jobseekerDashboard) {
+    jobseekerDashboard.hidden = false;
+    console.log("Jobseeker Dashboard Preview Active");
+    return;
+  }
+
+  // Preview Company Dashboard
+  if (preview === "company" && companyDashboard) {
+    companyDashboard.hidden = false;
+    console.log("Company Dashboard Preview Active");
+    return;
+  }
+
+  console.warn("Invalid dashboard preview parameter.");
+});
+

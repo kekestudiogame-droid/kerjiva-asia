@@ -823,6 +823,483 @@
 <!-- END JOBSEEKER DASHBOARD -->
 
 
+  <!-- KERJIVA MALAYSIA COMPANY DASHBOARD -->
+
+<section id="companyDashboard" class="dashboard-page" hidden>
+
+  <!-- DASHBOARD HEADER -->
+  <header class="dashboard-header">
+    <div class="dashboard-header-content">
+      <div class="logo">
+        <a href="#" id="companyDashboardHome">Kerjiva Malaysia</a>
+      </div>
+
+      <div class="dashboard-header-actions">
+        <span id="companyWelcome">Welcome, Company</span>
+
+        <button type="button" id="companyNotificationBtn">
+          Notifications
+        </button>
+
+        <button type="button" id="companyLogoutBtn">
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+  <div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="dashboard-sidebar">
+
+      <div class="sidebar-profile">
+        <div class="sidebar-avatar" id="companyAvatar">C</div>
+        <h3 id="companySidebarName">Company Name</h3>
+        <p>Company Account</p>
+      </div>
+
+      <nav class="dashboard-nav">
+
+        <a href="#companyOverview" class="active">
+          Dashboard
+        </a>
+
+        <a href="#companyProfile">
+          Company Profile
+        </a>
+
+        <a href="#companyPostJob">
+          Post a Job
+        </a>
+
+        <a href="#companyMyJobs">
+          My Jobs
+        </a>
+
+        <a href="#companyApplicants">
+          Incoming Applicants
+        </a>
+
+        <a href="#companyInterviews">
+          Interview Invitations
+        </a>
+
+        <a href="#companySettings">
+          Account Settings
+        </a>
+
+      </nav>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+
+      <!-- OVERVIEW -->
+      <section id="companyOverview" class="dashboard-content-section">
+
+        <div class="dashboard-section-header">
+          <h2>Company Dashboard</h2>
+          <p>Manage your company, job postings, and applicants.</p>
+        </div>
+
+        <div class="dashboard-stats">
+
+          <div class="stat-card">
+            <h3>Total Jobs</h3>
+            <p id="companyTotalJobs">0</p>
+          </div>
+
+          <div class="stat-card">
+            <h3>Published Jobs</h3>
+            <p id="companyPublishedJobs">0</p>
+          </div>
+
+          <div class="stat-card">
+            <h3>Draft Jobs</h3>
+            <p id="companyDraftJobs">0</p>
+          </div>
+
+          <div class="stat-card">
+            <h3>Total Applicants</h3>
+            <p id="companyTotalApplicants">0</p>
+          </div>
+
+        </div>
+
+        <div class="dashboard-panel">
+          <h3>Recent Job Applications</h3>
+          <div id="companyRecentApplicants">
+            <p>No applications yet.</p>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- COMPANY PROFILE -->
+      <section id="companyProfile" class="dashboard-content-section" hidden>
+
+        <div class="dashboard-section-header">
+          <h2>Company Profile</h2>
+          <p>Manage your company information.</p>
+        </div>
+
+        <div class="dashboard-panel">
+
+          <form id="companyProfileForm">
+
+            <div class="form-group">
+              <label for="companyName">Company Name</label>
+              <input type="text" id="companyName">
+            </div>
+
+            <div class="form-group">
+              <label for="companyRegistrationNumber">
+                Company Registration Number (SSM)
+              </label>
+              <input type="text" id="companyRegistrationNumber">
+            </div>
+
+            <div class="form-group">
+              <label for="companyIndustry">Industry</label>
+              <input type="text" id="companyIndustry">
+            </div>
+
+            <div class="form-group">
+              <label for="companyEmail">Company Email</label>
+              <input type="email" id="companyEmail" disabled>
+            </div>
+
+            <div class="form-group">
+              <label for="companyPhone">Phone Number</label>
+              <input type="tel" id="companyPhone">
+            </div>
+
+            <div class="form-group">
+              <label for="companyWebsite">Website</label>
+              <input type="url" id="companyWebsite">
+            </div>
+
+            <div class="form-group">
+              <label for="companyState">State</label>
+              <select id="companyState">
+                <option value="">Select State</option>
+                <option>Johor</option>
+                <option>Kedah</option>
+                <option>Kelantan</option>
+                <option>Melaka</option>
+                <option>Negeri Sembilan</option>
+                <option>Pahang</option>
+                <option>Penang</option>
+                <option>Perak</option>
+                <option>Perlis</option>
+                <option>Sabah</option>
+                <option>Sarawak</option>
+                <option>Selangor</option>
+                <option>Terengganu</option>
+                <option>Kuala Lumpur</option>
+                <option>Putrajaya</option>
+                <option>Labuan</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="companyCity">City</label>
+              <input type="text" id="companyCity">
+            </div>
+
+            <div class="form-group">
+              <label for="companyAddress">Company Address</label>
+              <textarea id="companyAddress"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="companyDescription">About Company</label>
+              <textarea id="companyDescription"></textarea>
+            </div>
+
+            <button type="submit" id="saveCompanyProfileBtn">
+              Save Company Profile
+            </button>
+
+            <p id="companyProfileStatus"></p>
+
+          </form>
+
+        </div>
+
+      </section>
+
+
+      <!-- POST A JOB -->
+      <section id="companyPostJob" class="dashboard-content-section" hidden>
+
+        <div class="dashboard-section-header">
+          <h2>Post a Job</h2>
+          <p>Create a new job posting for your company.</p>
+        </div>
+
+        <div class="dashboard-panel">
+
+          <form id="companyJobForm">
+
+            <input type="hidden" id="companyEditingJobId">
+
+            <div class="form-group">
+              <label for="companyJobTitle">Job Title</label>
+              <input type="text" id="companyJobTitle" required>
+            </div>
+
+            <div class="form-group">
+              <label for="companyJobCategory">Job Category</label>
+              <input type="text" id="companyJobCategory" required>
+            </div>
+
+            <div class="form-group">
+              <label for="companyJobType">Employment Type</label>
+              <select id="companyJobType" required>
+                <option value="">Select Employment Type</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
+                <option value="Temporary">Temporary</option>
+                <option value="Internship">Internship</option>
+                <option value="Freelance">Freelance</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="companyJobState">State</label>
+              <select id="companyJobState" required>
+                <option value="">Select State</option>
+                <option>Johor</option>
+                <option>Kedah</option>
+                <option>Kelantan</option>
+                <option>Melaka</option>
+                <option>Negeri Sembilan</option>
+                <option>Pahang</option>
+                <option>Penang</option>
+                <option>Perak</option>
+                <option>Perlis</option>
+                <option>Sabah</option>
+                <option>Sarawak</option>
+                <option>Selangor</option>
+                <option>Terengganu</option>
+                <option>Kuala Lumpur</option>
+                <option>Putrajaya</option>
+                <option>Labuan</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="companyJobCity">City</label>
+              <input type="text" id="companyJobCity" required>
+            </div>
+
+            <div class="form-group">
+              <label for="companyJobSalaryMin">Minimum Salary (RM)</label>
+              <input type="number" id="companyJobSalaryMin" min="0">
+            </div>
+
+            <div class="form-group">
+              <label for="companyJobSalaryMax">Maximum Salary (RM)</label>
+              <input type="number" id="companyJobSalaryMax" min="0">
+            </div>
+
+            <div class="form-group">
+              <label for="companyJobEducation">Education</label>
+              <input type="text" id="companyJobEducation">
+            </div>
+
+            <div class="form-group">
+              <label for="companyJobExperience">Experience</label>
+              <input type="text" id="companyJobExperience">
+            </div>
+
+            <div class="form-group">
+              <label for="companyJobDescription">Job Description</label>
+              <textarea id="companyJobDescription" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="companyJobRequirements">Job Requirements</label>
+              <textarea id="companyJobRequirements"></textarea>
+            </div>
+
+            <button type="button" id="saveCompanyJobDraftBtn">
+              Save as Draft
+            </button>
+
+            <button type="button" id="submitCompanyJobBtn">
+              Send Job
+            </button>
+
+            <p id="companyJobStatus"></p>
+
+          </form>
+
+        </div>
+
+      </section>
+
+
+      <!-- MY JOBS -->
+      <section id="companyMyJobs" class="dashboard-content-section" hidden>
+
+        <div class="dashboard-section-header">
+          <h2>My Jobs</h2>
+          <p>Manage your job postings.</p>
+        </div>
+
+        <div class="dashboard-panel">
+          <div id="companyJobsList">
+            <p>No job postings yet.</p>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- INCOMING APPLICANTS -->
+      <section id="companyApplicants" class="dashboard-content-section" hidden>
+
+        <div class="dashboard-section-header">
+          <h2>Incoming Applicants</h2>
+          <p>Review applications submitted to your jobs.</p>
+        </div>
+
+        <div class="dashboard-panel">
+
+          <div id="companyApplicantsList">
+            <p>No applicants yet.</p>
+          </div>
+
+        </div>
+
+        <div class="dashboard-panel" id="companyApplicantDetails" hidden>
+          <h3>Applicant Details</h3>
+          <div id="companyApplicantProfile"></div>
+
+          <h3>Application Documents</h3>
+          <div id="companyApplicantDocuments"></div>
+        </div>
+
+      </section>
+
+
+      <!-- INTERVIEWS -->
+      <section id="companyInterviews" class="dashboard-content-section" hidden>
+
+        <div class="dashboard-section-header">
+          <h2>Interview Invitations</h2>
+          <p>Manage interview invitations for applicants.</p>
+        </div>
+
+        <div class="dashboard-panel">
+
+          <div id="companyInterviewList">
+            <p>No interview invitations yet.</p>
+          </div>
+
+        </div>
+
+        <div class="dashboard-panel">
+
+          <h3>Create Interview Invitation</h3>
+
+          <form id="companyInterviewForm">
+
+            <input type="hidden" id="companyInterviewApplicationId">
+
+            <div class="form-group">
+              <label for="companyInterviewType">Interview Type</label>
+              <select id="companyInterviewType">
+                <option value="">Select Interview Type</option>
+                <option value="Online">Online</option>
+                <option value="In-person">In-person</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="companyInterviewDate">Interview Date</label>
+              <input type="date" id="companyInterviewDate">
+            </div>
+
+            <div class="form-group">
+              <label for="companyInterviewTime">Interview Time</label>
+              <input type="time" id="companyInterviewTime">
+            </div>
+
+            <div class="form-group">
+              <label for="companyInterviewLocation">
+                Interview Location
+              </label>
+              <input type="text" id="companyInterviewLocation">
+            </div>
+
+            <div class="form-group">
+              <label for="companyInterviewMeetingLink">
+                Online Meeting Link
+              </label>
+              <input type="url" id="companyInterviewMeetingLink">
+            </div>
+
+            <div class="form-group">
+              <label for="companyInterviewMessage">Message</label>
+              <textarea id="companyInterviewMessage"></textarea>
+            </div>
+
+            <button type="submit" id="sendCompanyInterviewBtn">
+              Send Invitation
+            </button>
+
+            <p id="companyInterviewStatus"></p>
+
+          </form>
+
+        </div>
+
+      </section>
+
+
+      <!-- ACCOUNT SETTINGS -->
+      <section id="companySettings" class="dashboard-content-section" hidden>
+
+        <div class="dashboard-section-header">
+          <h2>Account Settings</h2>
+          <p>Manage your account settings.</p>
+        </div>
+
+        <div class="dashboard-panel">
+
+          <div class="form-group">
+            <label for="settingsCompanyEmail">Account Email</label>
+            <input type="email" id="settingsCompanyEmail" disabled>
+          </div>
+
+          <button type="button" id="companyChangePasswordBtn">
+            Change Password
+          </button>
+
+        </div>
+
+      </section>
+
+
+    </main>
+
+  </div>
+
+</section>
+
+<!-- END COMPANY DASHBOARD -->
+
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 

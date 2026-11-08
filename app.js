@@ -909,6 +909,81 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   JOBSEEKER DASHBOARD NAVIGATION
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  // Jalankan hanya pada dashboard Jobseeker sebenarnya.
+  if (params.get("dashboard") !== "jobseeker" || params.has("preview")) {
+    return;
+  }
+
+  const dashboard = document.getElementById("jobseekerDashboard");
+
+  if (!dashboard) return;
+
+  const menuLinks = dashboard.querySelectorAll(
+    ".dashboard-menu .dashboard-menu-link"
+  );
+
+  const sections = dashboard.querySelectorAll(
+    ".dashboard-content-section"
+  );
+
+  if (!menuLinks.length || !sections.length) return;
+
+  function showSection(sectionId) {
+
+    const targetSection = dashboard.querySelector(
+      "#" + sectionId
+    );
+
+    if (!targetSection) return;
+
+    // Sembunyikan semua section.
+    sections.forEach(section => {
+      section.style.display = "none";
+    });
+
+    // Tampilkan section yang dipilih.
+    targetSection.style.display = "block";
+
+    // Perbarui menu aktif.
+    menuLinks.forEach(link => {
+      link.classList.toggle(
+        "active",
+        link.getAttribute("href") === "#" + sectionId
+      );
+    });
+
+  }
+
+  // Navigasi ketika menu sidebar diklik.
+  menuLinks.forEach(link => {
+
+    link.addEventListener("click", function (event) {
+
+      event.preventDefault();
+
+      const sectionId = this.getAttribute("href").substring(1);
+
+      showSection(sectionId);
+
+    });
+
+  });
+
+  // Tampilkan Dashboard sebagai halaman awal.
+  showSection("jobseekerOverview");
+
+});
+
+
 
 
 

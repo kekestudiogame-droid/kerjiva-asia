@@ -427,6 +427,151 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   AUTHENTICATED DASHBOARD ROUTING & LOGOUT
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", async function () {
+  const params = new URLSearchParams(window.location.search);
+
+  // Jangan mengganggu fitur Dashboard Preview sementara.
+  if (params.has("preview")) return;
+
+  const requestedDashboard = params.get("dashboard");
+
+  // =====================================================
+  // DASHBOARD ROUTING
+  // =====================================================
+
+  if (requestedDashboard === "jobseeker" || requestedDashboard === "company") {
+    const mainHeader = document.querySelector(".main-header");
+    const mainContent = document.querySelector("body > main");
+    const mainFooter = document.querySelector(".main-footer");
+
+    const jobseekerDashboard = document.getElementById("jobseekerDashboard");
+    const companyDashboard = document.getElementById("companyDashboard");
+
+    try {
+      const { data: sessionData, error: sessionError } =
+        await supabaseAuth.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      const session = sessionData.session;
+
+      if (!session || !session.user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const userId = session.user.id;
+
+      const { data: jobseeker, error: jobseekerError } =
+        await supabaseAuth
+          .from("jobseeker_profiles")
+          .select("id")
+          .eq("user_id", userId)
+          .maybeSingle();
+
+      if (jobseekerError) throw jobseekerError;
+
+      const { data: company, error: companyError } =
+        await supabaseAuth
+          .from("companies")
+          .select("id")
+          .eq("user_id", userId)
+          .maybeSingle();
+
+      if (companyError) throw companyError;
+
+      let actualRole = null;
+
+      if (jobseeker && !company) {
+        actualRole = "jobseeker";
+      } else if (company && !jobseeker) {
+        actualRole = "company";
+      }
+
+      if (!actualRole) {
+        await supabaseAuth.auth.signOut();
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Sembunyikan homepage.
+      if (mainHeader) mainHeader.hidden = true;
+      if (mainContent) mainContent.hidden = true;
+      if (mainFooter) mainFooter.hidden = true;
+
+      // Pastikan hanya dashboard sesuai role yang ditampilkan.
+      if (jobseekerDashboard) {
+        jobseekerDashboard.hidden = actualRole !== "jobseeker";
+      }
+
+      if (companyDashboard) {
+        companyDashboard.hidden = actualRole !== "company";
+      }
+
+      console.log("Kerjiva Malaysia Dashboard Active:", actualRole);
+
+    } catch (error) {
+      console.error("Kerjiva Malaysia Dashboard Routing Error:", error);
+      alert("Unable to open your dashboard. Please sign in again.");
+      window.location.href = "login.html";
+      return;
+    }
+  }
+
+  // =====================================================
+  // JOBSEEKER LOGOUT
+  // =====================================================
+
+  const jobseekerLogoutBtn = document.getElementById("jobseekerLogoutBtn");
+
+  if (jobseekerLogoutBtn) {
+    jobseekerLogoutBtn.addEventListener("click", async function () {
+      jobseekerLogoutBtn.disabled = true;
+
+      try {
+        const { error } = await supabaseAuth.auth.signOut();
+        if (error) throw error;
+
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Jobseeker Logout Error:", error);
+        alert("Unable to sign out. Please try again.");
+        jobseekerLogoutBtn.disabled = false;
+      }
+    });
+  }
+
+  // =====================================================
+  // COMPANY LOGOUT
+  // =====================================================
+
+  const companyLogoutBtn = document.getElementById("companyLogoutBtn");
+
+  if (companyLogoutBtn) {
+    companyLogoutBtn.addEventListener("click", async function () {
+      companyLogoutBtn.disabled = true;
+
+      try {
+        const { error } = await supabaseAuth.auth.signOut();
+        if (error) throw error;
+
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Company Logout Error:", error);
+        alert("Unable to sign out. Please try again.");
+        companyLogoutBtn.disabled = false;
+      }
+    });
+  }
+});
+
+
+
 
 
 

@@ -1428,6 +1428,218 @@ select {
 
 }
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   LOGIN PAGE STYLES
+   ===================================================== */
+
+.auth-page {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 18px;
+  background: #f1f5f9;
+  font-family: inherit;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 460px;
+  margin: auto;
+}
+
+.auth-card {
+  width: 100%;
+  padding: 38px 35px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+}
+
+.auth-brand {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.auth-brand .logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  color: #123b6d;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.1;
+  text-decoration: none;
+}
+
+.auth-brand .logo small {
+  margin-top: 4px;
+  color: #f28c28;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.auth-brand p {
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.auth-heading {
+  margin-bottom: 26px;
+  text-align: center;
+}
+
+.auth-heading h1 {
+  margin-bottom: 9px;
+  color: #123b6d;
+  font-size: 27px;
+  font-weight: 800;
+}
+
+.auth-heading p {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.auth-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 19px;
+}
+
+.auth-form-group label {
+  color: #123b6d;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.auth-form-group input {
+  width: 100%;
+  min-height: 47px;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #1e293b;
+  font: inherit;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-form-group input:focus {
+  outline: none;
+  border-color: #123b6d;
+  box-shadow: 0 0 0 3px rgba(18, 59, 109, 0.1);
+}
+
+.auth-forgot-password {
+  margin: -3px 0 22px;
+  text-align: right;
+}
+
+.auth-forgot-password a {
+  color: #123b6d;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-forgot-password a:hover {
+  color: #f28c28;
+  text-decoration: underline;
+}
+
+.auth-submit-btn {
+  width: 100%;
+  min-height: 47px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 7px;
+  background: #123b6d;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.auth-submit-btn:hover {
+  background: #0d2e55;
+}
+
+.auth-status {
+  min-height: 18px;
+  margin-top: 12px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.auth-footer {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.auth-footer p {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.auth-footer a,
+.auth-back-home a {
+  color: #123b6d;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-footer a:hover,
+.auth-back-home a:hover {
+  color: #f28c28;
+  text-decoration: underline;
+}
+
+.auth-back-home {
+  margin-top: 22px;
+  text-align: center;
+}
+
+.auth-back-home a {
+  font-size: 13px;
+}
+
+
+/* LOGIN RESPONSIVE */
+
+@media (max-width: 480px) {
+
+  .auth-page {
+    padding: 20px 14px;
+  }
+
+  .auth-card {
+    padding: 30px 22px;
+  }
+
+  .auth-brand .logo {
+    font-size: 29px;
+  }
+
+  .auth-heading h1 {
+    font-size: 24px;
+  }
+
+}
+
+
 
 
 

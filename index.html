@@ -455,27 +455,31 @@
 
 
     
+
 <!-- MY PROFILE -->
-<section
-  id="jobseekerProfile"
-  class="dashboard-content-section"
->
+<section id="jobseekerProfile" class="dashboard-content-section">
+
   <div class="dashboard-page-heading">
     <div>
       <h1>My Profile</h1>
-      <p>Manage your personal and professional information.</p>
+      <p>Manage your personal and professional information in one place.</p>
     </div>
   </div>
 
-  <form id="jobseekerProfileForm">
+  <form id="jobseekerProfileForm" class="jobseeker-profile-form">
 
-    <!-- PERSONAL INFORMATION -->
-    <div class="dashboard-panel">
-      <div class="panel-heading">
-        <h2>Personal Information</h2>
+    <div class="dashboard-panel jobseeker-profile-panel">
+
+      <div class="jobseeker-profile-top">
+        <div>
+          <h2>Profile Information</h2>
+          <p>Keep your information updated to improve your career opportunities.</p>
+        </div>
+
         <button
           type="button"
           id="editJobseekerProfileBtn"
+          class="profile-edit-btn"
         >
           Edit Profile
         </button>
@@ -483,239 +487,135 @@
 
       <fieldset id="jobseekerProfileFields" disabled>
 
-        <div class="form-group">
-          <label for="profileFullNameInput">Full Name</label>
-          <input
-            type="text"
-            id="profileFullNameInput"
-            name="full_name"
-            required
-          >
-        </div>
+        <div class="jobseeker-profile-grid">
 
-        <div class="form-group">
-          <label for="profileEmailInput">Email Address</label>
-          <input
-            type="email"
-            id="profileEmailInput"
-            name="email"
-            readonly
-          >
-        </div>
+          <div class="form-group">
+            <label for="profileFullNameInput">Full Name</label>
+            <input type="text" id="profileFullNameInput" name="full_name" required>
+          </div>
 
-        <div class="form-group">
-          <label for="profilePhoneInput">Phone Number</label>
-          <input
-            type="tel"
-            id="profilePhoneInput"
-            name="phone"
-          >
-        </div>
+          <div class="form-group">
+            <label for="profileEmailInput">Email Address</label>
+            <input type="email" id="profileEmailInput" name="email" readonly>
+          </div>
 
-        <div class="form-group">
-          <label for="profileAddressInput">Address</label>
-          <textarea
-            id="profileAddressInput"
-            name="address"
-            rows="3"
-          ></textarea>
-        </div>
+          <div class="form-group">
+            <label for="profilePhoneInput">Phone Number</label>
+            <input type="tel" id="profilePhoneInput" name="phone">
+          </div>
 
-        <div class="form-group">
-          <label for="profileStateInput">State</label>
-          <input
-            type="text"
-            id="profileStateInput"
-            name="state"
-          >
-        </div>
+          <div class="form-group">
+            <label for="profileStateInput">State</label>
+            <input type="text" id="profileStateInput" name="state">
+          </div>
 
-        <div class="form-group">
-          <label for="profileCityInput">City</label>
-          <input
-            type="text"
-            id="profileCityInput"
-            name="city"
-          >
-        </div>
+          <div class="form-group">
+            <label for="profileCityInput">City</label>
+            <input type="text" id="profileCityInput" name="city">
+          </div>
 
-      </fieldset>
-    </div>
+          <div class="form-group full-width">
+            <label for="profileAddressInput">Address</label>
+            <textarea id="profileAddressInput" name="address" rows="3"></textarea>
+          </div>
 
-    <!-- PROFESSIONAL INFORMATION -->
-    <div class="dashboard-panel">
-      <h2>Professional Information</h2>
+          <div class="form-group full-width">
+            <label for="profileHeadlineInput">Professional Headline</label>
+            <input type="text" id="profileHeadlineInput" name="headline" placeholder="Example: Marketing Executive">
+          </div>
 
-      <fieldset disabled>
+          <div class="form-group full-width">
+            <label for="profileAboutInput">About Me</label>
+            <textarea id="profileAboutInput" name="about_me" rows="4"></textarea>
+          </div>
 
-        <div class="form-group">
-          <label for="profileHeadlineInput">Professional Headline</label>
-          <input
-            type="text"
-            id="profileHeadlineInput"
-            name="headline"
-            placeholder="Example: Marketing Executive"
-          >
-        </div>
+          <div class="form-group">
+            <label for="profileEducationInput">Education Level</label>
+            <input type="text" id="profileEducationInput" name="education_level">
+          </div>
 
-        <div class="form-group">
-          <label for="profileAboutInput">About Me</label>
-          <textarea
-            id="profileAboutInput"
-            name="about_me"
-            rows="4"
-          ></textarea>
-        </div>
+          <div class="form-group">
+            <label for="profileFieldOfStudyInput">Field of Study</label>
+            <input type="text" id="profileFieldOfStudyInput" name="field_of_study">
+          </div>
 
-        <div class="form-group">
-          <label for="profileEducationInput">Education Level</label>
-          <input
-            type="text"
-            id="profileEducationInput"
-            name="education_level"
-          >
-        </div>
+          <div class="form-group">
+            <label for="profileInstitutionInput">Institution</label>
+            <input type="text" id="profileInstitutionInput" name="institution">
+          </div>
 
-        <div class="form-group">
-          <label for="profileFieldOfStudyInput">Field of Study</label>
-          <input
-            type="text"
-            id="profileFieldOfStudyInput"
-            name="field_of_study"
-          >
-        </div>
+          <div class="form-group">
+            <label for="profileGraduationYearInput">Graduation Year</label>
+            <input type="number" id="profileGraduationYearInput" name="graduation_year" min="1950" max="2100">
+          </div>
 
-        <div class="form-group">
-          <label for="profileInstitutionInput">Institution</label>
-          <input
-            type="text"
-            id="profileInstitutionInput"
-            name="institution"
-          >
-        </div>
+          <div class="form-group">
+            <label for="profileExperienceInput">Years of Experience</label>
+            <input type="number" id="profileExperienceInput" name="experience_years" min="0" step="0.5">
+          </div>
 
-        <div class="form-group">
-          <label for="profileGraduationYearInput">Graduation Year</label>
-          <input
-            type="number"
-            id="profileGraduationYearInput"
-            name="graduation_year"
-            min="1950"
-            max="2100"
-          >
-        </div>
+          <div class="form-group">
+            <label for="profileEmploymentTypeInput">Preferred Employment Type</label>
+            <select id="profileEmploymentTypeInput" name="employment_type">
+              <option value="">Select Employment Type</option>
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="Contract">Contract</option>
+              <option value="Temporary">Temporary</option>
+              <option value="Internship">Internship</option>
+              <option value="Freelance">Freelance</option>
+            </select>
+          </div>
 
-        <div class="form-group">
-          <label for="profileExperienceInput">Years of Experience</label>
-          <input
-            type="number"
-            id="profileExperienceInput"
-            name="experience_years"
-            min="0"
-            step="0.5"
-          >
-        </div>
+          <div class="form-group full-width">
+            <label for="profileSkillsInput">Skills</label>
+            <textarea id="profileSkillsInput" name="skills" rows="3" placeholder="Example: Communication, Microsoft Excel, Leadership"></textarea>
+          </div>
 
-        <div class="form-group">
-          <label for="profileSkillsInput">Skills</label>
-          <textarea
-            id="profileSkillsInput"
-            name="skills"
-            rows="3"
-            placeholder="Example: Communication, Microsoft Excel, Leadership"
-          ></textarea>
-        </div>
+          <div class="form-group">
+            <label for="profileSalaryMinInput">Expected Minimum Salary (MYR)</label>
+            <input type="number" id="profileSalaryMinInput" name="expected_salary_min" min="0" step="0.01">
+          </div>
 
-        <div class="form-group">
-          <label for="profileEmploymentTypeInput">Preferred Employment Type</label>
-          <select
-            id="profileEmploymentTypeInput"
-            name="employment_type"
-          >
-            <option value="">Select Employment Type</option>
-            <option value="Full-time">Full-time</option>
-            <option value="Part-time">Part-time</option>
-            <option value="Contract">Contract</option>
-            <option value="Temporary">Temporary</option>
-            <option value="Internship">Internship</option>
-            <option value="Freelance">Freelance</option>
-          </select>
-        </div>
+          <div class="form-group">
+            <label for="profileSalaryMaxInput">Expected Maximum Salary (MYR)</label>
+            <input type="number" id="profileSalaryMaxInput" name="expected_salary_max" min="0" step="0.01">
+          </div>
 
-        <div class="form-group">
-          <label for="profileSalaryMinInput">Expected Minimum Salary (MYR)</label>
-          <input
-            type="number"
-            id="profileSalaryMinInput"
-            name="expected_salary_min"
-            min="0"
-            step="0.01"
-          >
-        </div>
+          <input type="hidden" id="profileSalaryCurrencyInput" name="salary_currency" value="MYR">
 
-        <div class="form-group">
-          <label for="profileSalaryMaxInput">Expected Maximum Salary (MYR)</label>
-          <input
-            type="number"
-            id="profileSalaryMaxInput"
-            name="expected_salary_max"
-            min="0"
-            step="0.01"
-          >
-        </div>
+          <div class="form-group">
+            <label for="profileLinkedinInput">LinkedIn Profile</label>
+            <input type="url" id="profileLinkedinInput" name="linkedin_url" placeholder="https://www.linkedin.com/in/...">
+          </div>
 
-        <input
-          type="hidden"
-          id="profileSalaryCurrencyInput"
-          name="salary_currency"
-          value="MYR"
-        >
+          <div class="form-group">
+            <label for="profilePortfolioInput">Portfolio Website</label>
+            <input type="url" id="profilePortfolioInput" name="portfolio_url" placeholder="https://...">
+          </div>
 
-        <div class="form-group">
-          <label for="profileLinkedinInput">LinkedIn Profile</label>
-          <input
-            type="url"
-            id="profileLinkedinInput"
-            name="linkedin_url"
-            placeholder="https://www.linkedin.com/in/..."
-          >
-        </div>
-
-        <div class="form-group">
-          <label for="profilePortfolioInput">Portfolio Website</label>
-          <input
-            type="url"
-            id="profilePortfolioInput"
-            name="portfolio_url"
-            placeholder="https://..."
-          >
         </div>
 
       </fieldset>
-    </div>
 
-    <!-- PROFILE ACTIONS -->
-    <div class="dashboard-panel">
-      <div id="jobseekerProfileStatus" role="status"></div>
+      <div class="jobseeker-profile-actions">
+        <p id="jobseekerProfileStatus" role="status"></p>
 
-      <button
-        type="submit"
-        id="saveJobseekerProfileBtn"
-        hidden
-      >
-        Save Profile
-      </button>
+        <div class="jobseeker-profile-buttons">
+          <button type="submit" id="saveJobseekerProfileBtn" hidden>
+            Save Profile
+          </button>
 
-      <button
-        type="button"
-        id="cancelJobseekerProfileBtn"
-        hidden
-      >
-        Cancel
-      </button>
+          <button type="button" id="cancelJobseekerProfileBtn" hidden>
+            Cancel
+          </button>
+        </div>
+      </div>
+
     </div>
 
   </form>
+
 </section>
 
       <!-- MY DOCUMENTS -->

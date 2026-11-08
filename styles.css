@@ -1178,7 +1178,256 @@ select {
   .dashboard-panel .search-box {
     grid-template-columns: 1fr;
   }
+   }
+
+   /* =====================================================
+   KERJIVA MALAYSIA
+   COMPANY DASHBOARD STYLES
+   ===================================================== */
+
+/* COMPANY HEADER */
+
+#companyDashboard .dashboard-header {
+  display: flex;
+  align-items: center;
+}
+
+#companyDashboard .dashboard-header-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+#companyDashboard .dashboard-header-content .logo {
+  font-size: 25px;
+  font-weight: 800;
+}
+
+#companyDashboard .dashboard-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#companyDashboard .dashboard-header-actions span {
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+#companyDashboard .dashboard-header-actions button {
+  padding: 9px 15px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--white);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#companyDashboard #companyLogoutBtn {
+  background: var(--secondary);
+  border-color: var(--secondary);
+  color: var(--white);
+}
+
+
+/* COMPANY SIDEBAR */
+
+#companyDashboard .sidebar-avatar {
+  width: 65px;
+  height: 65px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--secondary);
+  color: var(--white);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+#companyDashboard .dashboard-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+#companyDashboard .dashboard-nav a {
+  display: block;
+  padding: 12px 14px;
+  border-radius: 7px;
+  color: #d6e0eb;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+#companyDashboard .dashboard-nav a:hover,
+#companyDashboard .dashboard-nav a.active {
+  background: rgba(255,255,255,0.13);
+  color: var(--white);
+}
+
+#companyDashboard .dashboard-nav a.active {
+  border-left: 3px solid var(--secondary);
+}
+
+
+/* COMPANY CONTENT */
+
+#companyDashboard .dashboard-section-header {
+  margin-bottom: 28px;
+}
+
+#companyDashboard .dashboard-section-header h2 {
+  color: var(--primary);
+  font-size: 30px;
+  margin-bottom: 7px;
+}
+
+#companyDashboard .dashboard-section-header p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+
+/* COMPANY STATISTICS */
+
+#companyDashboard .stat-card {
+  padding: 22px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+#companyDashboard .stat-card h3 {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+#companyDashboard .stat-card p {
+  color: var(--primary);
+  font-size: 30px;
+  font-weight: 800;
+  margin-top: 8px;
+}
+
+
+/* COMPANY FORMS */
+
+#companyDashboard .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+
+#companyDashboard .form-group label {
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+#companyDashboard .form-group input,
+#companyDashboard .form-group select,
+#companyDashboard .form-group textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 13px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--white);
+  color: var(--text);
+  font: inherit;
+}
+
+#companyDashboard .form-group textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+#companyDashboard .form-group input:focus,
+#companyDashboard .form-group select:focus,
+#companyDashboard .form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+#companyDashboard form button {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 7px;
+  background: var(--primary);
+  color: var(--white);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#companyDashboard #saveCompanyJobDraftBtn {
+  background: #64748b;
+}
+
+#companyDashboard #submitCompanyJobBtn {
+  background: var(--secondary);
+}
+
+#companyDashboard form button:hover {
+  opacity: 0.9;
+}
+
+
+/* COMPANY RESPONSIVE */
+
+@media (max-width: 650px) {
+
+  #companyDashboard .dashboard-header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #companyDashboard .dashboard-header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  #companyDashboard .dashboard-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 8px;
+  }
+
+  #companyDashboard .dashboard-nav a {
+    white-space: nowrap;
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+
+  #companyDashboard .dashboard-section-header h2 {
+    font-size: 25px;
+  }
+
+  #companyDashboard .stat-card {
+    padding: 15px;
+  }
+
+  #companyDashboard .stat-card p {
+    font-size: 24px;
+  }
+
+  #companyDashboard form button {
+    width: 100%;
+    margin-bottom: 8px;
+  }
 
 }
+
+
 
 

@@ -984,6 +984,48 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   PASSWORD SHOW / HIDE
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const toggleButtons = document.querySelectorAll(
+    ".toggle-password-btn"
+  );
+
+  toggleButtons.forEach(button => {
+
+    button.addEventListener("click", function () {
+
+      const targetId = this.getAttribute("data-target");
+      const passwordInput = document.getElementById(targetId);
+
+      if (!passwordInput) return;
+
+      const shouldShow = passwordInput.type === "password";
+
+      passwordInput.type = shouldShow ? "text" : "password";
+
+      this.setAttribute(
+        "aria-pressed",
+        String(shouldShow)
+      );
+
+      this.setAttribute(
+        "aria-label",
+        shouldShow ? "Hide password" : "Show password"
+      );
+
+    });
+
+  });
+
+});
+
+
+
 
 
 

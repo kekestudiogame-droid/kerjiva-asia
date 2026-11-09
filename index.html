@@ -798,10 +798,26 @@
 
         <div class="dashboard-panel">
 
-        <div class="search-box">
+       
+<div class="search-box">
 
+  <!-- CATEGORY / JOB TYPE -->
   <div class="search-field">
-    <label for="dashboardJobKeyword">Job Title or Keyword</label>
+    <label for="dashboardJobCategoryType">
+      Category / Job Type
+    </label>
+
+    <select id="dashboardJobCategoryType">
+      <option value="">All Categories & Job Types</option>
+    </select>
+  </div>
+
+  <!-- KEYWORD -->
+  <div class="search-field">
+    <label for="dashboardJobKeyword">
+      Job Title or Keyword
+    </label>
+
     <input
       type="text"
       id="dashboardJobKeyword"
@@ -809,8 +825,12 @@
     >
   </div>
 
+  <!-- LOCATION -->
   <div class="search-field">
-    <label for="dashboardJobLocation">State / City</label>
+    <label for="dashboardJobLocation">
+      State / City
+    </label>
+
     <input
       type="text"
       id="dashboardJobLocation"
@@ -818,20 +838,7 @@
     >
   </div>
 
-  <div class="search-field">
-    <label for="dashboardJobCategory">Category</label>
-    <select id="dashboardJobCategory">
-      <option value="">All Categories</option>
-    </select>
-  </div>
-
-  <div class="search-field">
-    <label for="dashboardJobType">Job Type</label>
-    <select id="dashboardJobType">
-      <option value="">All Job Types</option>
-    </select>
-  </div>
-
+  <!-- SEARCH BUTTON -->
   <button
     type="button"
     id="dashboardJobSearchBtn"
@@ -841,6 +848,7 @@
   </button>
 
 </div>
+
         </div>
 
         <div id="jobseekerJobResults" class="jobs-grid">

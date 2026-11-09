@@ -1417,6 +1417,395 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   JOBSEEKER MY DOCUMENTS
+   LOAD, VIEW & UPLOAD DOCUMENTS
+   PRIVATE SUPABASE STORAGE
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", async function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  // Jalankan hanya pada dashboard Jobseeker sebenarnya.
+  if (params.get("dashboard") !== "jobseeker" || params.has("preview")) {
+    return;
+  }
+
+  const documentList = document.getElementById("jobseekerDocumentList");
+  const documentType = document.getElementById("jobseekerDocumentType");
+  const documentFile = document.getElementById("jobseekerDocumentFile");
+  const uploadBtn = document.getElementById("uploadJobseekerDocumentBtn");
+  const statusEl = document.getElementById("jobseekerDocumentStatus");
+
+  if (
+    !documentList ||
+    !documentType ||
+    !documentFile ||
+    !uploadBtn ||
+    !statusEl
+  ) {
+    return;
+  }
+
+  const BUCKET_NAME = "jobseeker-documents";
+  const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+  const allowedTypes = [
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "image/jpeg",
+    "image/png"
+  ];
+
+  const documentTypeLabels = {
+    cv: "CV / Resume",
+    certificate: "Certificate",
+    education: "Education Certificate",
+    experience: "Work Experience Letter",
+    mykad: "MyKad",
+    passport: "Passport",
+    driving_license: "Driving Licence",
+    other: "Other Documents"
+  };
+
+  let currentUser = null;
+  let selectedFile = null;
+
+  // =========================================
+  // FORMAT FILE SIZE
+  // =========================================
+
+  function formatFileSize(bytes) {
+
+    if (!bytes) return "Unknown size";
+
+    if (bytes < 1024 * 1024) {
+      return `${(bytes / 1024).toFixed(1)} KB`;
+    }
+
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+
+  }
+
+  // =========================================
+  // DISPLAY EMPTY STATE
+  // =========================================
+
+  function showEmptyState() {
+
+    documentList.replaceChildren();
+
+    const emptyState = document.createElement("div");
+    emptyState.className = "dashboard-empty-state";
+
+    const heading = document.createElement("h3");
+    heading.textContent = "No Documents Uploaded";
+
+    const description = document.createElement("p");
+    description.textContent =
+      "Your uploaded documents will appear here.";
+
+    emptyState.append(heading, description);
+    documentList.appendChild(emptyState);
+
+  }
+
+  // =========================================
+  // LOAD DOCUMENTS FROM SUPABASE
+  // =========================================
+
+  async function loadJobseekerDocuments() {
+
+    documentList.textContent = "Loading documents...";
+
+    try {
+
+      const { data, error } = await supabaseAuth
+        .from("jobseeker_documents")
+        .select(`
+          id,
+          document_type,
+          file_name,
+          storage_path,
+          file_size,
+          mime_type,
+          created_at
+        `)
+        .eq("user_id", currentUser.id)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        showEmptyState();
+        return;
+      }
+
+      documentList.replaceChildren();
+
+      for (const item of data) {
+
+        const card = document.createElement("div");
+        card.className = "jobseeker-document-card";
+
+        const heading = document.createElement("h3");
+        heading.textContent =
+          documentTypeLabels[item.document_type] ||
+          item.document_type;
+
+        const fileName = document.createElement("p");
+        fileName.textContent = item.file_name;
+
+        const fileInfo = document.createElement("p");
+        fileInfo.textContent = formatFileSize(item.file_size);
+
+        const date = document.createElement("p");
+        date.textContent = item.created_at
+          ? new Date(item.created_at).toLocaleDateString("en-MY")
+          : "";
+
+        const viewLink = document.createElement("a");
+        viewLink.textContent = "View Document";
+        viewLink.target = "_blank";
+        viewLink.rel = "noopener noreferrer";
+
+        const { data: signedData, error: signedError } =
+          await supabaseAuth.storage
+            .from(BUCKET_NAME)
+            .createSignedUrl(item.storage_path, 3600);
+
+        if (!signedError && signedData?.signedUrl) {
+
+          viewLink.href = signedData.signedUrl;
+
+        } else {
+
+          viewLink.textContent = "Document unavailable";
+          viewLink.removeAttribute("target");
+
+        }
+
+        card.append(
+          heading,
+          fileName,
+          fileInfo,
+          date,
+          viewLink
+        );
+
+        documentList.appendChild(card);
+
+      }
+
+    } catch (error) {
+
+      console.error("Load Jobseeker Documents Error:", error);
+
+      documentList.textContent =
+        "Unable to load your documents. Please try again.";
+
+      throw error;
+
+    }
+
+  }
+
+  // =========================================
+  // SELECT DOCUMENT FILE
+  // =========================================
+
+  documentFile.addEventListener("change", function () {
+
+    selectedFile = documentFile.files[0] || null;
+
+    if (!selectedFile) {
+      statusEl.textContent = "";
+      return;
+    }
+
+    if (!allowedTypes.includes(selectedFile.type)) {
+
+      statusEl.textContent =
+        "Please select a PDF, DOC, DOCX, JPG, or PNG file.";
+
+      selectedFile = null;
+      documentFile.value = "";
+
+      return;
+
+    }
+
+    if (selectedFile.size > MAX_FILE_SIZE) {
+
+      statusEl.textContent =
+        "Document size must not exceed 10 MB.";
+
+      selectedFile = null;
+      documentFile.value = "";
+
+      return;
+
+    }
+
+    statusEl.textContent = "File selected successfully.";
+
+  });
+
+  // =========================================
+  // UPLOAD DOCUMENT
+  // =========================================
+
+  uploadBtn.addEventListener("click", async function () {
+
+    const selectedType = documentType.value;
+
+    if (!currentUser) {
+      statusEl.textContent =
+        "Your session has expired. Please sign in again.";
+      return;
+    }
+
+    if (!selectedType) {
+      statusEl.textContent = "Please select a document type.";
+      return;
+    }
+
+    if (!selectedFile) {
+      statusEl.textContent = "Please select a file first.";
+      return;
+    }
+
+    const file = selectedFile;
+
+    const originalButtonText = uploadBtn.textContent;
+
+    uploadBtn.disabled = true;
+    documentType.disabled = true;
+    documentFile.disabled = true;
+
+    uploadBtn.textContent = "Uploading...";
+    statusEl.textContent = "Uploading your document...";
+
+    let uploadedPath = null;
+
+    try {
+
+      const safeFileName = file.name
+        .replace(/[^a-zA-Z0-9._-]/g, "_");
+
+      uploadedPath =
+        `${currentUser.id}/${crypto.randomUUID()}-${safeFileName}`;
+
+      // Upload to private Storage.
+      const { error: uploadError } =
+        await supabaseAuth.storage
+          .from(BUCKET_NAME)
+          .upload(uploadedPath, file, {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: file.type
+          });
+
+      if (uploadError) throw uploadError;
+
+      // Save document metadata.
+      const { error: insertError } =
+        await supabaseAuth
+          .from("jobseeker_documents")
+          .insert({
+            user_id: currentUser.id,
+            document_type: selectedType,
+            file_name: file.name,
+            storage_path: uploadedPath,
+            file_size: file.size,
+            mime_type: file.type
+          });
+
+      if (insertError) throw insertError;
+
+      uploadedPath = null;
+
+      selectedFile = null;
+      documentFile.value = "";
+      documentType.value = "";
+
+      await loadJobseekerDocuments();
+
+      statusEl.textContent =
+        "Document uploaded successfully.";
+
+    } catch (error) {
+
+      console.error("Upload Jobseeker Document Error:", error);
+
+      // Remove newly uploaded file if database insertion failed.
+      if (uploadedPath) {
+
+        const { error: cleanupError } =
+          await supabaseAuth.storage
+            .from(BUCKET_NAME)
+            .remove([uploadedPath]);
+
+        if (cleanupError) {
+          console.error(
+            "Document Upload Cleanup Error:",
+            cleanupError
+          );
+        }
+
+      }
+
+      statusEl.textContent =
+        error.message || "Unable to upload your document.";
+
+    } finally {
+
+      uploadBtn.disabled = false;
+      documentType.disabled = false;
+      documentFile.disabled = false;
+      uploadBtn.textContent = originalButtonText;
+
+    }
+
+  });
+
+  // =========================================
+  // INITIALIZE MY DOCUMENTS
+  // =========================================
+
+  try {
+
+    const { data: sessionData, error: sessionError } =
+      await supabaseAuth.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    const session = sessionData.session;
+
+    if (!session || !session.user) {
+      throw new Error("Please sign in again.");
+    }
+
+    currentUser = session.user;
+
+    await loadJobseekerDocuments();
+
+  } catch (error) {
+
+    console.error("Initialize My Documents Error:", error);
+
+    statusEl.textContent =
+      error.message || "Unable to initialize My Documents.";
+
+  }
+
+});
+
+
+
 
 
 

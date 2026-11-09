@@ -1589,7 +1589,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
      
-       const editBtn = document.createElement("button");
+     
+        const editBtn = document.createElement("button");
         editBtn.type = "button";
         editBtn.className = "document-edit-btn";
         editBtn.textContent = "Edit";
@@ -1624,12 +1625,69 @@ document.addEventListener("DOMContentLoaded", async function () {
 
           typeSelect.value = item.document_type;
 
-          const note = document.createElement("p");
-          note.textContent =
-            "You can update the document type here. File replacement will be available later.";
+          // CURRENT FILE
+          const currentFileLabel = document.createElement("label");
+          currentFileLabel.textContent = "Current File";
+
+          const currentFileInfo = document.createElement("p");
+          currentFileInfo.textContent = item.file_name;
+
+          // CHOOSE REPLACEMENT FILE
+          const fileLabel = document.createElement("label");
+          fileLabel.textContent = "Choose Replacement File";
+
+          const fileInput = document.createElement("input");
+          fileInput.type = "file";
+          fileInput.accept = ".pdf,.doc,.docx,.jpg,.jpeg,.png";
+
+          let replacementFile = null;
+
+          const fileNote = document.createElement("p");
+          fileNote.textContent =
+            "PDF, DOC, DOCX, JPG, PNG. Maximum file size: 10 MB.";
 
           const formStatus = document.createElement("p");
           formStatus.className = "document-edit-status";
+
+          fileInput.addEventListener("change", function () {
+
+            replacementFile = fileInput.files[0] || null;
+
+            if (!replacementFile) {
+              fileNote.textContent =
+                "PDF, DOC, DOCX, JPG, PNG. Maximum file size: 10 MB.";
+              return;
+            }
+
+            if (!allowedTypes.includes(replacementFile.type)) {
+
+              formStatus.textContent =
+                "Please select a PDF, DOC, DOCX, JPG, or PNG file.";
+
+              replacementFile = null;
+              fileInput.value = "";
+
+              return;
+
+            }
+
+            if (replacementFile.size > MAX_FILE_SIZE) {
+
+              formStatus.textContent =
+                "Document size must not exceed 10 MB.";
+
+              replacementFile = null;
+              fileInput.value = "";
+
+              return;
+
+            }
+
+            formStatus.textContent = "";
+            fileNote.textContent =
+              "Selected: " + replacementFile.name;
+
+          });
 
           const saveBtn = document.createElement("button");
           saveBtn.type = "button";
@@ -1645,7 +1703,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           });
 
           // =========================================
-          // SAVE DOCUMENT TYPE
+          // SAVE DOCUMENT CHANGES
           // =========================================
 
           saveBtn.addEventListener("click", async function () {
@@ -1669,18 +1727,52 @@ document.addEventListener("DOMContentLoaded", async function () {
             saveBtn.disabled = true;
             cancelBtn.disabled = true;
             typeSelect.disabled = true;
+            fileInput.disabled = true;
 
             saveBtn.textContent = "Saving...";
             formStatus.textContent = "Saving document changes...";
 
+            let replacementPath = null;
+
             try {
+
+              // Upload replacement file if selected.
+              if (replacementFile) {
+
+                const safeFileName = replacementFile.name
+                  .replace(/[^a-zA-Z0-9._-]/g, "_");
+
+                replacementPath =
+                  `${currentUser.id}/${crypto.randomUUID()}-${safeFileName}`;
+
+                const { error: uploadError } =
+                  await supabaseAuth.storage
+                    .from(BUCKET_NAME)
+                    .upload(replacementPath, replacementFile, {
+                      cacheControl: "3600",
+                      upsert: false,
+                      contentType: replacementFile.type
+                    });
+
+                if (uploadError) throw uploadError;
+
+              }
+
+              const updateData = {
+                document_type: selectedType,
+                updated_at: new Date().toISOString()
+              };
+
+              if (replacementFile) {
+                updateData.file_name = replacementFile.name;
+                updateData.storage_path = replacementPath;
+                updateData.file_size = replacementFile.size;
+                updateData.mime_type = replacementFile.type;
+              }
 
               const { data, error } = await supabaseAuth
                 .from("jobseeker_documents")
-                .update({
-                  document_type: selectedType,
-                  updated_at: new Date().toISOString()
-                })
+                .update(updateData)
                 .eq("id", item.id)
                 .eq("user_id", currentUser.id)
                 .select("id")
@@ -1694,14 +1786,40 @@ document.addEventListener("DOMContentLoaded", async function () {
                 );
               }
 
+              // Database update succeeded.
+              // Old Storage file cleanup will be handled
+              // after the Storage RLS policies are updated.
+
+              replacementPath = null;
+
               statusEl.textContent =
-                "Document type updated successfully.";
+                "Document updated successfully.";
 
               await loadJobseekerDocuments();
 
             } catch (error) {
 
-              console.error("Update Jobseeker Document Error:", error);
+              console.error(
+                "Update Jobseeker Document Error:",
+                error
+              );
+
+              // Remove replacement upload if database update failed.
+              if (replacementPath) {
+
+                const { error: cleanupError } =
+                  await supabaseAuth.storage
+                    .from(BUCKET_NAME)
+                    .remove([replacementPath]);
+
+                if (cleanupError) {
+                  console.error(
+                    "Replacement File Cleanup Error:",
+                    cleanupError
+                  );
+                }
+
+              }
 
               formStatus.textContent =
                 error.message || "Unable to update document.";
@@ -1711,6 +1829,7 @@ document.addEventListener("DOMContentLoaded", async function () {
               saveBtn.disabled = false;
               cancelBtn.disabled = false;
               typeSelect.disabled = false;
+              fileInput.disabled = false;
               saveBtn.textContent = originalButtonText;
 
             }
@@ -1720,7 +1839,11 @@ document.addEventListener("DOMContentLoaded", async function () {
           editForm.append(
             typeLabel,
             typeSelect,
-            note,
+            currentFileLabel,
+            currentFileInfo,
+            fileLabel,
+            fileInput,
+            fileNote,
             formStatus,
             saveBtn,
             cancelBtn

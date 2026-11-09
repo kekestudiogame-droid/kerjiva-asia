@@ -1021,16 +1021,28 @@ select {
 
 /* JOB SEARCH */
 
+
 .dashboard-panel .search-box {
   box-shadow: none;
   padding: 0;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+/* Category / Job Type: full width on first row */
+.dashboard-panel .search-box .search-field:first-child {
+  grid-column: 1 / -1;
+}
+
+/* Search button: full width on last row */
 .dashboard-panel .search-box .search-btn {
   grid-column: 1 / -1;
   width: 100%;
 }
+
+#jobseekerJobResults {
+  margin-top: 20px;
+}
+
 
 #jobseekerJobResults {
   margin-top: 20px;

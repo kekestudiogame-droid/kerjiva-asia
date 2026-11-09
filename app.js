@@ -3052,6 +3052,326 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+/* =========================================================
+   KERJIVA MALAYSIA
+   COMPANY PROFILE
+   LOAD, EDIT, SAVE & CANCEL
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", async function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  // Jalankan hanya pada Company Dashboard.
+  if (params.get("dashboard") !== "company") return;
+
+  if (params.has("preview")) return;
+
+  const dashboard = document.getElementById("companyDashboard");
+
+  if (!dashboard) return;
+
+  const form = document.getElementById("companyProfileForm");
+
+  const editBtn = document.getElementById("editCompanyProfileBtn");
+  const saveBtn = document.getElementById("saveCompanyProfileBtn");
+  const cancelBtn = document.getElementById("cancelCompanyProfileBtn");
+  const statusEl = document.getElementById("companyProfileStatus");
+
+  if (!form || !editBtn || !saveBtn || !cancelBtn || !statusEl) {
+    console.error("Company Profile: Required HTML elements not found.");
+    return;
+  }
+
+  // =====================================================
+  // PROFILE FIELDS
+  // =====================================================
+
+  const fields = {
+    company_name: document.getElementById("companyName"),
+    registration_number: document.getElementById("companyRegistrationNumber"),
+    industry: document.getElementById("companyIndustry"),
+    email: document.getElementById("companyEmail"),
+    phone: document.getElementById("companyPhone"),
+    website: document.getElementById("companyWebsite"),
+    state: document.getElementById("companyState"),
+    city: document.getElementById("companyCity"),
+    address: document.getElementById("companyAddress"),
+    description: document.getElementById("companyDescription")
+  };
+
+  if (Object.values(fields).some(field => !field)) {
+    console.error("Company Profile: One or more fields are missing.");
+    return;
+  }
+
+  const editableFields = Object.entries(fields)
+    .filter(([key]) => key !== "email")
+    .map(([, field]) => field);
+
+  let originalProfile = null;
+  let companyUserId = null;
+
+  // =====================================================
+  // PROFILE MODE
+  // =====================================================
+
+  function setProfileMode(editing) {
+
+    editableFields.forEach(field => {
+      field.disabled = !editing;
+    });
+
+    // Company Email always read-only.
+    fields.email.disabled = true;
+
+    editBtn.hidden = editing;
+    saveBtn.hidden = !editing;
+    cancelBtn.hidden = !editing;
+
+  }
+
+  // =====================================================
+  // SHOW STATUS
+  // =====================================================
+
+  function showStatus(message, isError = false) {
+
+    statusEl.textContent = message;
+
+    statusEl.style.color = isError ? "red" : "";
+
+  }
+
+  // =====================================================
+  // FILL PROFILE FORM
+  // =====================================================
+
+  function fillProfile(profile) {
+
+    fields.company_name.value = profile.company_name || "";
+    fields.registration_number.value = profile.registration_number || "";
+    fields.industry.value = profile.industry || "";
+    fields.email.value = profile.email || "";
+    fields.phone.value = profile.phone || "";
+    fields.website.value = profile.website || "";
+    fields.state.value = profile.state || "";
+    fields.city.value = profile.city || "";
+    fields.address.value = profile.address || "";
+    fields.description.value = profile.description || "";
+
+  }
+
+  // =====================================================
+  // SAVE ORIGINAL PROFILE VALUES
+  // =====================================================
+
+  function captureOriginalProfile() {
+
+    originalProfile = {};
+
+    Object.entries(fields).forEach(([key, field]) => {
+      originalProfile[key] = field.value;
+    });
+
+  }
+
+  // =====================================================
+  // LOAD COMPANY PROFILE
+  // =====================================================
+
+  async function loadCompanyProfile() {
+
+    setProfileMode(false);
+
+    showStatus("Loading company profile...");
+
+    const { data: sessionData, error: sessionError } =
+      await supabaseAuth.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    const session = sessionData.session;
+
+    if (!session?.user) {
+      throw new Error("Please sign in again.");
+    }
+
+    companyUserId = session.user.id;
+
+    const { data: profile, error } = await supabaseAuth
+      .from("companies")
+      .select(`
+        company_name,
+        registration_number,
+        industry,
+        email,
+        phone,
+        website,
+        state,
+        city,
+        address,
+        description
+      `)
+      .eq("user_id", companyUserId)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!profile) {
+      throw new Error("Company profile not found.");
+    }
+
+    fillProfile(profile);
+
+    captureOriginalProfile();
+
+    setProfileMode(false);
+
+    showStatus("");
+
+    console.log("Company Profile Loaded Successfully.");
+
+  }
+
+  // =====================================================
+  // EDIT PROFILE
+  // =====================================================
+
+  editBtn.addEventListener("click", function () {
+
+    setProfileMode(true);
+
+    showStatus("");
+
+  });
+
+  // =====================================================
+  // CANCEL EDIT
+  // =====================================================
+
+  cancelBtn.addEventListener("click", function () {
+
+    if (originalProfile) {
+
+      fillProfile(originalProfile);
+
+    }
+
+    setProfileMode(false);
+
+    showStatus("");
+
+  });
+
+  // =====================================================
+  // SAVE PROFILE
+  // =====================================================
+
+  form.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+    if (!companyUserId || !originalProfile) {
+      showStatus("Company profile is not ready.", true);
+      return;
+    }
+
+    const updatedProfile = {
+      company_name: fields.company_name.value.trim(),
+      registration_number: fields.registration_number.value.trim(),
+      industry: fields.industry.value.trim(),
+      phone: fields.phone.value.trim(),
+      website: fields.website.value.trim() || null,
+      state: fields.state.value,
+      city: fields.city.value.trim(),
+      address: fields.address.value.trim(),
+      description: fields.description.value.trim(),
+      updated_at: new Date().toISOString()
+    };
+
+    if (!updatedProfile.company_name) {
+      showStatus("Company Name is required.", true);
+      fields.company_name.focus();
+      return;
+    }
+
+    saveBtn.disabled = true;
+    cancelBtn.disabled = true;
+
+    showStatus("Saving company profile...");
+
+    try {
+
+      const { data: savedProfile, error } = await supabaseAuth
+        .from("companies")
+        .update(updatedProfile)
+        .eq("user_id", companyUserId)
+        .select(`
+          company_name,
+          registration_number,
+          industry,
+          email,
+          phone,
+          website,
+          state,
+          city,
+          address,
+          description
+        `)
+        .single();
+
+      if (error) throw error;
+
+      fillProfile(savedProfile);
+
+      captureOriginalProfile();
+
+      setProfileMode(false);
+
+      showStatus("Company profile updated successfully.");
+
+      console.log("Company Profile Saved Successfully.");
+
+    } catch (error) {
+
+      console.error("Save Company Profile Error:", error);
+
+      showStatus(
+        error.message || "Unable to save company profile.",
+        true
+      );
+
+    } finally {
+
+      saveBtn.disabled = false;
+      cancelBtn.disabled = false;
+
+    }
+
+  });
+
+  // =====================================================
+  // INITIALIZE COMPANY PROFILE
+  // =====================================================
+
+  try {
+
+    await loadCompanyProfile();
+
+  } catch (error) {
+
+    console.error("Load Company Profile Error:", error);
+
+    showStatus(
+      error.message || "Unable to load company profile.",
+      true
+    );
+
+  }
+
+});
+
 
 
 

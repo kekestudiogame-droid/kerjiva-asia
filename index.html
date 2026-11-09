@@ -798,42 +798,49 @@
 
         <div class="dashboard-panel">
 
-          <div class="search-box">
+        <div class="search-box">
 
-            <div class="search-field">
-              <label for="dashboardJobKeyword">
-                Job Title or Keyword
-              </label>
+  <div class="search-field">
+    <label for="dashboardJobKeyword">Job Title or Keyword</label>
+    <input
+      type="text"
+      id="dashboardJobKeyword"
+      placeholder="e.g. Marketing Executive"
+    >
+  </div>
 
-              <input
-                type="text"
-                id="dashboardJobKeyword"
-                placeholder="e.g. Marketing Executive"
-              >
-            </div>
+  <div class="search-field">
+    <label for="dashboardJobLocation">State / City</label>
+    <input
+      type="text"
+      id="dashboardJobLocation"
+      placeholder="e.g. Kuala Lumpur"
+    >
+  </div>
 
-            <div class="search-field">
-              <label for="dashboardJobLocation">
-                State / City
-              </label>
+  <div class="search-field">
+    <label for="dashboardJobCategory">Category</label>
+    <select id="dashboardJobCategory">
+      <option value="">All Categories</option>
+    </select>
+  </div>
 
-              <input
-                type="text"
-                id="dashboardJobLocation"
-                placeholder="e.g. Kuala Lumpur"
-              >
-            </div>
+  <div class="search-field">
+    <label for="dashboardJobType">Job Type</label>
+    <select id="dashboardJobType">
+      <option value="">All Job Types</option>
+    </select>
+  </div>
 
-            <button
-              type="button"
-              id="dashboardJobSearchBtn"
-              class="search-btn"
-            >
-              Search Jobs
-            </button>
+  <button
+    type="button"
+    id="dashboardJobSearchBtn"
+    class="search-btn"
+  >
+    Search Jobs
+  </button>
 
-          </div>
-
+</div>
         </div>
 
         <div id="jobseekerJobResults" class="jobs-grid">

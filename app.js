@@ -1588,12 +1588,76 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         }
 
+        const editBtn = document.createElement("button");
+        editBtn.type = "button";
+        editBtn.textContent = "Edit";
+
+        editBtn.addEventListener("click", function () {
+
+          if (card.querySelector(".document-edit-form")) return;
+
+          const editForm = document.createElement("div");
+          editForm.className = "document-edit-form";
+
+          const typeLabel = document.createElement("label");
+          typeLabel.textContent = "Document Type";
+
+          const typeSelect = document.createElement("select");
+
+          Object.entries(documentTypeLabels).forEach(
+            ([value, label]) => {
+
+              const option = document.createElement("option");
+              option.value = value;
+              option.textContent = label;
+
+              typeSelect.appendChild(option);
+
+            }
+          );
+
+          typeSelect.value = item.document_type;
+
+          const fileLabel = document.createElement("label");
+          fileLabel.textContent = "Select Replacement File";
+
+          const fileInput = document.createElement("input");
+          fileInput.type = "file";
+          fileInput.accept =
+            ".pdf,.doc,.docx,.jpg,.jpeg,.png";
+
+          const note = document.createElement("p");
+          note.textContent =
+            "You can change the document type or select a replacement file.";
+
+          const cancelBtn = document.createElement("button");
+          cancelBtn.type = "button";
+          cancelBtn.textContent = "Cancel";
+
+          cancelBtn.addEventListener("click", function () {
+            editForm.remove();
+          });
+
+          editForm.append(
+            typeLabel,
+            typeSelect,
+            fileLabel,
+            fileInput,
+            note,
+            cancelBtn
+          );
+
+          card.appendChild(editForm);
+
+        });
+
         card.append(
           heading,
           fileName,
           fileInfo,
           date,
-          viewLink
+          viewLink,
+          editBtn
         );
 
         documentList.appendChild(card);
@@ -1612,7 +1676,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
   }
-
   // =========================================
   // SELECT DOCUMENT FILE
   // =========================================

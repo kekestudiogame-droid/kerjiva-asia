@@ -2199,6 +2199,10 @@ select {
     width: 100%;
   }
 }
+/* Jarak tombol Edit dari View Document */
+.document-edit-btn {
+  margin-left: 12px;
+}
 
 
 

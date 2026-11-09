@@ -1024,6 +1024,12 @@ select {
 .dashboard-panel .search-box {
   box-shadow: none;
   padding: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dashboard-panel .search-box .search-btn {
+  grid-column: 1 / -1;
+  width: 100%;
 }
 
 #jobseekerJobResults {

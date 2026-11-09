@@ -1025,6 +1025,399 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   JOBSEEKER PROFILE PHOTO
+   PRIVATE SUPABASE STORAGE
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", async function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  // Jalankan hanya pada dashboard Jobseeker sebenarnya.
+  if (params.get("dashboard") !== "jobseeker" || params.has("preview")) {
+    return;
+  }
+
+  const photoFileInput = document.getElementById("jobseekerAvatarFile");
+  const choosePhotoBtn = document.getElementById("chooseJobseekerAvatarBtn");
+  const uploadPhotoBtn = document.getElementById("uploadJobseekerAvatarBtn");
+  const removePhotoBtn = document.getElementById("removeJobseekerAvatarBtn");
+  const photoStatus = document.getElementById("jobseekerAvatarStatus");
+
+  const photoPreview = document.getElementById("jobseekerPhotoPreview");
+  const photoImage = document.getElementById("jobseekerPhotoImage");
+  const photoInitials = document.getElementById("jobseekerPhotoInitials");
+
+  const sidebarAvatar = document.getElementById("jobseekerAvatar");
+  const sidebarName = document.getElementById("jobseekerSidebarName");
+
+  if (
+    !photoFileInput ||
+    !choosePhotoBtn ||
+    !uploadPhotoBtn ||
+    !removePhotoBtn ||
+    !photoStatus ||
+    !photoPreview ||
+    !photoImage ||
+    !photoInitials
+  ) {
+    return;
+  }
+
+  const BUCKET_NAME = "jobseeker-avatars";
+  const MAX_FILE_SIZE = 2 * 1024 * 1024;
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ];
+
+  let currentUser = null;
+  let currentAvatarPath = null;
+  let selectedPhoto = null;
+
+  // =========================================
+  // INITIALS
+  // =========================================
+
+  function getInitials(name) {
+
+    const words = (name || "Job Seeker")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+
+    return words
+      .slice(0, 2)
+      .map(word => word.charAt(0).toUpperCase())
+      .join("") || "JS";
+
+  }
+
+  function showInitials(name) {
+
+    const initials = getInitials(name);
+
+    photoInitials.textContent = initials;
+    photoInitials.hidden = false;
+    photoImage.hidden = true;
+    photoImage.removeAttribute("src");
+
+    if (sidebarAvatar) {
+
+      sidebarAvatar.textContent = initials;
+
+    }
+
+  }
+
+  // =========================================
+  // DISPLAY PHOTO
+  // =========================================
+
+  function displayPhoto(signedUrl) {
+
+    photoImage.src = signedUrl;
+    photoImage.hidden = false;
+    photoInitials.hidden = true;
+
+    if (sidebarAvatar) {
+
+      sidebarAvatar.textContent = "";
+
+      const sidebarImage = document.createElement("img");
+
+      sidebarImage.src = signedUrl;
+      sidebarImage.alt = "Jobseeker Profile Photo";
+
+      sidebarImage.style.width = "100%";
+      sidebarImage.style.height = "100%";
+      sidebarImage.style.objectFit = "cover";
+      sidebarImage.style.borderRadius = "50%";
+
+      sidebarAvatar.appendChild(sidebarImage);
+
+    }
+
+  }
+
+  // =========================================
+  // LOAD CURRENT PHOTO
+  // =========================================
+
+  async function loadJobseekerPhoto() {
+
+    photoStatus.textContent = "Loading profile photo...";
+
+    try {
+
+      const { data: sessionData, error: sessionError } =
+        await supabaseAuth.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      const session = sessionData.session;
+
+      if (!session || !session.user) {
+        throw new Error("Please sign in again.");
+      }
+
+      currentUser = session.user;
+
+      const { data: profile, error: profileError } =
+        await supabaseAuth
+          .from("jobseeker_profiles")
+          .select("full_name, avatar_url")
+          .eq("user_id", currentUser.id)
+          .maybeSingle();
+
+      if (profileError) throw profileError;
+
+      if (!profile) {
+        throw new Error("Jobseeker profile was not found.");
+      }
+
+      if (sidebarName && profile.full_name) {
+        sidebarName.textContent = profile.full_name;
+      }
+
+      showInitials(profile.full_name);
+
+      currentAvatarPath = profile.avatar_url || null;
+
+      if (currentAvatarPath) {
+
+        const { data: signedData, error: signedError } =
+          await supabaseAuth.storage
+            .from(BUCKET_NAME)
+            .createSignedUrl(currentAvatarPath, 3600);
+
+        if (signedError) throw signedError;
+
+        if (signedData && signedData.signedUrl) {
+          displayPhoto(signedData.signedUrl);
+          removePhotoBtn.hidden = false;
+        }
+
+      } else {
+
+        removePhotoBtn.hidden = true;
+
+      }
+
+      photoStatus.textContent = "";
+
+    } catch (error) {
+
+      console.error("Load Jobseeker Photo Error:", error);
+
+      photoStatus.textContent =
+        error.message || "Unable to load profile photo.";
+
+    }
+
+  }
+
+  // =========================================
+  // CHOOSE PHOTO
+  // =========================================
+
+  choosePhotoBtn.addEventListener("click", function () {
+
+    photoFileInput.click();
+
+  });
+
+  photoFileInput.addEventListener("change", function () {
+
+    const file = photoFileInput.files[0];
+
+    selectedPhoto = null;
+    uploadPhotoBtn.disabled = true;
+
+    if (!file) return;
+
+    if (!allowedTypes.includes(file.type)) {
+
+      photoStatus.textContent =
+        "Please select a JPG, PNG, or WebP image.";
+
+      photoFileInput.value = "";
+      return;
+
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+
+      photoStatus.textContent =
+        "Photo size must not exceed 2 MB.";
+
+      photoFileInput.value = "";
+      return;
+
+    }
+
+    selectedPhoto = file;
+    uploadPhotoBtn.disabled = false;
+
+    photoStatus.textContent = "Photo selected. Click Upload Photo to continue.";
+
+  });
+
+  // =========================================
+  // UPLOAD PHOTO
+  // =========================================
+
+  uploadPhotoBtn.addEventListener("click", async function () {
+
+    if (!selectedPhoto || !currentUser) return;
+
+    const originalButtonText = uploadPhotoBtn.textContent;
+
+    uploadPhotoBtn.disabled = true;
+    choosePhotoBtn.disabled = true;
+    removePhotoBtn.disabled = true;
+
+    uploadPhotoBtn.textContent = "Uploading...";
+    photoStatus.textContent = "Uploading profile photo...";
+
+    try {
+
+      const avatarPath = `${currentUser.id}/profile`;
+
+      const { error: uploadError } =
+        await supabaseAuth.storage
+          .from(BUCKET_NAME)
+          .upload(avatarPath, selectedPhoto, {
+            cacheControl: "3600",
+            upsert: true,
+            contentType: selectedPhoto.type
+          });
+
+      if (uploadError) throw uploadError;
+
+      const { error: updateError } =
+        await supabaseAuth
+          .from("jobseeker_profiles")
+          .update({
+            avatar_url: avatarPath,
+            updated_at: new Date().toISOString()
+          })
+          .eq("user_id", currentUser.id);
+
+      if (updateError) throw updateError;
+
+      currentAvatarPath = avatarPath;
+
+      const { data: signedData, error: signedError } =
+        await supabaseAuth.storage
+          .from(BUCKET_NAME)
+          .createSignedUrl(avatarPath, 3600);
+
+      if (signedError) throw signedError;
+
+      displayPhoto(signedData.signedUrl);
+
+      removePhotoBtn.hidden = false;
+
+      selectedPhoto = null;
+      photoFileInput.value = "";
+
+      photoStatus.textContent = "Profile photo uploaded successfully.";
+
+    } catch (error) {
+
+      console.error("Upload Jobseeker Photo Error:", error);
+
+      photoStatus.textContent =
+        error.message || "Unable to upload profile photo.";
+
+    } finally {
+
+      uploadPhotoBtn.disabled = true;
+      choosePhotoBtn.disabled = false;
+      removePhotoBtn.disabled = false;
+      uploadPhotoBtn.textContent = originalButtonText;
+
+    }
+
+  });
+
+  // =========================================
+  // REMOVE PHOTO
+  // =========================================
+
+  removePhotoBtn.addEventListener("click", async function () {
+
+    if (!currentAvatarPath || !currentUser) return;
+
+    const confirmed = window.confirm(
+      "Are you sure you want to remove your profile photo?"
+    );
+
+    if (!confirmed) return;
+
+    removePhotoBtn.disabled = true;
+    choosePhotoBtn.disabled = true;
+
+    photoStatus.textContent = "Removing profile photo...";
+
+    try {
+
+      const { error: deleteError } =
+        await supabaseAuth.storage
+          .from(BUCKET_NAME)
+          .remove([currentAvatarPath]);
+
+      if (deleteError) throw deleteError;
+
+      const { error: updateError } =
+        await supabaseAuth
+          .from("jobseeker_profiles")
+          .update({
+            avatar_url: null,
+            updated_at: new Date().toISOString()
+          })
+          .eq("user_id", currentUser.id);
+
+      if (updateError) throw updateError;
+
+      currentAvatarPath = null;
+
+      showInitials(
+        sidebarName ? sidebarName.textContent : "Job Seeker"
+      );
+
+      removePhotoBtn.hidden = true;
+
+      photoStatus.textContent = "Profile photo removed successfully.";
+
+    } catch (error) {
+
+      console.error("Remove Jobseeker Photo Error:", error);
+
+      photoStatus.textContent =
+        error.message || "Unable to remove profile photo.";
+
+    } finally {
+
+      removePhotoBtn.disabled = false;
+      choosePhotoBtn.disabled = false;
+
+    }
+
+  });
+
+  // Load photo when Jobseeker Dashboard opens.
+  await loadJobseekerPhoto();
+
+});
+
+
+
 
 
 

@@ -1588,10 +1588,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         }
 
+     
        const editBtn = document.createElement("button");
-         editBtn.type = "button";
-         editBtn.className = "document-edit-btn";
-         editBtn.textContent = "Edit";
+        editBtn.type = "button";
+        editBtn.className = "document-edit-btn";
+        editBtn.textContent = "Edit";
+
+        // =========================================
+        // OPEN DOCUMENT EDIT FORM
+        // =========================================
 
         editBtn.addEventListener("click", function () {
 
@@ -1619,17 +1624,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 
           typeSelect.value = item.document_type;
 
-          const fileLabel = document.createElement("label");
-          fileLabel.textContent = "Select Replacement File";
-
-          const fileInput = document.createElement("input");
-          fileInput.type = "file";
-          fileInput.accept =
-            ".pdf,.doc,.docx,.jpg,.jpeg,.png";
-
           const note = document.createElement("p");
           note.textContent =
-            "You can change the document type or select a replacement file.";
+            "You can update the document type here. File replacement will be available later.";
+
+          const formStatus = document.createElement("p");
+          formStatus.className = "document-edit-status";
+
+          const saveBtn = document.createElement("button");
+          saveBtn.type = "button";
+          saveBtn.className = "document-edit-save-btn";
+          saveBtn.textContent = "Save Changes";
 
           const cancelBtn = document.createElement("button");
           cancelBtn.type = "button";
@@ -1639,12 +1644,85 @@ document.addEventListener("DOMContentLoaded", async function () {
             editForm.remove();
           });
 
+          // =========================================
+          // SAVE DOCUMENT TYPE
+          // =========================================
+
+          saveBtn.addEventListener("click", async function () {
+
+            if (!currentUser) {
+              formStatus.textContent =
+                "Your session has expired. Please sign in again.";
+              return;
+            }
+
+            const selectedType = typeSelect.value;
+
+            if (!selectedType) {
+              formStatus.textContent =
+                "Please select a document type.";
+              return;
+            }
+
+            const originalButtonText = saveBtn.textContent;
+
+            saveBtn.disabled = true;
+            cancelBtn.disabled = true;
+            typeSelect.disabled = true;
+
+            saveBtn.textContent = "Saving...";
+            formStatus.textContent = "Saving document changes...";
+
+            try {
+
+              const { data, error } = await supabaseAuth
+                .from("jobseeker_documents")
+                .update({
+                  document_type: selectedType,
+                  updated_at: new Date().toISOString()
+                })
+                .eq("id", item.id)
+                .eq("user_id", currentUser.id)
+                .select("id")
+                .single();
+
+              if (error) throw error;
+
+              if (!data) {
+                throw new Error(
+                  "Document was not found or could not be updated."
+                );
+              }
+
+              statusEl.textContent =
+                "Document type updated successfully.";
+
+              await loadJobseekerDocuments();
+
+            } catch (error) {
+
+              console.error("Update Jobseeker Document Error:", error);
+
+              formStatus.textContent =
+                error.message || "Unable to update document.";
+
+            } finally {
+
+              saveBtn.disabled = false;
+              cancelBtn.disabled = false;
+              typeSelect.disabled = false;
+              saveBtn.textContent = originalButtonText;
+
+            }
+
+          });
+
           editForm.append(
             typeLabel,
             typeSelect,
-            fileLabel,
-            fileInput,
             note,
+            formStatus,
+            saveBtn,
             cancelBtn
           );
 

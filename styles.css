@@ -814,13 +814,15 @@ select {
   padding: 35px;
 }
 
+
 .dashboard-content-section {
   display: none;
 }
 
-.dashboard-content-section:first-child {
+.dashboard-content-section:not([hidden]) {
   display: block;
 }
+
 
 .dashboard-page-heading {
   display: flex;

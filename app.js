@@ -1732,107 +1732,132 @@ document.addEventListener("DOMContentLoaded", async function () {
             saveBtn.textContent = "Saving...";
             formStatus.textContent = "Saving document changes...";
 
-            let replacementPath = null;
+          
+let replacementPath = null;
+const oldStoragePath = item.storage_path;
 
-            try {
+try {
 
-              // Upload replacement file if selected.
-              if (replacementFile) {
+  // Upload replacement file if selected.
+  if (replacementFile) {
 
-                const safeFileName = replacementFile.name
-                  .replace(/[^a-zA-Z0-9._-]/g, "_");
+    const safeFileName = replacementFile.name
+      .replace(/[^a-zA-Z0-9._-]/g, "_");
 
-                replacementPath =
-                  `${currentUser.id}/${crypto.randomUUID()}-${safeFileName}`;
+    replacementPath =
+      `${currentUser.id}/${crypto.randomUUID()}-${safeFileName}`;
 
-                const { error: uploadError } =
-                  await supabaseAuth.storage
-                    .from(BUCKET_NAME)
-                    .upload(replacementPath, replacementFile, {
-                      cacheControl: "3600",
-                      upsert: false,
-                      contentType: replacementFile.type
-                    });
+    const { error: uploadError } =
+      await supabaseAuth.storage
+        .from(BUCKET_NAME)
+        .upload(replacementPath, replacementFile, {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: replacementFile.type
+        });
 
-                if (uploadError) throw uploadError;
+    if (uploadError) throw uploadError;
 
-              }
+  }
 
-              const updateData = {
-                document_type: selectedType,
-                updated_at: new Date().toISOString()
-              };
+  const updateData = {
+    document_type: selectedType,
+    updated_at: new Date().toISOString()
+  };
 
-              if (replacementFile) {
-                updateData.file_name = replacementFile.name;
-                updateData.storage_path = replacementPath;
-                updateData.file_size = replacementFile.size;
-                updateData.mime_type = replacementFile.type;
-              }
+  if (replacementFile) {
+    updateData.file_name = replacementFile.name;
+    updateData.storage_path = replacementPath;
+    updateData.file_size = replacementFile.size;
+    updateData.mime_type = replacementFile.type;
+  }
 
-              const { data, error } = await supabaseAuth
-                .from("jobseeker_documents")
-                .update(updateData)
-                .eq("id", item.id)
-                .eq("user_id", currentUser.id)
-                .select("id")
-                .single();
+  const { data, error } = await supabaseAuth
+    .from("jobseeker_documents")
+    .update(updateData)
+    .eq("id", item.id)
+    .eq("user_id", currentUser.id)
+    .select("id")
+    .single();
 
-              if (error) throw error;
+  if (error) throw error;
 
-              if (!data) {
-                throw new Error(
-                  "Document was not found or could not be updated."
-                );
-              }
+  if (!data) {
+    throw new Error(
+      "Document was not found or could not be updated."
+    );
+  }
 
-              // Database update succeeded.
-              // Old Storage file cleanup will be handled
-              // after the Storage RLS policies are updated.
+  // Database update succeeded.
+  // New file is now the active source document.
+  replacementPath = null;
 
-              replacementPath = null;
+  // Remove old Storage file only after successful replacement.
+  if (replacementFile && oldStoragePath) {
 
-              statusEl.textContent =
-                "Document updated successfully.";
+    const { error: deleteError } =
+      await supabaseAuth.storage
+        .from(BUCKET_NAME)
+        .remove([oldStoragePath]);
 
-              await loadJobseekerDocuments();
+    if (deleteError) {
+      console.error(
+        "Old Document Cleanup Error:",
+        deleteError
+      );
 
-            } catch (error) {
+      statusEl.textContent =
+        "Document updated successfully, but the old file could not be removed.";
+    } else {
+      statusEl.textContent =
+        "Document updated successfully.";
+    }
 
-              console.error(
-                "Update Jobseeker Document Error:",
-                error
-              );
+  } else {
 
-              // Remove replacement upload if database update failed.
-              if (replacementPath) {
+    statusEl.textContent =
+      "Document updated successfully.";
 
-                const { error: cleanupError } =
-                  await supabaseAuth.storage
-                    .from(BUCKET_NAME)
-                    .remove([replacementPath]);
+  }
 
-                if (cleanupError) {
-                  console.error(
-                    "Replacement File Cleanup Error:",
-                    cleanupError
-                  );
-                }
+  await loadJobseekerDocuments();
 
-              }
+} catch (error) {
 
-              formStatus.textContent =
-                error.message || "Unable to update document.";
+  console.error(
+    "Update Jobseeker Document Error:",
+    error
+  );
 
-            } finally {
+  // Remove replacement upload if database update failed.
+  if (replacementPath) {
 
-              saveBtn.disabled = false;
-              cancelBtn.disabled = false;
-              typeSelect.disabled = false;
-              fileInput.disabled = false;
-              saveBtn.textContent = originalButtonText;
+    const { error: cleanupError } =
+      await supabaseAuth.storage
+        .from(BUCKET_NAME)
+        .remove([replacementPath]);
 
-            }
+    if (cleanupError) {
+      console.error(
+        "Replacement File Cleanup Error:",
+        cleanupError
+      );
+    }
+
+  }
+
+  formStatus.textContent =
+    error.message || "Unable to update document.";
+
+} finally {
+
+  saveBtn.disabled = false;
+  cancelBtn.disabled = false;
+  typeSelect.disabled = false;
+  fileInput.disabled = false;
+  saveBtn.textContent = originalButtonText;
+
+}
 
           });
 

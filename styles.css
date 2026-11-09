@@ -2305,3 +2305,20 @@ select {
   font-size: 12px;
 }
 
+/* COMPANY LOGO - FIX BUTTON TEXT VISIBILITY */
+
+#companyLogoUploadLabel {
+  background-color: #1e3a8a !important;
+  color: #ffffff !important;
+  opacity: 1;
+  text-decoration: none;
+  text-align: center;
+  line-height: 1.5;
+}
+
+#companyLogoUploadLabel:hover {
+  background-color: #1e40af !important;
+  color: #ffffff !important;
+}
+
+

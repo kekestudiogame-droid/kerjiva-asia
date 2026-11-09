@@ -2467,13 +2467,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     "dashboardJobLocation"
   );
 
-  const categorySelect = document.getElementById(
-    "dashboardJobCategory"
-  );
-
-  const jobTypeSelect = document.getElementById(
-    "dashboardJobType"
-  );
+const categoryTypeSelect = document.getElementById(
+  "dashboardJobCategoryType"
+);
 
   const searchButton = document.getElementById(
     "dashboardJobSearchBtn"
@@ -2484,8 +2480,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     !resultsContainer ||
     !keywordInput ||
     !locationInput ||
-    !categorySelect ||
-    !jobTypeSelect ||
+   !categoryTypeSelect ||
     !searchButton
   ) {
     return;
@@ -2574,60 +2569,60 @@ document.addEventListener("DOMContentLoaded", async function () {
   // POPULATE FILTER OPTIONS
   // =========================================
 
-  function populateJobFilters() {
+ function populateJobFilters() {
 
-    const categories = [
-      ...new Set(
-        publishedJobs
-          .map(job => String(job.category || "").trim())
-          .filter(Boolean)
-      )
-    ].sort((a, b) => a.localeCompare(b));
+  categoryTypeSelect.replaceChildren();
 
-    const jobTypes = [
-      ...new Set(
-        publishedJobs
-          .map(job => String(job.job_type || "").trim())
-          .filter(Boolean)
-      )
-    ].sort((a, b) => a.localeCompare(b));
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "All Categories & Job Types";
 
-    categorySelect.replaceChildren();
+  categoryTypeSelect.appendChild(defaultOption);
 
-    const allCategories = document.createElement("option");
-    allCategories.value = "";
-    allCategories.textContent = "All Categories";
-    categorySelect.appendChild(allCategories);
+  const filterOptions = [];
 
-    categories.forEach(category => {
+  publishedJobs.forEach(job => {
 
-      const option = document.createElement("option");
-      option.value = category;
-      option.textContent = category;
+    if (job.category) {
+      filterOptions.push({
+        value: "category:" + job.category,
+        label: job.category
+      });
+    }
 
-      categorySelect.appendChild(option);
+    if (job.job_type) {
+      filterOptions.push({
+        value: "type:" + job.job_type,
+        label: job.job_type
+      });
+    }
 
-    });
+  });
 
-    jobTypeSelect.replaceChildren();
+  const uniqueOptions = [
+    ...new Map(
+      filterOptions.map(option => [
+        option.value.toLowerCase(),
+        option
+      ])
+    ).values()
+  ];
 
-    const allJobTypes = document.createElement("option");
-    allJobTypes.value = "";
-    allJobTypes.textContent = "All Job Types";
-    jobTypeSelect.appendChild(allJobTypes);
+  uniqueOptions.sort((a, b) =>
+    a.label.localeCompare(b.label)
+  );
 
-    jobTypes.forEach(jobType => {
+  uniqueOptions.forEach(item => {
 
-      const option = document.createElement("option");
-      option.value = jobType;
-      option.textContent = jobType;
+    const option = document.createElement("option");
+    option.value = item.value;
+    option.textContent = item.label;
 
-      jobTypeSelect.appendChild(option);
+    categoryTypeSelect.appendChild(option);
 
-    });
+  });
 
-  }
-
+}
   // =========================================
   // DISPLAY JOB CARDS
   // =========================================
@@ -2735,13 +2730,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       .trim()
       .toLowerCase();
 
-    const selectedCategory = categorySelect.value
-      .trim()
-      .toLowerCase();
-
-    const selectedJobType = jobTypeSelect.value
-      .trim()
-      .toLowerCase();
+   const selectedFilter = categoryTypeSelect.value;
 
     const filteredJobs = publishedJobs.filter(job => {
 
@@ -2768,22 +2757,36 @@ document.addEventListener("DOMContentLoaded", async function () {
       const matchesLocation =
         !location || locationContent.includes(location);
 
-      const matchesCategory =
-        !selectedCategory ||
-        String(job.category || "").trim().toLowerCase() ===
-          selectedCategory;
+     let matchesCategoryType = true;
 
-      const matchesJobType =
-        !selectedJobType ||
-        String(job.job_type || "").trim().toLowerCase() ===
-          selectedJobType;
+if (selectedFilter.startsWith("category:")) {
 
-      return (
-        matchesKeyword &&
-        matchesLocation &&
-        matchesCategory &&
-        matchesJobType
-      );
+  const selectedCategory = selectedFilter
+    .substring(9)
+    .trim()
+    .toLowerCase();
+
+  matchesCategoryType =
+    String(job.category || "").trim().toLowerCase() ===
+    selectedCategory;
+
+} else if (selectedFilter.startsWith("type:")) {
+
+  const selectedJobType = selectedFilter
+    .substring(5)
+    .trim()
+    .toLowerCase();
+
+  matchesCategoryType =
+    String(job.job_type || "").trim().toLowerCase() ===
+    selectedJobType;
+
+}
+    return (
+  matchesKeyword &&
+  matchesLocation &&
+  matchesCategoryType
+);
 
     });
 
@@ -2918,8 +2921,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   // Update results when filters change.
-  categorySelect.addEventListener("change", searchJobs);
-  jobTypeSelect.addEventListener("change", searchJobs);
+categoryTypeSelect.addEventListener("change", searchJobs);
 
   // =========================================
   // LOAD JOBS WHEN OPENING FIND JOBS

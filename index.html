@@ -465,6 +465,80 @@
       <p>Manage your personal and professional information in one place.</p>
     </div>
   </div>
+  
+  <!-- PROFILE PHOTO -->
+  <div class="dashboard-panel jobseeker-photo-panel">
+
+    <div class="jobseeker-photo-content">
+
+      <div class="jobseeker-photo-preview" id="jobseekerPhotoPreview">
+
+        <span id="jobseekerPhotoInitials">JS</span>
+
+        <img
+          id="jobseekerPhotoImage"
+          src=""
+          alt="Jobseeker Profile Photo"
+          hidden
+        >
+
+      </div>
+
+      <div class="jobseeker-photo-details">
+
+        <h2>Profile Photo</h2>
+
+        <p>
+          Upload a profile photo to help companies recognise you.
+        </p>
+
+        <p class="jobseeker-photo-requirements">
+          JPG, PNG, or WebP. Maximum file size: 2 MB.
+        </p>
+
+        <div class="jobseeker-photo-actions">
+
+          <input
+            type="file"
+            id="jobseekerAvatarFile"
+            accept="image/jpeg,image/png,image/webp"
+            hidden
+          >
+
+          <button
+            type="button"
+            id="chooseJobseekerAvatarBtn"
+          >
+            Choose Photo
+          </button>
+
+          <button
+            type="button"
+            id="uploadJobseekerAvatarBtn"
+            disabled
+          >
+            Upload Photo
+          </button>
+
+          <button
+            type="button"
+            id="removeJobseekerAvatarBtn"
+            hidden
+          >
+            Remove Photo
+          </button>
+
+        </div>
+
+        <p id="jobseekerAvatarStatus" role="status"></p>
+
+      </div>
+
+    </div>
+
+  </div>
+  <!-- END PROFILE PHOTO -->
+
 
   <form id="jobseekerProfileForm" class="jobseeker-profile-form">
 

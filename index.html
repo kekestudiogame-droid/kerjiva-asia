@@ -1116,6 +1116,39 @@
         <div class="dashboard-panel">
 
           <form id="companyProfileForm">
+            
+<!-- COMPANY LOGO -->
+<div class="form-group company-logo-group">
+  <label>Company Logo</label>
+
+  <div class="company-logo-preview-wrapper">
+    <img
+      id="companyLogoPreview"
+      src=""
+      alt="Company Logo"
+      hidden
+    >
+
+    <div id="companyLogoPlaceholder" class="company-logo-placeholder">
+      <span>Company Logo</span>
+    </div>
+  </div>
+
+  <input
+    type="file"
+    id="companyLogoInput"
+    accept="image/jpeg,image/png,image/webp"
+    hidden
+  >
+
+  <label for="companyLogoInput" id="companyLogoUploadLabel">
+    Upload or Change Logo
+  </label>
+
+  <small>JPG, PNG, or WebP. Maximum file size: 2 MB.</small>
+</div>
+<!-- END COMPANY LOGO -->
+
 
             <div class="form-group">
               <label for="companyName">Company Name</label>

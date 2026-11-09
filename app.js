@@ -3052,10 +3052,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+        
 /* =========================================================
    KERJIVA MALAYSIA
    COMPANY PROFILE
-   LOAD, EDIT, SAVE & CANCEL
+   LOAD, EDIT, SAVE, CANCEL & COMPANY LOGO
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -3078,7 +3079,16 @@ document.addEventListener("DOMContentLoaded", async function () {
   const cancelBtn = document.getElementById("cancelCompanyProfileBtn");
   const statusEl = document.getElementById("companyProfileStatus");
 
-  if (!form || !editBtn || !saveBtn || !cancelBtn || !statusEl) {
+  // COMPANY LOGO ELEMENTS
+  const logoPreview = document.getElementById("companyLogoPreview");
+  const logoPlaceholder = document.getElementById("companyLogoPlaceholder");
+  const logoInput = document.getElementById("companyLogoInput");
+  const logoUploadLabel = document.getElementById("companyLogoUploadLabel");
+
+  if (
+    !form || !editBtn || !saveBtn || !cancelBtn || !statusEl ||
+    !logoPreview || !logoPlaceholder || !logoInput || !logoUploadLabel
+  ) {
     console.error("Company Profile: Required HTML elements not found.");
     return;
   }
@@ -3111,6 +3121,32 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let originalProfile = null;
   let companyUserId = null;
+  let originalLogoUrl = null;
+  let selectedLogoFile = null;
+  let previewObjectUrl = null;
+
+  // =====================================================
+  // SHOW COMPANY LOGO
+  // =====================================================
+
+  function showCompanyLogo(url) {
+
+    if (previewObjectUrl) {
+      URL.revokeObjectURL(previewObjectUrl);
+      previewObjectUrl = null;
+    }
+
+    if (url) {
+      logoPreview.src = url;
+      logoPreview.hidden = false;
+      logoPlaceholder.hidden = true;
+    } else {
+      logoPreview.removeAttribute("src");
+      logoPreview.hidden = true;
+      logoPlaceholder.hidden = false;
+    }
+
+  }
 
   // =====================================================
   // PROFILE MODE
@@ -3125,6 +3161,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Company Email always read-only.
     fields.email.disabled = true;
 
+    logoInput.disabled = !editing;
+    logoUploadLabel.hidden = !editing;
+
     editBtn.hidden = editing;
     saveBtn.hidden = !editing;
     cancelBtn.hidden = !editing;
@@ -3138,7 +3177,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   function showStatus(message, isError = false) {
 
     statusEl.textContent = message;
-
     statusEl.style.color = isError ? "red" : "";
 
   }
@@ -3160,19 +3198,36 @@ document.addEventListener("DOMContentLoaded", async function () {
     fields.address.value = profile.address || "";
     fields.description.value = profile.description || "";
 
+    showCompanyLogo(profile.logo_url || null);
+
   }
 
   // =====================================================
   // SAVE ORIGINAL PROFILE VALUES
   // =====================================================
 
-  function captureOriginalProfile() {
+  function captureOriginalProfile(profile) {
 
     originalProfile = {};
 
     Object.entries(fields).forEach(([key, field]) => {
       originalProfile[key] = field.value;
     });
+
+    originalLogoUrl = profile.logo_url || null;
+
+  }
+
+  // =====================================================
+  // RESET LOGO SELECTION
+  // =====================================================
+
+  function resetLogoSelection() {
+
+    selectedLogoFile = null;
+    logoInput.value = "";
+
+    showCompanyLogo(originalLogoUrl);
 
   }
 
@@ -3211,7 +3266,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         state,
         city,
         address,
-        description
+        description,
+        logo_url
       `)
       .eq("user_id", companyUserId)
       .maybeSingle();
@@ -3224,7 +3280,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     fillProfile(profile);
 
-    captureOriginalProfile();
+    captureOriginalProfile(profile);
 
     setProfileMode(false);
 
@@ -3233,6 +3289,62 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.log("Company Profile Loaded Successfully.");
 
   }
+
+  // =====================================================
+  // SELECT & PREVIEW COMPANY LOGO
+  // =====================================================
+
+  logoInput.addEventListener("change", function () {
+
+    const file = this.files && this.files[0];
+
+    if (!file) return;
+
+    const allowedTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/webp"
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+
+      showStatus(
+        "Please select a JPG, PNG, or WebP image.",
+        true
+      );
+
+      resetLogoSelection();
+      return;
+
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+
+      showStatus(
+        "Company logo must not exceed 2 MB.",
+        true
+      );
+
+      resetLogoSelection();
+      return;
+
+    }
+
+    selectedLogoFile = file;
+
+    if (previewObjectUrl) {
+      URL.revokeObjectURL(previewObjectUrl);
+    }
+
+    previewObjectUrl = URL.createObjectURL(file);
+
+    logoPreview.src = previewObjectUrl;
+    logoPreview.hidden = false;
+    logoPlaceholder.hidden = true;
+
+    showStatus("");
+
+  });
 
   // =====================================================
   // EDIT PROFILE
@@ -3254,15 +3366,55 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     if (originalProfile) {
 
-      fillProfile(originalProfile);
+      Object.entries(fields).forEach(([key, field]) => {
+        field.value = originalProfile[key] || "";
+      });
 
     }
+
+    resetLogoSelection();
 
     setProfileMode(false);
 
     showStatus("");
 
   });
+
+  // =====================================================
+  // GET OLD LOGO STORAGE PATH
+  // =====================================================
+
+  function getOldLogoStoragePath(url) {
+
+    if (!url) return null;
+
+    const marker = "/storage/v1/object/public/company-logos/";
+
+    const markerIndex = url.indexOf(marker);
+
+    if (markerIndex === -1) return null;
+
+    try {
+
+      const path = decodeURIComponent(
+        url.substring(markerIndex + marker.length).split("?")[0]
+      );
+
+      if (!path.startsWith(companyUserId + "/")) {
+        return null;
+      }
+
+      return path;
+
+    } catch (error) {
+
+      console.warn("Unable to read old company logo path:", error);
+
+      return null;
+
+    }
+
+  }
 
   // =====================================================
   // SAVE PROFILE
@@ -3298,10 +3450,62 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     saveBtn.disabled = true;
     cancelBtn.disabled = true;
+    editBtn.disabled = true;
+
+    logoInput.disabled = true;
 
     showStatus("Saving company profile...");
 
+    let uploadedLogoPath = null;
+
     try {
+
+      // -----------------------------------------------
+      // UPLOAD NEW COMPANY LOGO IF SELECTED
+      // -----------------------------------------------
+
+      if (selectedLogoFile) {
+
+        showStatus("Uploading company logo...");
+
+        const fileExtension = selectedLogoFile.name
+          .split(".")
+          .pop()
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "");
+
+        const uniqueFileName =
+          Date.now() + "-" +
+          Math.random().toString(36).substring(2, 10) +
+          "." + fileExtension;
+
+        uploadedLogoPath =
+          companyUserId + "/" + uniqueFileName;
+
+        const { error: uploadError } = await supabaseAuth
+          .storage
+          .from("company-logos")
+          .upload(uploadedLogoPath, selectedLogoFile, {
+            contentType: selectedLogoFile.type,
+            upsert: false
+          });
+
+        if (uploadError) throw uploadError;
+
+        const { data: publicUrlData } = supabaseAuth
+          .storage
+          .from("company-logos")
+          .getPublicUrl(uploadedLogoPath);
+
+        updatedProfile.logo_url = publicUrlData.publicUrl;
+
+      }
+
+      // -----------------------------------------------
+      // UPDATE COMPANY PROFILE
+      // -----------------------------------------------
+
+      showStatus("Saving company profile...");
 
       const { data: savedProfile, error } = await supabaseAuth
         .from("companies")
@@ -3317,15 +3521,49 @@ document.addEventListener("DOMContentLoaded", async function () {
           state,
           city,
           address,
-          description
+          description,
+          logo_url
         `)
         .single();
 
       if (error) throw error;
 
+      // -----------------------------------------------
+      // DELETE OLD LOGO AFTER DATABASE UPDATE SUCCEEDS
+      // -----------------------------------------------
+
+      if (selectedLogoFile && originalLogoUrl) {
+
+        const oldLogoPath = getOldLogoStoragePath(originalLogoUrl);
+
+        if (oldLogoPath && oldLogoPath !== uploadedLogoPath) {
+
+          const { error: deleteError } = await supabaseAuth
+            .storage
+            .from("company-logos")
+            .remove([oldLogoPath]);
+
+          if (deleteError) {
+            console.warn(
+              "Old company logo could not be deleted:",
+              deleteError
+            );
+          }
+
+        }
+
+      }
+
+      // -----------------------------------------------
+      // UPDATE FORM & ORIGINAL VALUES
+      // -----------------------------------------------
+
+      selectedLogoFile = null;
+      logoInput.value = "";
+
       fillProfile(savedProfile);
 
-      captureOriginalProfile();
+      captureOriginalProfile(savedProfile);
 
       setProfileMode(false);
 
@@ -3337,6 +3575,23 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       console.error("Save Company Profile Error:", error);
 
+      // Hapus file baru jika penyimpanan database gagal.
+      if (uploadedLogoPath) {
+
+        const { error: cleanupError } = await supabaseAuth
+          .storage
+          .from("company-logos")
+          .remove([uploadedLogoPath]);
+
+        if (cleanupError) {
+          console.warn(
+            "Unable to clean up newly uploaded logo:",
+            cleanupError
+          );
+        }
+
+      }
+
       showStatus(
         error.message || "Unable to save company profile.",
         true
@@ -3346,6 +3601,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       saveBtn.disabled = false;
       cancelBtn.disabled = false;
+      editBtn.disabled = false;
+
+      logoInput.disabled = false;
+
+      // Pastikan input logo tetap terkunci di mode tampilan.
+      if (!cancelBtn.hidden) {
+        logoInput.disabled = false;
+      } else {
+        logoInput.disabled = true;
+      }
 
     }
 
@@ -3371,17 +3636,4 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 

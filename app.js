@@ -2435,6 +2435,550 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   JOBSEEKER FIND JOBS
+   LOAD PUBLISHED JOBS
+   SEARCH AND FILTER
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", async function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  // Run only on the actual Jobseeker dashboard.
+  if (
+    params.get("dashboard") !== "jobseeker" ||
+    params.has("preview")
+  ) {
+    return;
+  }
+
+  const dashboard = document.getElementById("jobseekerDashboard");
+  const resultsContainer = document.getElementById(
+    "jobseekerJobResults"
+  );
+
+  const keywordInput = document.getElementById(
+    "dashboardJobKeyword"
+  );
+
+  const locationInput = document.getElementById(
+    "dashboardJobLocation"
+  );
+
+  const categorySelect = document.getElementById(
+    "dashboardJobCategory"
+  );
+
+  const jobTypeSelect = document.getElementById(
+    "dashboardJobType"
+  );
+
+  const searchButton = document.getElementById(
+    "dashboardJobSearchBtn"
+  );
+
+  if (
+    !dashboard ||
+    !resultsContainer ||
+    !keywordInput ||
+    !locationInput ||
+    !categorySelect ||
+    !jobTypeSelect ||
+    !searchButton
+  ) {
+    return;
+  }
+
+  let publishedJobs = [];
+  let companyMap = new Map();
+  let isLoading = false;
+
+  // =========================================
+  // EMPTY STATE
+  // =========================================
+
+  function showJobEmptyState(
+    headingText,
+    descriptionText
+  ) {
+
+    resultsContainer.replaceChildren();
+
+    const emptyState = document.createElement("div");
+    emptyState.className = "empty-jobs";
+
+    const heading = document.createElement("h3");
+    heading.textContent = headingText;
+
+    const description = document.createElement("p");
+    description.textContent = descriptionText;
+
+    emptyState.append(heading, description);
+    resultsContainer.appendChild(emptyState);
+
+  }
+
+  // =========================================
+  // FORMAT SALARY
+  // =========================================
+
+  function formatJobSalary(job) {
+
+    const minimum = Number(job.salary_min);
+    const maximum = Number(job.salary_max);
+
+    const hasMinimum =
+      job.salary_min !== null &&
+      job.salary_min !== undefined &&
+      job.salary_min !== "";
+
+    const hasMaximum =
+      job.salary_max !== null &&
+      job.salary_max !== undefined &&
+      job.salary_max !== "";
+
+    if (!hasMinimum && !hasMaximum) {
+      return "Salary not specified";
+    }
+
+    const currency = job.salary_currency || "MYR";
+
+    function formatAmount(amount) {
+
+      return new Intl.NumberFormat("en-MY", {
+        maximumFractionDigits: 0
+      }).format(amount);
+
+    }
+
+    if (hasMinimum && hasMaximum) {
+
+      return currency + " " +
+        formatAmount(minimum) +
+        " - " +
+        formatAmount(maximum);
+
+    }
+
+    if (hasMinimum) {
+      return currency + " " + formatAmount(minimum);
+    }
+
+    return "Up to " + currency + " " + formatAmount(maximum);
+
+  }
+
+  // =========================================
+  // POPULATE FILTER OPTIONS
+  // =========================================
+
+  function populateJobFilters() {
+
+    const categories = [
+      ...new Set(
+        publishedJobs
+          .map(job => String(job.category || "").trim())
+          .filter(Boolean)
+      )
+    ].sort((a, b) => a.localeCompare(b));
+
+    const jobTypes = [
+      ...new Set(
+        publishedJobs
+          .map(job => String(job.job_type || "").trim())
+          .filter(Boolean)
+      )
+    ].sort((a, b) => a.localeCompare(b));
+
+    categorySelect.replaceChildren();
+
+    const allCategories = document.createElement("option");
+    allCategories.value = "";
+    allCategories.textContent = "All Categories";
+    categorySelect.appendChild(allCategories);
+
+    categories.forEach(category => {
+
+      const option = document.createElement("option");
+      option.value = category;
+      option.textContent = category;
+
+      categorySelect.appendChild(option);
+
+    });
+
+    jobTypeSelect.replaceChildren();
+
+    const allJobTypes = document.createElement("option");
+    allJobTypes.value = "";
+    allJobTypes.textContent = "All Job Types";
+    jobTypeSelect.appendChild(allJobTypes);
+
+    jobTypes.forEach(jobType => {
+
+      const option = document.createElement("option");
+      option.value = jobType;
+      option.textContent = jobType;
+
+      jobTypeSelect.appendChild(option);
+
+    });
+
+  }
+
+  // =========================================
+  // DISPLAY JOB CARDS
+  // =========================================
+
+  function displayJobs(jobsToDisplay) {
+
+    resultsContainer.replaceChildren();
+
+    if (!jobsToDisplay.length) {
+
+      showJobEmptyState(
+        "No Matching Jobs",
+        "Try changing your search keywords or filters."
+      );
+
+      return;
+    }
+
+    jobsToDisplay.forEach(job => {
+
+      const card = document.createElement("article");
+      card.className = "find-job-card";
+
+      const title = document.createElement("h3");
+      title.textContent = job.title || "Untitled Job";
+
+      const company = document.createElement("p");
+      company.className = "find-job-company";
+
+      const companyData = companyMap.get(job.company_id);
+
+      company.textContent = companyData
+        ? companyData.company_name
+        : "Company information unavailable";
+
+      const details = document.createElement("div");
+      details.className = "find-job-details";
+
+      const locationParts = [
+        job.city,
+        job.state
+      ].filter(Boolean);
+
+      const location = document.createElement("p");
+      location.textContent = locationParts.length
+        ? "Location: " + locationParts.join(", ")
+        : "Location not specified";
+
+      const category = document.createElement("p");
+      category.textContent = job.category
+        ? "Category: " + job.category
+        : "Category not specified";
+
+      const jobType = document.createElement("p");
+      jobType.textContent = job.job_type
+        ? "Job Type: " + job.job_type
+        : "Job Type not specified";
+
+      const salary = document.createElement("p");
+      salary.textContent =
+        "Salary: " + formatJobSalary(job);
+
+      details.append(
+        location,
+        category,
+        jobType,
+        salary
+      );
+
+      const description = document.createElement("p");
+      description.className = "find-job-description";
+
+      const descriptionText = String(
+        job.description || ""
+      ).trim();
+
+      description.textContent = descriptionText.length > 180
+        ? descriptionText.substring(0, 180) + "..."
+        : descriptionText || "No job description available.";
+
+      card.append(
+        title,
+        company,
+        details,
+        description
+      );
+
+      resultsContainer.appendChild(card);
+
+    });
+
+  }
+
+  // =========================================
+  // SEARCH AND FILTER JOBS
+  // =========================================
+
+  function searchJobs() {
+
+    const keyword = keywordInput.value
+      .trim()
+      .toLowerCase();
+
+    const location = locationInput.value
+      .trim()
+      .toLowerCase();
+
+    const selectedCategory = categorySelect.value
+      .trim()
+      .toLowerCase();
+
+    const selectedJobType = jobTypeSelect.value
+      .trim()
+      .toLowerCase();
+
+    const filteredJobs = publishedJobs.filter(job => {
+
+      const keywordContent = [
+        job.title,
+        job.description,
+        job.requirements
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      const locationContent = [
+        job.city,
+        job.state
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      const matchesKeyword =
+        !keyword || keywordContent.includes(keyword);
+
+      const matchesLocation =
+        !location || locationContent.includes(location);
+
+      const matchesCategory =
+        !selectedCategory ||
+        String(job.category || "").trim().toLowerCase() ===
+          selectedCategory;
+
+      const matchesJobType =
+        !selectedJobType ||
+        String(job.job_type || "").trim().toLowerCase() ===
+          selectedJobType;
+
+      return (
+        matchesKeyword &&
+        matchesLocation &&
+        matchesCategory &&
+        matchesJobType
+      );
+
+    });
+
+    displayJobs(filteredJobs);
+
+  }
+
+  // =========================================
+  // LOAD PUBLISHED JOBS FROM SUPABASE
+  // =========================================
+
+  async function loadPublishedJobs() {
+
+    if (isLoading) return;
+
+    isLoading = true;
+
+    resultsContainer.textContent = "Loading jobs...";
+
+    try {
+
+      const { data: jobs, error: jobsError } =
+        await supabaseAuth
+          .from("jobs")
+          .select(`
+            id,
+            title,
+            description,
+            requirements,
+            job_type,
+            category,
+            salary_min,
+            salary_max,
+            salary_currency,
+            experience,
+            education,
+            city,
+            state,
+            application_deadline,
+            created_at,
+            company_id
+          `)
+          .eq("status", "published")
+          .order("created_at", { ascending: false });
+
+      if (jobsError) throw jobsError;
+
+      publishedJobs = jobs || [];
+
+      // Load company names belonging to published jobs.
+      const companyIds = [
+        ...new Set(
+          publishedJobs
+            .map(job => job.company_id)
+            .filter(Boolean)
+        )
+      ];
+
+      companyMap = new Map();
+
+      if (companyIds.length > 0) {
+
+        const { data: companies, error: companyError } =
+          await supabaseAuth
+            .from("companies")
+            .select("id, company_name")
+            .in("id", companyIds);
+
+        if (companyError) throw companyError;
+
+        companyMap = new Map(
+          (companies || []).map(company => [
+            company.id,
+            company
+          ])
+        );
+
+      }
+
+      populateJobFilters();
+
+      if (publishedJobs.length === 0) {
+
+        showJobEmptyState(
+          "No Jobs Available",
+          "Available job opportunities will appear here."
+        );
+
+        return;
+      }
+
+      searchJobs();
+
+    } catch (error) {
+
+      console.error(
+        "Load Find Jobs Error:",
+        error
+      );
+
+      showJobEmptyState(
+        "Unable to Load Jobs",
+        "Please refresh the page and try again."
+      );
+
+    } finally {
+
+      isLoading = false;
+
+    }
+
+  }
+
+  // =========================================
+  // SEARCH BUTTON
+  // =========================================
+
+  searchButton.addEventListener("click", searchJobs);
+
+  // Press Enter to search from the text fields.
+  [keywordInput, locationInput].forEach(input => {
+
+    input.addEventListener("keydown", function (event) {
+
+      if (event.key === "Enter") {
+        event.preventDefault();
+        searchJobs();
+      }
+
+    });
+
+  });
+
+  // Update results when filters change.
+  categorySelect.addEventListener("change", searchJobs);
+  jobTypeSelect.addEventListener("change", searchJobs);
+
+  // =========================================
+  // LOAD JOBS WHEN OPENING FIND JOBS
+  // =========================================
+
+  const menuLinks = dashboard.querySelectorAll(
+    ".dashboard-menu .dashboard-menu-link"
+  );
+
+  menuLinks.forEach(link => {
+
+    link.addEventListener("click", function () {
+
+      if (
+        this.getAttribute("href") === "#jobseekerFindJobs"
+      ) {
+        loadPublishedJobs();
+      }
+
+    });
+
+  });
+
+  // =========================================
+  // INITIALIZE SESSION
+  // =========================================
+
+  try {
+
+    const { data: sessionData, error: sessionError } =
+      await supabaseAuth.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    if (!sessionData.session?.user) {
+      throw new Error("Please sign in again.");
+    }
+
+    // Load jobs when the dashboard opens.
+    await loadPublishedJobs();
+
+  } catch (error) {
+
+    console.error(
+      "Initialize Find Jobs Error:",
+      error
+    );
+
+    showJobEmptyState(
+      "Unable to Load Jobs",
+      error.message || "Please sign in again."
+    );
+
+  }
+
+});
+
+
+
 
 
 

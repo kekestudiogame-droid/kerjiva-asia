@@ -2094,6 +2094,347 @@ try {
 
 });
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   JOBSEEKER MY APPLICATIONS
+   LOAD APPLICATION HISTORY
+   SUPABASE REALTIME
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", async function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  // Jalankan hanya pada dashboard Jobseeker sebenarnya.
+  if (
+    params.get("dashboard") !== "jobseeker" ||
+    params.has("preview")
+  ) {
+    return;
+  }
+
+  const dashboard = document.getElementById("jobseekerDashboard");
+  const applicationList = document.getElementById(
+    "jobseekerApplicationsList"
+  );
+
+  if (!dashboard || !applicationList) return;
+
+  let currentUser = null;
+  let applicationChannel = null;
+  let isLoading = false;
+  let loadRequestId = 0;
+
+  // =========================================
+  // EMPTY STATE
+  // =========================================
+
+  function showEmptyState() {
+
+    applicationList.replaceChildren();
+
+    const emptyState = document.createElement("div");
+    emptyState.className = "dashboard-empty-state";
+
+    const heading = document.createElement("h3");
+    heading.textContent = "No Applications Yet";
+
+    const description = document.createElement("p");
+    description.textContent =
+      "You have not submitted any job applications.";
+
+    emptyState.append(heading, description);
+    applicationList.appendChild(emptyState);
+
+  }
+
+  // =========================================
+  // FORMAT APPLICATION STATUS
+  // =========================================
+
+  function formatApplicationStatus(status) {
+
+    if (!status) return "Status not set";
+
+    return String(status)
+      .replace(/[_-]+/g, " ")
+      .replace(/\b\w/g, character => character.toUpperCase());
+
+  }
+
+  // =========================================
+  // LOAD APPLICATIONS
+  // =========================================
+
+  async function loadJobseekerApplications() {
+
+    if (!currentUser || isLoading) return;
+
+    isLoading = true;
+
+    const requestId = ++loadRequestId;
+
+    applicationList.textContent = "Loading applications...";
+
+    try {
+
+      // 1. Get applications belonging to this Jobseeker.
+      const { data: applications, error: applicationError } =
+        await supabaseAuth
+          .from("applications")
+          .select(`
+            id,
+            job_id,
+            status,
+            applied_at
+          `)
+          .eq("user_id", currentUser.id)
+          .order("applied_at", { ascending: false });
+
+      if (applicationError) throw applicationError;
+
+      if (requestId !== loadRequestId) return;
+
+      if (!applications || applications.length === 0) {
+        showEmptyState();
+        return;
+      }
+
+      // 2. Get related job information.
+      const jobIds = [
+        ...new Set(applications.map(item => item.job_id))
+      ];
+
+      const { data: jobs, error: jobsError } =
+        await supabaseAuth
+          .from("jobs")
+          .select(`
+            id,
+            title,
+            job_type,
+            category,
+            city,
+            state,
+            company_id
+          `)
+          .in("id", jobIds);
+
+      if (jobsError) throw jobsError;
+
+      if (requestId !== loadRequestId) return;
+
+      const jobMap = new Map(
+        (jobs || []).map(job => [job.id, job])
+      );
+
+      // 3. Get related company information.
+      const companyIds = [
+        ...new Set(
+          (jobs || [])
+            .map(job => job.company_id)
+            .filter(Boolean)
+        )
+      ];
+
+      let companies = [];
+
+      if (companyIds.length > 0) {
+
+        const { data: companyData, error: companyError } =
+          await supabaseAuth
+            .from("companies")
+            .select("id, company_name")
+            .in("id", companyIds);
+
+        if (companyError) throw companyError;
+
+        companies = companyData || [];
+
+      }
+
+      if (requestId !== loadRequestId) return;
+
+      const companyMap = new Map(
+        companies.map(company => [company.id, company])
+      );
+
+      // 4. Display application history.
+      applicationList.replaceChildren();
+
+      for (const application of applications) {
+
+        const job = jobMap.get(application.job_id);
+        const company = job
+          ? companyMap.get(job.company_id)
+          : null;
+
+        const card = document.createElement("div");
+        card.className = "jobseeker-application-card";
+
+        const heading = document.createElement("h3");
+        heading.textContent = job
+          ? job.title
+          : "Job details unavailable";
+
+        const companyName = document.createElement("p");
+        companyName.textContent = company
+          ? company.company_name
+          : "Company information unavailable";
+
+        const status = document.createElement("p");
+        status.className = "application-status";
+        status.textContent =
+          "Status: " +
+          formatApplicationStatus(application.status);
+
+        const jobType = document.createElement("p");
+        jobType.textContent = job?.job_type || "";
+
+        const category = document.createElement("p");
+        category.textContent = job?.category || "";
+
+        const location = document.createElement("p");
+
+        const locationParts = [
+          job?.city,
+          job?.state
+        ].filter(Boolean);
+
+        location.textContent = locationParts.join(", ");
+
+        const appliedDate = document.createElement("p");
+        appliedDate.textContent = application.applied_at
+          ? "Applied on: " +
+            new Date(application.applied_at).toLocaleDateString("en-MY")
+          : "Application date unavailable";
+
+        card.append(
+          heading,
+          companyName,
+          status
+        );
+
+        if (jobType.textContent) card.appendChild(jobType);
+        if (category.textContent) card.appendChild(category);
+        if (location.textContent) card.appendChild(location);
+
+        card.appendChild(appliedDate);
+
+        applicationList.appendChild(card);
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Load Jobseeker Applications Error:",
+        error
+      );
+
+      if (requestId === loadRequestId) {
+
+        applicationList.textContent =
+          "Unable to load your applications. Please try again.";
+
+      }
+
+    } finally {
+
+      isLoading = false;
+
+    }
+
+  }
+
+  // =========================================
+  // REFRESH WHEN OPENING MY APPLICATIONS
+  // =========================================
+
+  const menuLinks = dashboard.querySelectorAll(
+    ".dashboard-menu .dashboard-menu-link"
+  );
+
+  menuLinks.forEach(link => {
+
+    link.addEventListener("click", function () {
+
+      if (
+        this.getAttribute("href") === "#jobseekerApplications"
+      ) {
+        loadJobseekerApplications();
+      }
+
+    });
+
+  });
+
+  // =========================================
+  // INITIALIZE SESSION
+  // =========================================
+
+  try {
+
+    const { data: sessionData, error: sessionError } =
+      await supabaseAuth.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    if (!sessionData.session?.user) {
+      throw new Error("Please sign in again.");
+    }
+
+    currentUser = sessionData.session.user;
+
+    // Load application history when dashboard opens.
+    await loadJobseekerApplications();
+
+    // =========================================
+    // SUPABASE REALTIME SUBSCRIPTION
+    // =========================================
+
+    applicationChannel = supabaseAuth
+      .channel("jobseeker-applications-" + currentUser.id)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "applications",
+          filter: "user_id=eq." + currentUser.id
+        },
+        function () {
+          loadJobseekerApplications();
+        }
+      )
+      .subscribe(function (status) {
+
+        if (status === "CHANNEL_ERROR" ||
+            status === "TIMED_OUT") {
+
+          console.warn(
+            "My Applications Realtime is unavailable:",
+            status
+          );
+
+        }
+
+      });
+
+  } catch (error) {
+
+    console.error(
+      "Initialize My Applications Error:",
+      error
+    );
+
+    applicationList.textContent =
+      error.message || "Unable to initialize My Applications.";
+
+  }
+
+});
+
+
 
 
 

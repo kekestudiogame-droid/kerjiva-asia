@@ -3084,6 +3084,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   const logoPlaceholder = document.getElementById("companyLogoPlaceholder");
   const logoInput = document.getElementById("companyLogoInput");
   const logoUploadLabel = document.getElementById("companyLogoUploadLabel");
+   
+   // COMPANY SIDEBAR ELEMENTS
+  const sidebarAvatar = document.getElementById("companyAvatar");
+  const sidebarName = document.getElementById("companySidebarName");
 
   if (
     !form || !editBtn || !saveBtn || !cancelBtn || !statusEl ||
@@ -3147,6 +3151,49 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
   }
+   
+   // =====================================================
+// UPDATE COMPANY SIDEBAR PROFILE
+// =====================================================
+
+function updateCompanySidebar(profile) {
+
+  if (sidebarName) {
+    sidebarName.textContent = profile.company_name || "Company Name";
+  }
+
+  if (sidebarAvatar) {
+
+    sidebarAvatar.replaceChildren();
+
+    if (profile.logo_url) {
+
+      const logoImage = document.createElement("img");
+
+      logoImage.src = profile.logo_url;
+      logoImage.alt = "Company Logo";
+
+      logoImage.style.width = "100%";
+      logoImage.style.height = "100%";
+      logoImage.style.objectFit = "cover";
+      logoImage.style.borderRadius = "50%";
+
+      sidebarAvatar.appendChild(logoImage);
+
+    } else {
+
+      const initial = (profile.company_name || "C")
+        .trim()
+        .charAt(0)
+        .toUpperCase() || "C";
+
+      sidebarAvatar.textContent = initial;
+
+    }
+
+  }
+
+}
 
   // =====================================================
   // PROFILE MODE
@@ -3199,6 +3246,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     fields.description.value = profile.description || "";
 
     showCompanyLogo(profile.logo_url || null);
+     updateCompanySidebar(profile);
 
   }
 
@@ -3456,9 +3504,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     showStatus("Saving company profile...");
 
-    let uploadedLogoPath = null;
+   let uploadedLogoPath = null;
+   let profileUpdated = false;
 
-    try {
+       try {
 
       // -----------------------------------------------
       // UPLOAD NEW COMPANY LOGO IF SELECTED
@@ -3526,7 +3575,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         `)
         .single();
 
-      if (error) throw error;
+    if (error) throw error;
+
+    profileUpdated = true;
 
       // -----------------------------------------------
       // DELETE OLD LOGO AFTER DATABASE UPDATE SUCCEEDS
@@ -3576,7 +3627,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       console.error("Save Company Profile Error:", error);
 
       // Hapus file baru jika penyimpanan database gagal.
-      if (uploadedLogoPath) {
+         if (uploadedLogoPath && !profileUpdated) {
 
         const { error: cleanupError } = await supabaseAuth
           .storage

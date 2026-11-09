@@ -2979,6 +2979,80 @@ categoryTypeSelect.addEventListener("change", searchJobs);
 
 });
 
+/* =========================================================
+   KERJIVA MALAYSIA
+   COMPANY DASHBOARD NAVIGATION
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  // Jalankan hanya pada Company Dashboard.
+  if (params.get("dashboard") !== "company") return;
+
+  if (params.has("preview")) return;
+
+  const dashboard = document.getElementById("companyDashboard");
+
+  if (!dashboard) return;
+
+  const menuLinks = dashboard.querySelectorAll(
+    ".dashboard-nav a[href^='#']"
+  );
+
+  const contentSections = dashboard.querySelectorAll(
+    ".dashboard-content-section"
+  );
+
+  if (!menuLinks.length || !contentSections.length) return;
+
+  function showCompanySection(sectionId) {
+
+    const targetSection = dashboard.querySelector(
+      "#" + sectionId
+    );
+
+    if (!targetSection) return;
+
+    // Tampilkan hanya section yang dipilih.
+    contentSections.forEach(section => {
+      section.hidden = section.id !== sectionId;
+    });
+
+    // Perbarui menu aktif.
+    menuLinks.forEach(link => {
+      link.classList.toggle(
+        "active",
+        link.getAttribute("href") === "#" + sectionId
+      );
+    });
+
+  }
+
+  // Navigasi menu Company.
+  menuLinks.forEach(link => {
+
+    link.addEventListener("click", function (event) {
+
+      event.preventDefault();
+
+      const sectionId = this.getAttribute("href").substring(1);
+
+      showCompanySection(sectionId);
+
+    });
+
+  });
+
+  // Buka Dashboard Overview saat pertama kali masuk.
+  showCompanySection("companyOverview");
+
+  console.log("Kerjiva Malaysia Company Navigation Ready.");
+
+});
+
+
 
 
 

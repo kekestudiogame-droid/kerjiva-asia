@@ -1588,9 +1588,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         }
 
-        const editBtn = document.createElement("button");
-        editBtn.type = "button";
-        editBtn.textContent = "Edit";
+       const editBtn = document.createElement("button");
+         editBtn.type = "button";
+         editBtn.className = "document-edit-btn";
+         editBtn.textContent = "Edit";
 
         editBtn.addEventListener("click", function () {
 

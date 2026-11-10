@@ -4286,9 +4286,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
+
 /* =====================================================
    KERJIVA MALAYSIA
    HOMEPAGE LATEST JOBS
+   VIEW JOB DETAILS
    ===================================================== */
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -4306,7 +4308,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     return;
   }
 
+  const detailsModal = document.getElementById("homepageJobDetailsModal");
+  const detailsContent = document.getElementById("homepageJobDetailsContent");
+  const closeDetailsButton = document.getElementById("closeHomepageJobDetails");
+  const applyNowButton = document.getElementById("homepageApplyNowBtn");
+
   let homepageJobs = [];
+  let selectedHomepageJob = null;
 
   function getMalaysiaDate() {
     const parts = new Intl.DateTimeFormat("en-CA", {
@@ -4342,13 +4350,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       return `${formatAmount(min)} - ${formatAmount(max)}`;
     }
 
-    if (min != null) {
-      return `From ${formatAmount(min)}`;
-    }
-
-    if (max != null) {
-      return `Up to ${formatAmount(max)}`;
-    }
+    if (min != null) return `From ${formatAmount(min)}`;
+    if (max != null) return `Up to ${formatAmount(max)}`;
 
     return "Salary not specified";
   }
@@ -4359,6 +4362,125 @@ document.addEventListener("DOMContentLoaded", async function () {
     element.textContent = value || "";
     return element;
   }
+
+  function addDetail(content, heading, value) {
+    const wrapper = document.createElement("div");
+
+    const label = createTextElement("h3", "", heading);
+    const text = createTextElement(
+      "p",
+      "",
+      value || "Not specified"
+    );
+
+    wrapper.append(label, text);
+    content.appendChild(wrapper);
+  }
+
+  function openJobDetails(job) {
+    if (!detailsModal || !detailsContent) {
+      console.error("Homepage job details modal not found.");
+      return;
+    }
+
+    selectedHomepageJob = job;
+    detailsContent.replaceChildren();
+
+    const title = createTextElement("h2", "", job.title);
+    const company = createTextElement(
+      "p",
+      "",
+      job.company_name || "Company"
+    );
+
+    const category = createTextElement(
+      "p",
+      "",
+      `Category: ${job.category || "Other"}`
+    );
+
+    const location = [job.city, job.state]
+      .filter(Boolean)
+      .join(", ");
+
+    const jobLocation = createTextElement(
+      "p",
+      "",
+      `Location: ${location || "Not specified"}`
+    );
+
+    const jobType = createTextElement(
+      "p",
+      "",
+      `Job Type: ${job.job_type || "Not specified"}`
+    );
+
+    const salary = createTextElement(
+      "p",
+      "",
+      `Salary: ${formatSalary(job)}`
+    );
+
+    detailsContent.append(
+      title,
+      company,
+      category,
+      jobLocation,
+      jobType,
+      salary
+    );
+
+    addDetail(detailsContent, "Education", job.education);
+    addDetail(detailsContent, "Experience", job.experience);
+    addDetail(detailsContent, "Job Description", job.description);
+    addDetail(detailsContent, "Requirements", job.requirements);
+
+    addDetail(
+      detailsContent,
+      "Application Deadline",
+      job.application_deadline || "Not specified"
+    );
+
+    if (applyNowButton) {
+      applyNowButton.disabled = false;
+      applyNowButton.textContent = "Apply Now";
+    }
+
+    const applyStatus = document.getElementById("homepageApplyStatus");
+    if (applyStatus) applyStatus.textContent = "";
+
+    detailsModal.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeJobDetails() {
+    if (detailsModal) detailsModal.hidden = true;
+
+    document.body.style.overflow = "";
+    selectedHomepageJob = null;
+  }
+
+  if (closeDetailsButton) {
+    closeDetailsButton.addEventListener("click", closeJobDetails);
+  }
+
+  if (detailsModal) {
+    detailsModal.addEventListener("click", function (event) {
+      if (event.target === detailsModal) {
+        closeJobDetails();
+      }
+    });
+  }
+
+  document.addEventListener("keydown", function (event) {
+    if (
+      event.key === "Escape" &&
+      detailsModal &&
+      !detailsModal.hidden
+    ) {
+      closeJobDetails();
+    }
+  });
 
   function renderHomepageJobs(jobs) {
     jobsGrid.replaceChildren();
@@ -4451,7 +4573,24 @@ document.addEventListener("DOMContentLoaded", async function () {
         formatSalary(job)
       );
 
-      card.append(header, title, category, details, salary);
+      const viewDetailsButton = document.createElement("button");
+      viewDetailsButton.type = "button";
+      viewDetailsButton.className = "primary-btn";
+      viewDetailsButton.textContent = "View Details";
+
+      viewDetailsButton.addEventListener("click", function () {
+        openJobDetails(job);
+      });
+
+      card.append(
+        header,
+        title,
+        category,
+        details,
+        salary,
+        viewDetailsButton
+      );
+
       jobsGrid.appendChild(card);
     });
   }
@@ -4505,13 +4644,15 @@ document.addEventListener("DOMContentLoaded", async function () {
           title,
           description,
           requirements,
-          category,
           job_type,
+          category,
           city,
           state,
           salary_min,
           salary_max,
           salary_currency,
+          education,
+          experience,
           application_deadline,
           created_at,
           company_id
@@ -4596,6 +4737,4 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   await loadHomepageJobs();
 });
-
-
 

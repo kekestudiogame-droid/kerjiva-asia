@@ -1008,7 +1008,6 @@ function showSection(sectionId) {
 
   // Navigasi ketika menu sidebar diklik.
   menuLinks.forEach(link => {
-
     link.addEventListener("click", function (event) {
 
       event.preventDefault();
@@ -1020,6 +1019,21 @@ function showSection(sectionId) {
     });
 
   });
+
+   
+  // DASHBOARD CTA BUTTONS - RETURN TO HOMEPAGE
+  const dashboardFindJobBtn = document.getElementById("dashboardFindJobBtn");
+  const dashboardExploreJobsBtn = document.getElementById("dashboardExploreJobsBtn");
+
+  [dashboardFindJobBtn, dashboardExploreJobsBtn].forEach(button => {
+    if (!button) return;
+
+    button.addEventListener("click", function (event) {
+      event.preventDefault();
+      showSection("jobs");
+    });
+  });
+
        
 
   // Tampilkan Dashboard sebagai halaman awal.

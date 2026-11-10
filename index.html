@@ -67,53 +67,115 @@
     </section>
 
 
-    <!-- JOB SEARCH -->
-    <section class="search-section">
-      <div class="container">
+        
+<!-- JOB SEARCH -->
+<section class="search-section">
+  <div class="container">
 
-        <div class="search-box">
+    <div class="search-box">
 
-          <div class="search-field">
-            <label for="keyword">Job Title or Keyword</label>
-            <input
-              type="text"
-              id="keyword"
-              placeholder="e.g. Marketing Executive"
-            >
-          </div>
-
-          <div class="search-field">
-            <label for="location">Location</label>
-            <select id="location">
-              <option value="">All Locations</option>
-              <option>Kuala Lumpur</option>
-              <option>Selangor</option>
-              <option>Johor</option>
-              <option>Penang</option>
-              <option>Perak</option>
-              <option>Melaka</option>
-              <option>Negeri Sembilan</option>
-              <option>Pahang</option>
-              <option>Terengganu</option>
-              <option>Kelantan</option>
-              <option>Kedah</option>
-              <option>Perlis</option>
-              <option>Sabah</option>
-              <option>Sarawak</option>
-              <option>Putrajaya</option>
-              <option>Labuan</option>
-            </select>
-          </div>
-
-          <button type="button" id="searchJobsBtn" class="search-btn">
-            Search Jobs
-          </button>
-
-        </div>
-
+      <!-- JOB TITLE -->
+      <div class="search-field">
+        <label for="keyword">Job Title or Keyword</label>
+        <input
+          type="text"
+          id="keyword"
+          placeholder="e.g. Marketing Executive"
+        >
       </div>
-    </section>
 
+      <!-- LOCATION -->
+      <div class="search-field">
+        <label for="location">State / City</label>
+        <select id="location">
+          <option value="">All Locations</option>
+          <option>Kuala Lumpur</option>
+          <option>Selangor</option>
+          <option>Johor</option>
+          <option>Penang</option>
+          <option>Perak</option>
+          <option>Melaka</option>
+          <option>Negeri Sembilan</option>
+          <option>Pahang</option>
+          <option>Terengganu</option>
+          <option>Kelantan</option>
+          <option>Kedah</option>
+          <option>Perlis</option>
+          <option>Sabah</option>
+          <option>Sarawak</option>
+          <option>Putrajaya</option>
+          <option>Labuan</option>
+        </select>
+      </div>
+
+      <!-- JOB CATEGORY -->
+      <div class="search-field">
+        <label for="jobCategory">Job Category</label>
+        <select id="jobCategory">
+          <option value="">All Categories</option>
+          <option value="Accounting & Finance">Accounting & Finance</option>
+          <option value="Administration & Office Support">Administration & Office Support</option>
+          <option value="Architecture & Interior Design">Architecture & Interior Design</option>
+          <option value="Banking & Financial Services">Banking & Financial Services</option>
+          <option value="Beauty, Wellness & Personal Care">Beauty, Wellness & Personal Care</option>
+          <option value="Construction & Building">Construction & Building</option>
+          <option value="Customer Service">Customer Service</option>
+          <option value="Design & Creative">Design & Creative</option>
+          <option value="Education & Training">Education & Training</option>
+          <option value="Engineering">Engineering</option>
+          <option value="Food & Beverage">Food & Beverage</option>
+          <option value="Government & Public Services">Government & Public Services</option>
+          <option value="Healthcare & Medical">Healthcare & Medical</option>
+          <option value="Hospitality & Tourism">Hospitality & Tourism</option>
+          <option value="Human Resources">Human Resources</option>
+          <option value="Information Technology">Information Technology</option>
+          <option value="Insurance">Insurance</option>
+          <option value="Legal">Legal</option>
+          <option value="Logistics, Transport & Supply Chain">Logistics, Transport & Supply Chain</option>
+          <option value="Manufacturing & Production">Manufacturing & Production</option>
+          <option value="Marketing & Communications">Marketing & Communications</option>
+          <option value="Media & Entertainment">Media & Entertainment</option>
+          <option value="Oil, Gas & Energy">Oil, Gas & Energy</option>
+          <option value="Property & Real Estate">Property & Real Estate</option>
+          <option value="Retail & Merchandising">Retail & Merchandising</option>
+          <option value="Sales & Business Development">Sales & Business Development</option>
+          <option value="Science & Research">Science & Research</option>
+          <option value="Security & Safety">Security & Safety</option>
+          <option value="Telecommunications">Telecommunications</option>
+          <option value="Agriculture & Plantation">Agriculture & Plantation</option>
+          <option value="Automotive">Automotive</option>
+          <option value="Aviation">Aviation</option>
+          <option value="Environmental & Sustainability">Environmental & Sustainability</option>
+          <option value="NGO & Social Services">NGO & Social Services</option>
+          <option value="Others">Others</option>
+        </select>
+      </div>
+
+      <!-- JOB TYPE -->
+      <div class="search-field">
+        <label for="jobType">Job Type</label>
+        <select id="jobType">
+          <option value="">All Job Types</option>
+          <option value="Full-time">Full-time</option>
+          <option value="Part-time">Part-time</option>
+          <option value="Contract">Contract</option>
+          <option value="Temporary">Temporary</option>
+          <option value="Internship">Internship</option>
+          <option value="Freelance">Freelance</option>
+          <option value="Casual">Casual</option>
+          <option value="Apprenticeship">Apprenticeship</option>
+          <option value="Graduate Programme">Graduate Programme</option>
+        </select>
+      </div>
+
+      <button type="button" id="searchJobsBtn" class="search-btn">
+        Search Jobs
+      </button>
+
+    </div>
+
+  </div>
+</section>
 
     <!-- LATEST JOBS -->
     <section class="jobs-section" id="jobs">

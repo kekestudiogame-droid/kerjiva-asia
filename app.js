@@ -4286,3 +4286,316 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   HOMEPAGE LATEST JOBS
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", async function () {
+  const jobsGrid = document.getElementById("jobsGrid");
+  const keywordInput = document.getElementById("keyword");
+  const locationSelect = document.getElementById("location");
+  const searchButton = document.getElementById("searchJobsBtn");
+
+  if (!jobsGrid) return;
+
+  const supabase = window.supabaseAuth;
+
+  if (!supabase) {
+    console.error("Homepage Latest Jobs: Supabase client not found.");
+    return;
+  }
+
+  let homepageJobs = [];
+
+  function getMalaysiaDate() {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Kuala_Lumpur",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).formatToParts(new Date());
+
+    const values = {};
+    parts.forEach(part => {
+      values[part.type] = part.value;
+    });
+
+    return `${values.year}-${values.month}-${values.day}`;
+  }
+
+  function formatSalary(job) {
+    const currency = job.salary_currency || "MYR";
+
+    function formatAmount(amount) {
+      return new Intl.NumberFormat("en-MY", {
+        style: "currency",
+        currency: currency,
+        maximumFractionDigits: 0
+      }).format(amount);
+    }
+
+    const min = job.salary_min;
+    const max = job.salary_max;
+
+    if (min != null && max != null) {
+      return `${formatAmount(min)} - ${formatAmount(max)}`;
+    }
+
+    if (min != null) {
+      return `From ${formatAmount(min)}`;
+    }
+
+    if (max != null) {
+      return `Up to ${formatAmount(max)}`;
+    }
+
+    return "Salary not specified";
+  }
+
+  function createTextElement(tag, className, value) {
+    const element = document.createElement(tag);
+    element.className = className;
+    element.textContent = value || "";
+    return element;
+  }
+
+  function renderHomepageJobs(jobs) {
+    jobsGrid.replaceChildren();
+
+    if (!jobs.length) {
+      const empty = document.createElement("div");
+      empty.className = "empty-jobs";
+
+      empty.appendChild(
+        createTextElement("h3", "", "No Jobs Available Yet")
+      );
+
+      empty.appendChild(
+        createTextElement(
+          "p",
+          "",
+          "New job opportunities will appear here soon."
+        )
+      );
+
+      jobsGrid.appendChild(empty);
+      return;
+    }
+
+    jobs.slice(0, 6).forEach(job => {
+      const card = document.createElement("article");
+      card.className = "job-card";
+
+      const header = document.createElement("div");
+      header.className = "job-card-header";
+
+      const logo = document.createElement("img");
+      logo.className = "job-card-company-logo";
+      logo.alt = job.company_name
+        ? `${job.company_name} logo`
+        : "Company logo";
+
+      logo.src = job.logo_url || "/kerjiva-favicon.png";
+
+      logo.addEventListener("error", function () {
+        logo.src = "/kerjiva-favicon.png";
+      }, { once: true });
+
+      const companyName = createTextElement(
+        "span",
+        "job-card-company-name",
+        job.company_name || "Company"
+      );
+
+      header.append(logo, companyName);
+
+      const title = createTextElement(
+        "h3",
+        "job-card-title",
+        job.title
+      );
+
+      const category = createTextElement(
+        "span",
+        "job-card-category",
+        job.category || "Other"
+      );
+
+      const details = document.createElement("div");
+      details.className = "job-card-details";
+
+      const location = [job.city, job.state]
+        .filter(Boolean)
+        .join(", ");
+
+      details.appendChild(
+        createTextElement(
+          "p",
+          "",
+          `Location: ${location || "Not specified"}`
+        )
+      );
+
+      details.appendChild(
+        createTextElement(
+          "p",
+          "",
+          `Job Type: ${job.job_type || "Not specified"}`
+        )
+      );
+
+      const salary = createTextElement(
+        "p",
+        "job-card-salary",
+        formatSalary(job)
+      );
+
+      card.append(header, title, category, details, salary);
+      jobsGrid.appendChild(card);
+    });
+  }
+
+  function filterHomepageJobs() {
+    const keyword = (keywordInput?.value || "")
+      .trim()
+      .toLowerCase();
+
+    const selectedLocation = (locationSelect?.value || "")
+      .trim()
+      .toLowerCase();
+
+    const filteredJobs = homepageJobs.filter(job => {
+      const searchableText = [
+        job.title,
+        job.category,
+        job.description,
+        job.requirements,
+        job.company_name,
+        job.city,
+        job.state,
+        job.job_type
+      ].filter(Boolean).join(" ").toLowerCase();
+
+      const matchesKeyword =
+        !keyword || searchableText.includes(keyword);
+
+      const matchesLocation =
+        !selectedLocation ||
+        selectedLocation === "all locations" ||
+        [job.city, job.state]
+          .filter(Boolean)
+          .some(value => value.toLowerCase() === selectedLocation);
+
+      return matchesKeyword && matchesLocation;
+    });
+
+    renderHomepageJobs(filteredJobs);
+  }
+
+  async function loadHomepageJobs() {
+    jobsGrid.innerHTML =
+      '<div class="job-card-loading">Loading latest jobs...</div>';
+
+    try {
+      const { data: jobs, error: jobsError } = await supabase
+        .from("jobs")
+        .select(`
+          id,
+          title,
+          description,
+          requirements,
+          category,
+          job_type,
+          city,
+          state,
+          salary_min,
+          salary_max,
+          salary_currency,
+          application_deadline,
+          created_at,
+          company_id
+        `)
+        .eq("status", "published")
+        .order("created_at", { ascending: false });
+
+      if (jobsError) throw jobsError;
+
+      const today = getMalaysiaDate();
+
+      const activeJobs = (jobs || []).filter(job => {
+        return (
+          !job.application_deadline ||
+          job.application_deadline >= today
+        );
+      });
+
+      const companyIds = [
+        ...new Set(
+          activeJobs
+            .map(job => job.company_id)
+            .filter(Boolean)
+        )
+      ];
+
+      let companies = [];
+
+      if (companyIds.length) {
+        const { data, error: companyError } = await supabase
+          .from("public_job_companies")
+          .select("id, company_name, logo_url")
+          .in("id", companyIds);
+
+        if (companyError) throw companyError;
+
+        companies = data || [];
+      }
+
+      const companyMap = new Map(
+        companies.map(company => [company.id, company])
+      );
+
+      homepageJobs = activeJobs.map(job => {
+        const company = companyMap.get(job.company_id);
+
+        return {
+          ...job,
+          company_name: company?.company_name || "Company",
+          logo_url: company?.logo_url || ""
+        };
+      });
+
+      filterHomepageJobs();
+
+      console.log(
+        "Homepage Latest Jobs Ready:",
+        homepageJobs.length,
+        "active jobs."
+      );
+
+    } catch (error) {
+      console.error("Homepage Latest Jobs Error:", error);
+
+      jobsGrid.innerHTML =
+        '<div class="job-card-error">Unable to load jobs. Please try again later.</div>';
+    }
+  }
+
+  if (searchButton) {
+    searchButton.addEventListener("click", filterHomepageJobs);
+  }
+
+  if (keywordInput) {
+    keywordInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        filterHomepageJobs();
+      }
+    });
+  }
+
+  await loadHomepageJobs();
+});
+
+
+

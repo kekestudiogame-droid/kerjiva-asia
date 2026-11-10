@@ -4537,23 +4537,29 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const session = sessionData.session;
 
-       // BELUM LOGIN
+              
+        // BELUM LOGIN
 
-if (!session || !session.user) {
+        if (!session || !session.user) {
 
-  if (applyStatus) {
-    applyStatus.textContent =
-      "Please log in to your Jobseeker account to apply for this job.";
+          if (applyStatus) {
+            applyStatus.textContent =
+              "Please log in to your Jobseeker account to apply for this job.";
 
-    applyStatus.hidden = false;
-   
-  }
+            applyStatus.hidden = false;
+          }
 
-  applyNowButton.disabled = false;
-  applyNowButton.textContent = "Apply Now";
+          applyNowButton.textContent = "Redirecting...";
 
-  return;
-}
+          const jobId = selectedHomepageJob.id;
+
+          setTimeout(function () {
+            window.location.href =
+              "login.html?applyJob=" + encodeURIComponent(jobId);
+          }, 1800);
+
+          return;
+        }
 
         const userId = session.user.id;
 

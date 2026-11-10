@@ -4504,6 +4504,111 @@ document.addEventListener("DOMContentLoaded", async function () {
       closeJobDetails();
     }
   });
+     // =========================================
+  // HOMEPAGE APPLY NOW - LOGIN CHECK
+  // =========================================
+
+  if (applyNowButton) {
+    applyNowButton.addEventListener("click", async function () {
+
+      if (!selectedHomepageJob) {
+        return;
+      }
+
+      const applyStatus = document.getElementById("homepageApplyStatus");
+
+      applyNowButton.disabled = true;
+      applyNowButton.textContent = "Please wait...";
+
+      if (applyStatus) {
+        applyStatus.textContent = "";
+      }
+
+      try {
+
+        const { data: sessionData, error: sessionError } =
+          await window.supabaseAuth.auth.getSession();
+
+        if (sessionError) throw sessionError;
+
+        const session = sessionData.session;
+
+        // Belum login: arahkan ke halaman Login
+        // sambil membawa ID lowongan yang dipilih.
+
+        if (!session || !session.user) {
+
+          window.location.href =
+            "login.html?applyJob=" +
+            encodeURIComponent(selectedHomepageJob.id);
+
+          return;
+        }
+
+        const userId = session.user.id;
+
+        // Periksa role Jobseeker
+
+        const { data: jobseeker, error: jobseekerError } =
+          await window.supabaseAuth
+            .from("jobseeker_profiles")
+            .select("id")
+            .eq("user_id", userId)
+            .maybeSingle();
+
+        if (jobseekerError) throw jobseekerError;
+
+        // Periksa role Company
+
+        const { data: company, error: companyError } =
+          await window.supabaseAuth
+            .from("companies")
+            .select("id")
+            .eq("user_id", userId)
+            .maybeSingle();
+
+        if (companyError) throw companyError;
+
+        if (jobseeker && !company) {
+
+          if (applyStatus) {
+            applyStatus.textContent =
+              "Your account is ready. Please wait for the application form.";
+          }
+
+        } else if (company && !jobseeker) {
+
+          if (applyStatus) {
+            applyStatus.textContent =
+              "Company accounts cannot apply for jobs. Please use a Jobseeker account.";
+          }
+
+        } else {
+
+          throw new Error(
+            "Your account profile could not be identified."
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error("Homepage Apply Now Error:", error);
+
+        if (applyStatus) {
+          applyStatus.textContent =
+            error.message || "Unable to continue. Please try again.";
+        }
+
+      } finally {
+
+        applyNowButton.disabled = false;
+        applyNowButton.textContent = "Apply Now";
+
+      }
+
+    });
+  }
 
   function renderHomepageJobs(jobs) {
     jobsGrid.replaceChildren();

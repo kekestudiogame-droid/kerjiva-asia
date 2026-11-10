@@ -220,7 +220,8 @@
     aria-modal="true"
     aria-labelledby="homepageJobDetailsTitle"
   >
-          <div class="job-modal-content">
+       
+<div class="job-modal-content">
 
   <button
     type="button"
@@ -231,25 +232,38 @@
     &times;
   </button>
 
-  <p
-    id="homepageApplyStatus"
-    class="homepage-apply-status"
-    role="status"
-    aria-live="polite"
-    hidden
-  ></p>
+  <div class="homepage-job-details-layout">
 
-  <div id="homepageJobDetailsContent"></div>
+    <div class="homepage-job-details-main">
 
-  <button
-    type="button"
-    id="homepageApplyNowBtn"
-    class="primary-btn"
-  >
-    Apply Now
-  </button>
+      <div id="homepageJobDetailsContent"></div>
+
+      <button
+        type="button"
+        id="homepageApplyNowBtn"
+        class="primary-btn"
+      >
+        Apply Now
+      </button>
+
+    </div>
+
+    <div class="homepage-job-details-notice">
+
+      <p
+        id="homepageApplyStatus"
+        class="homepage-apply-status"
+        role="status"
+        aria-live="polite"
+        hidden
+      ></p>
+
+    </div>
+
+  </div>
 
 </div>
+
   </div>
 
 

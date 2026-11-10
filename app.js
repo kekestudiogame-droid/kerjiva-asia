@@ -2798,6 +2798,569 @@ function populateJobFilters() {
 
 }
 
+
+  // =========================================
+  // DISPLAY JOB CARDS
+  // FIND JOBS - JOBSEEKER DASHBOARD
+  // =========================================
+
+  let selectedDashboardJob = null;
+  let dashboardApplicationDocuments = [];
+
+  // =========================================
+  // CREATE DASHBOARD JOB MODALS
+  // =========================================
+
+  const dashboardJobDetailsModal = document.createElement("dialog");
+  dashboardJobDetailsModal.id = "dashboardJobDetailsModal";
+  dashboardJobDetailsModal.style.cssText =
+    "width:min(700px,92%);max-height:85vh;overflow-y:auto;border:0;border-radius:12px;padding:24px;";
+
+  const dashboardApplyDocumentsModal = document.createElement("dialog");
+  dashboardApplyDocumentsModal.id = "dashboardApplyDocumentsModal";
+  dashboardApplyDocumentsModal.style.cssText =
+    "width:min(600px,92%);max-height:85vh;overflow-y:auto;border:0;border-radius:12px;padding:24px;";
+
+  const dashboardModalStyle = document.createElement("style");
+
+  dashboardModalStyle.textContent = `
+    #dashboardJobDetailsModal::backdrop,
+    #dashboardApplyDocumentsModal::backdrop {
+      background: rgba(0,0,0,.6);
+    }
+
+    #dashboardJobDetailsModal h2,
+    #dashboardApplyDocumentsModal h2 {
+      margin-top: 0;
+    }
+
+    .dashboard-job-modal-section {
+      margin: 18px 0;
+    }
+
+    .dashboard-job-modal-section h3 {
+      margin-bottom: 8px;
+    }
+
+    .dashboard-job-modal-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .dashboard-job-modal-actions button {
+      padding: 11px 18px;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .dashboard-job-primary-btn {
+      background: #2563eb;
+      color: white;
+    }
+
+    .dashboard-job-secondary-btn {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .dashboard-application-document {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 7px;
+      margin-bottom: 9px;
+    }
+
+    .dashboard-application-document input {
+      margin-top: 4px;
+    }
+
+    .dashboard-application-document label {
+      cursor: pointer;
+      flex: 1;
+    }
+
+    #dashboardApplyCoverLetter {
+      width: 100%;
+      min-height: 110px;
+      box-sizing: border-box;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font: inherit;
+    }
+
+    #dashboardApplyDocumentStatus {
+      margin-top: 12px;
+      white-space: pre-wrap;
+    }
+  `;
+
+  document.head.appendChild(dashboardModalStyle);
+
+  document.body.append(
+    dashboardJobDetailsModal,
+    dashboardApplyDocumentsModal
+  );
+
+  // =========================================
+  // HELPER: CREATE TEXT ELEMENT
+  // =========================================
+
+  function createDashboardText(tag, text, className) {
+
+    const element = document.createElement(tag);
+
+    element.textContent = text || "";
+
+    if (className) {
+      element.className = className;
+    }
+
+    return element;
+  }
+
+  // =========================================
+  // CLOSE MODALS
+  // =========================================
+
+  function closeDashboardJobDetails() {
+
+    if (dashboardJobDetailsModal.open) {
+      dashboardJobDetailsModal.close();
+    }
+
+  }
+
+  function closeDashboardApplyDocuments() {
+
+    if (dashboardApplyDocumentsModal.open) {
+      dashboardApplyDocumentsModal.close();
+    }
+
+  }
+
+  // =========================================
+  // SHOW JOB DETAILS
+  // =========================================
+
+  function openDashboardJobDetails(job) {
+
+    selectedDashboardJob = job;
+
+    dashboardJobDetailsModal.replaceChildren();
+
+    const companyData = companyMap.get(job.company_id);
+
+    const companyName = companyData
+      ? companyData.company_name
+      : "Company information unavailable";
+
+    const heading = createDashboardText(
+      "h2",
+      job.title || "Untitled Job"
+    );
+
+    const company = createDashboardText(
+      "p",
+      companyName
+    );
+
+    const detailsSection = document.createElement("div");
+    detailsSection.className = "dashboard-job-modal-section";
+
+    const location = [
+      job.city,
+      job.state
+    ].filter(Boolean).join(", ");
+
+    const salary = formatJobSalary(job);
+
+    const information = [
+      ["Location", location || "Not specified"],
+      ["Category", job.category || "Not specified"],
+      ["Job Type", job.job_type || "Not specified"],
+      ["Salary", salary],
+      ["Experience", job.experience || "Not specified"],
+      ["Education", job.education || "Not specified"],
+      [
+        "Application Deadline",
+        job.application_deadline || "Not specified"
+      ]
+    ];
+
+    information.forEach(([label, value]) => {
+
+      const row = document.createElement("p");
+
+      const strong = document.createElement("strong");
+      strong.textContent = label + ": ";
+
+      row.append(
+        strong,
+        document.createTextNode(value)
+      );
+
+      detailsSection.appendChild(row);
+
+    });
+
+    function addJobDescription(title, content) {
+
+      const section = document.createElement("section");
+      section.className = "dashboard-job-modal-section";
+
+      section.appendChild(
+        createDashboardText("h3", title)
+      );
+
+      section.appendChild(
+        createDashboardText(
+          "p",
+          String(content || "").trim() || "Not provided."
+        )
+      );
+
+      dashboardJobDetailsModal.appendChild(section);
+
+    }
+
+    dashboardJobDetailsModal.append(
+      heading,
+      company,
+      detailsSection
+    );
+
+    addJobDescription(
+      "Job Description",
+      job.description
+    );
+
+    addJobDescription(
+      "Requirements",
+      job.requirements
+    );
+
+    const actions = document.createElement("div");
+    actions.className = "dashboard-job-modal-actions";
+
+    const applyButton = createDashboardText(
+      "button",
+      "Apply Now",
+      "dashboard-job-primary-btn"
+    );
+
+    applyButton.type = "button";
+
+    applyButton.addEventListener("click", function () {
+
+      closeDashboardJobDetails();
+
+      openDashboardApplyDocuments(job);
+
+    });
+
+    const closeButton = createDashboardText(
+      "button",
+      "Close",
+      "dashboard-job-secondary-btn"
+    );
+
+    closeButton.type = "button";
+    closeButton.addEventListener(
+      "click",
+      closeDashboardJobDetails
+    );
+
+    actions.append(applyButton, closeButton);
+
+    dashboardJobDetailsModal.appendChild(actions);
+
+    dashboardJobDetailsModal.showModal();
+
+  }
+
+  // =========================================
+  // LOAD JOBSEEKER APPLICATION DOCUMENTS
+  // =========================================
+
+  async function loadDashboardApplicationDocuments() {
+
+    const list = document.getElementById(
+      "dashboardApplyDocumentList"
+    );
+
+    const status = document.getElementById(
+      "dashboardApplyDocumentStatus"
+    );
+
+    list.replaceChildren();
+
+    status.textContent = "Loading your documents...";
+
+    dashboardApplicationDocuments = [];
+
+    try {
+
+      const {
+        data: sessionData,
+        error: sessionError
+      } = await supabaseAuth.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      const user = sessionData.session?.user;
+
+      if (!user) {
+        throw new Error("Please sign in again.");
+      }
+
+      const {
+        data: documents,
+        error: documentsError
+      } = await supabaseAuth
+        .from("jobseeker_documents")
+        .select(`
+          id,
+          document_type,
+          file_name,
+          file_size,
+          mime_type,
+          created_at
+        `)
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (documentsError) throw documentsError;
+
+      dashboardApplicationDocuments = documents || [];
+
+      if (!dashboardApplicationDocuments.length) {
+
+        status.textContent =
+          "You have no documents yet. Please upload your documents in My Documents first.";
+
+        return;
+
+      }
+
+      const documentLabels = {
+        cv: "CV / Resume",
+        resume: "CV / Resume",
+        certificate: "Certificate",
+        education_certificate: "Education Certificate",
+        employment_certificate: "Work Experience Letter",
+        identity_card: "MyKad",
+        driving_licence: "Driving Licence",
+        other: "Other Documents"
+      };
+
+      dashboardApplicationDocuments.forEach(document => {
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "dashboard-application-document";
+
+        const checkbox = document.createElement("input");
+
+        checkbox.type = "checkbox";
+        checkbox.name = "dashboardApplicationDocument";
+        checkbox.value = document.id;
+        checkbox.id = "dashboard-document-" + document.id;
+
+        const label = document.createElement("label");
+        label.htmlFor = checkbox.id;
+
+        const type = documentLabels[document.document_type] ||
+          document.document_type;
+
+        label.textContent =
+          type + " — " + document.file_name;
+
+        wrapper.append(checkbox, label);
+
+        list.appendChild(wrapper);
+
+      });
+
+      status.textContent =
+        "Select the documents you want to attach to your application.";
+
+    } catch (error) {
+
+      console.error(
+        "Load Dashboard Application Documents Error:",
+        error
+      );
+
+      status.textContent =
+        error.message || "Unable to load your documents.";
+
+    }
+
+  }
+
+  // =========================================
+  // OPEN APPLICATION DOCUMENT MODAL
+  // =========================================
+
+  async function openDashboardApplyDocuments(job) {
+
+    selectedDashboardJob = job;
+
+    dashboardApplyDocumentsModal.replaceChildren();
+
+    const heading = createDashboardText(
+      "h2",
+      "Select Application Documents"
+    );
+
+    const jobTitle = createDashboardText(
+      "p",
+      "Applying for: " + (job.title || "Untitled Job")
+    );
+
+    const documentList = document.createElement("div");
+    documentList.id = "dashboardApplyDocumentList";
+
+    const coverLabel = createDashboardText(
+      "h3",
+      "Cover Letter (Optional)"
+    );
+
+    const coverLetter = document.createElement("textarea");
+    coverLetter.id = "dashboardApplyCoverLetter";
+    coverLetter.placeholder =
+      "Write a cover letter to introduce yourself...";
+
+    const status = document.createElement("p");
+    status.id = "dashboardApplyDocumentStatus";
+    status.setAttribute("role", "status");
+
+    const actions = document.createElement("div");
+    actions.className = "dashboard-job-modal-actions";
+
+    const submitButton = createDashboardText(
+      "button",
+      "Submit Application",
+      "dashboard-job-primary-btn"
+    );
+
+    submitButton.id = "submitDashboardApplicationBtn";
+    submitButton.type = "button";
+
+    const closeButton = createDashboardText(
+      "button",
+      "Close",
+      "dashboard-job-secondary-btn"
+    );
+
+    closeButton.type = "button";
+
+    closeButton.addEventListener(
+      "click",
+      closeDashboardApplyDocuments
+    );
+
+    submitButton.addEventListener("click", async function () {
+
+      const selectedDocuments = Array.from(
+        documentList.querySelectorAll(
+          'input[name="dashboardApplicationDocument"]:checked'
+        )
+      ).map(input => input.value);
+
+      if (!selectedDocuments.length) {
+
+        status.textContent =
+          "Please select at least one document.";
+
+        status.style.color = "#dc2626";
+
+        return;
+
+      }
+
+      if (!selectedDashboardJob) return;
+
+      if (
+        typeof window.submitMalaysiaJobApplication !== "function"
+      ) {
+
+        status.textContent =
+          "Application system is unavailable. Please refresh the page.";
+
+        status.style.color = "#dc2626";
+
+        return;
+
+      }
+
+      try {
+
+        const result =
+          await window.submitMalaysiaJobApplication({
+            jobId: selectedDashboardJob.id,
+            documentIds: selectedDocuments,
+            coverLetter: coverLetter.value.trim(),
+            statusElement: status,
+            submitButton: submitButton
+          });
+
+        if (result && result.success) {
+
+          status.textContent =
+            "Your application has been submitted successfully.";
+
+          status.style.color = "#15803d";
+
+          submitButton.disabled = true;
+          closeButton.textContent = "Done";
+
+          closeButton.onclick = function () {
+
+            closeDashboardApplyDocuments();
+
+          };
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Dashboard Job Application Error:",
+          error
+        );
+
+      }
+
+    });
+
+    actions.append(
+      submitButton,
+      closeButton
+    );
+
+    dashboardApplyDocumentsModal.append(
+      heading,
+      jobTitle,
+      documentList,
+      coverLabel,
+      coverLetter,
+      status,
+      actions
+    );
+
+    dashboardApplyDocumentsModal.showModal();
+
+    await loadDashboardApplicationDocuments();
+
+  }
+
   // =========================================
   // DISPLAY JOB CARDS
   // =========================================
@@ -2878,11 +3441,26 @@ function populateJobFilters() {
         ? descriptionText.substring(0, 180) + "..."
         : descriptionText || "No job description available.";
 
+      const viewDetailsButton = createDashboardText(
+        "button",
+        "View Details",
+        "dashboard-job-primary-btn"
+      );
+
+      viewDetailsButton.type = "button";
+
+      viewDetailsButton.addEventListener("click", function () {
+
+        openDashboardJobDetails(job);
+
+      });
+
       card.append(
         title,
         company,
         details,
-        description
+        description,
+        viewDetailsButton
       );
 
       resultsContainer.appendChild(card);

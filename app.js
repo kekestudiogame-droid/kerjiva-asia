@@ -3845,3 +3845,444 @@ function updateCompanySidebar(profile) {
 
 });
 
+
+/* =========================================================
+   KERJIVA MALAYSIA
+   COMPANY POST A JOB
+   CREATE, SAVE DRAFT, PUBLISH & EDIT JOB
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", async function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  // Jalankan hanya pada Company Dashboard.
+  if (params.get("dashboard") !== "company") return;
+
+  if (params.has("preview")) return;
+
+  const dashboard = document.getElementById("companyDashboard");
+
+  if (!dashboard) return;
+
+  // =====================================================
+  // FORM ELEMENTS
+  // =====================================================
+
+  const form = document.getElementById("companyJobForm");
+
+  const editingJobId = document.getElementById("companyEditingJobId");
+
+  const titleInput = document.getElementById("companyJobTitle");
+  const categoryInput = document.getElementById("companyJobCategory");
+  const typeInput = document.getElementById("companyJobType");
+  const stateInput = document.getElementById("companyJobState");
+  const cityInput = document.getElementById("companyJobCity");
+
+  const salaryMinInput = document.getElementById("companyJobSalaryMin");
+  const salaryMaxInput = document.getElementById("companyJobSalaryMax");
+
+  const educationInput = document.getElementById("companyJobEducation");
+  const experienceInput = document.getElementById("companyJobExperience");
+
+  const descriptionInput = document.getElementById("companyJobDescription");
+  const requirementsInput = document.getElementById("companyJobRequirements");
+  const deadlineInput = document.getElementById("companyJobDeadline");
+
+  const saveDraftBtn = document.getElementById("saveCompanyJobDraftBtn");
+  const submitJobBtn = document.getElementById("submitCompanyJobBtn");
+  const statusEl = document.getElementById("companyJobStatus");
+
+  if (
+    !form ||
+    !editingJobId ||
+    !titleInput ||
+    !categoryInput ||
+    !typeInput ||
+    !stateInput ||
+    !cityInput ||
+    !salaryMinInput ||
+    !salaryMaxInput ||
+    !educationInput ||
+    !experienceInput ||
+    !descriptionInput ||
+    !requirementsInput ||
+    !deadlineInput ||
+    !saveDraftBtn ||
+    !submitJobBtn ||
+    !statusEl
+  ) {
+    console.error("Company Post a Job: Required HTML elements not found.");
+    return;
+  }
+
+  // =====================================================
+  // STATE
+  // =====================================================
+
+  let companyUserId = null;
+  let companyId = null;
+  let isSaving = false;
+
+  // =====================================================
+  // STATUS MESSAGE
+  // =====================================================
+
+  function showJobStatus(message, isError = false) {
+
+    statusEl.textContent = message;
+    statusEl.style.color = isError ? "red" : "";
+
+  }
+
+  // =====================================================
+  // LOAD COMPANY ID
+  // =====================================================
+
+  async function loadCompanyId() {
+
+    const { data: sessionData, error: sessionError } =
+      await supabaseAuth.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    const session = sessionData.session;
+
+    if (!session?.user) {
+      throw new Error("Please sign in again.");
+    }
+
+    companyUserId = session.user.id;
+
+    const { data: company, error } = await supabaseAuth
+      .from("companies")
+      .select("id")
+      .eq("user_id", companyUserId)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!company) {
+      throw new Error("Company profile not found.");
+    }
+
+    companyId = company.id;
+
+    console.log("Company Post a Job: Company ID Loaded.");
+
+  }
+
+  // =====================================================
+  // RESET FORM
+  // =====================================================
+
+  function resetJobForm() {
+
+    form.reset();
+
+    editingJobId.value = "";
+
+    showJobStatus("");
+
+  }
+
+  // =====================================================
+  // GET FORM DATA
+  // =====================================================
+
+  function getJobFormData(status) {
+
+    const salaryMinValue = salaryMinInput.value.trim();
+    const salaryMaxValue = salaryMaxInput.value.trim();
+
+    const salaryMin = salaryMinValue === ""
+      ? null
+      : Number(salaryMinValue);
+
+    const salaryMax = salaryMaxValue === ""
+      ? null
+      : Number(salaryMaxValue);
+
+    if (
+      salaryMin !== null &&
+      salaryMax !== null &&
+      salaryMin > salaryMax
+    ) {
+      throw new Error(
+        "Minimum Salary cannot be greater than Maximum Salary."
+      );
+    }
+
+    return {
+
+      company_id: companyId,
+
+      title: titleInput.value.trim(),
+
+      category: categoryInput.value,
+
+      job_type: typeInput.value,
+
+      state: stateInput.value,
+
+      city: cityInput.value.trim(),
+
+      salary_min: salaryMin,
+
+      salary_max: salaryMax,
+
+      salary_currency: "MYR",
+
+      education: educationInput.value.trim() || null,
+
+      experience: experienceInput.value.trim() || null,
+
+      description: descriptionInput.value.trim(),
+
+      requirements: requirementsInput.value.trim() || null,
+
+      application_deadline: deadlineInput.value || null,
+
+      status: status,
+
+      updated_at: new Date().toISOString()
+
+    };
+
+  }
+
+  // =====================================================
+  // SAVE JOB
+  // =====================================================
+
+  async function saveCompanyJob(status) {
+
+    if (isSaving) return;
+
+    if (!companyId) {
+      showJobStatus("Company profile is not ready.", true);
+      return;
+    }
+
+    // Validasi field required dari HTML.
+    if (!form.reportValidity()) return;
+
+    let jobData;
+
+    try {
+
+      jobData = getJobFormData(status);
+
+    } catch (error) {
+
+      showJobStatus(error.message, true);
+      return;
+
+    }
+
+    const jobId = editingJobId.value.trim();
+
+    isSaving = true;
+
+    saveDraftBtn.disabled = true;
+    submitJobBtn.disabled = true;
+
+    showJobStatus(
+      status === "draft"
+        ? "Saving job draft..."
+        : "Publishing job..."
+    );
+
+    try {
+
+      let result;
+
+      if (jobId) {
+
+        // -----------------------------------------------
+        // UPDATE EXISTING JOB
+        // -----------------------------------------------
+
+        const { data, error } = await supabaseAuth
+          .from("jobs")
+          .update(jobData)
+          .eq("id", jobId)
+          .eq("company_id", companyId)
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        result = data;
+
+      } else {
+
+        // -----------------------------------------------
+        // CREATE NEW JOB
+        // -----------------------------------------------
+
+        const { data, error } = await supabaseAuth
+          .from("jobs")
+          .insert(jobData)
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        result = data;
+
+      }
+
+      const successMessage =
+        status === "draft"
+          ? "Job draft saved successfully."
+          : "Job published successfully.";
+
+      resetJobForm();
+
+      showJobStatus(successMessage);
+
+      console.log("Company Job Saved Successfully:", result.id);
+
+    } catch (error) {
+
+      console.error("Save Company Job Error:", error);
+
+      showJobStatus(
+        error.message || "Unable to save job.",
+        true
+      );
+
+    } finally {
+
+      isSaving = false;
+
+      saveDraftBtn.disabled = false;
+      submitJobBtn.disabled = false;
+
+    }
+
+  }
+
+  // =====================================================
+  // SAVE AS DRAFT
+  // =====================================================
+
+  saveDraftBtn.addEventListener("click", function () {
+
+    saveCompanyJob("draft");
+
+  });
+
+  // =====================================================
+  // SEND / PUBLISH JOB
+  // =====================================================
+
+  submitJobBtn.addEventListener("click", function () {
+
+    saveCompanyJob("published");
+
+  });
+
+  // =====================================================
+  // PREPARE JOB FORM FOR EDITING
+  // =====================================================
+
+  window.openCompanyJobForEdit = async function (jobId) {
+
+    if (!companyId) {
+      showJobStatus("Company profile is not ready.", true);
+      return;
+    }
+
+    if (!jobId) {
+      showJobStatus("Invalid job ID.", true);
+      return;
+    }
+
+    showJobStatus("Loading job details...");
+
+    try {
+
+      const { data: job, error } = await supabaseAuth
+        .from("jobs")
+        .select("*")
+        .eq("id", jobId)
+        .eq("company_id", companyId)
+        .single();
+
+      if (error) throw error;
+
+      // Isi form dengan data lowongan.
+      editingJobId.value = job.id;
+
+      titleInput.value = job.title || "";
+      categoryInput.value = job.category || "";
+      typeInput.value = job.job_type || "";
+
+      stateInput.value = job.state || "";
+      cityInput.value = job.city || "";
+
+      salaryMinInput.value = job.salary_min ?? "";
+      salaryMaxInput.value = job.salary_max ?? "";
+
+      educationInput.value = job.education || "";
+      experienceInput.value = job.experience || "";
+
+      descriptionInput.value = job.description || "";
+      requirementsInput.value = job.requirements || "";
+
+      deadlineInput.value = job.application_deadline || "";
+
+      // Buka section Post a Job melalui navigasi yang tersedia.
+      const postJobLink = dashboard.querySelector(
+        ".dashboard-nav a[href='#companyPostJob']"
+      );
+
+      if (postJobLink) {
+        postJobLink.click();
+      } else {
+        document.getElementById("companyPostJob").hidden = false;
+      }
+
+      showJobStatus("Editing existing job.");
+
+      console.log("Company Job Loaded For Editing:", job.id);
+
+    } catch (error) {
+
+      console.error("Load Company Job For Editing Error:", error);
+
+      showJobStatus(
+        error.message || "Unable to load job details.",
+        true
+      );
+
+    }
+
+  };
+
+  // =====================================================
+  // INITIALIZE COMPANY POST A JOB
+  // =====================================================
+
+  try {
+
+    await loadCompanyId();
+
+    console.log("Company Post a Job Ready.");
+
+  } catch (error) {
+
+    console.error("Company Post a Job Initialization Error:", error);
+
+    showJobStatus(
+      error.message || "Unable to initialize Post a Job.",
+      true
+    );
+
+  }
+
+});
+
+

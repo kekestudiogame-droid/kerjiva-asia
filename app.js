@@ -2570,101 +2570,209 @@ const categoryTypeSelect = document.getElementById(
   // POPULATE FILTER OPTIONS
   // =========================================
 
-  function populateJobFilters() {
 
-    categoryTypeSelect.replaceChildren();
+function populateJobFilters() {
 
-    const defaultOption = document.createElement("option");
-    defaultOption.value = "";
-    defaultOption.textContent = "All Categories & Job Types";
+  const categoryTypeDropdown = document.getElementById(
+    "dashboardJobCategoryTypeDropdown"
+  );
 
-    categoryTypeSelect.appendChild(defaultOption);
+  const categoryTypeToggle = document.getElementById(
+    "dashboardJobCategoryTypeToggle"
+  );
 
-    // MASTER JOB CATEGORIES
-    const jobCategories = [
-      "Accounting & Finance",
-      "Administration & Office Support",
-      "Architecture & Interior Design",
-      "Banking & Financial Services",
-      "Beauty, Wellness & Personal Care",
-      "Construction & Building",
-      "Customer Service",
-      "Design & Creative",
-      "Education & Training",
-      "Engineering",
-      "Food & Beverage",
-      "Government & Public Services",
-      "Healthcare & Medical",
-      "Hospitality & Tourism",
-      "Human Resources",
-      "Information Technology",
-      "Insurance",
-      "Legal",
-      "Logistics, Transport & Supply Chain",
-      "Manufacturing & Production",
-      "Marketing & Communications",
-      "Media & Entertainment",
-      "Oil, Gas & Energy",
-      "Property & Real Estate",
-      "Retail & Merchandising",
-      "Sales & Business Development",
-      "Science & Research",
-      "Security & Safety",
-      "Telecommunications",
-      "Agriculture & Plantation",
-      "Automotive",
-      "Aviation",
-      "Environmental & Sustainability",
-      "NGO & Social Services",
-      "Others"
-    ];
+  const categoryTypeLabel = document.getElementById(
+    "dashboardJobCategoryTypeLabel"
+  );
 
-    // MASTER JOB TYPES
-    const jobTypes = [
-      "Full-time",
-      "Part-time",
-      "Contract",
-      "Temporary",
-      "Internship",
-      "Freelance",
-      "Casual",
-      "Apprenticeship",
-      "Graduate Programme"
-    ];
+  const categoryTypeOptions = document.getElementById(
+    "dashboardJobCategoryTypeOptions"
+  );
 
-    // CATEGORY GROUP
-    const categoryGroup = document.createElement("optgroup");
-    categoryGroup.label = "Categories";
+  if (
+    !categoryTypeDropdown ||
+    !categoryTypeToggle ||
+    !categoryTypeLabel ||
+    !categoryTypeOptions ||
+    !categoryTypeSelect
+  ) return;
 
-    jobCategories.forEach(category => {
+  categoryTypeSelect.replaceChildren();
+  categoryTypeOptions.replaceChildren();
+
+  const jobCategories = [
+    "Accounting & Finance",
+    "Administration & Office Support",
+    "Architecture & Interior Design",
+    "Banking & Financial Services",
+    "Beauty, Wellness & Personal Care",
+    "Construction & Building",
+    "Customer Service",
+    "Design & Creative",
+    "Education & Training",
+    "Engineering",
+    "Food & Beverage",
+    "Government & Public Services",
+    "Healthcare & Medical",
+    "Hospitality & Tourism",
+    "Human Resources",
+    "Information Technology",
+    "Insurance",
+    "Legal",
+    "Logistics, Transport & Supply Chain",
+    "Manufacturing & Production",
+    "Marketing & Communications",
+    "Media & Entertainment",
+    "Oil, Gas & Energy",
+    "Property & Real Estate",
+    "Retail & Merchandising",
+    "Sales & Business Development",
+    "Science & Research",
+    "Security & Safety",
+    "Telecommunications",
+    "Agriculture & Plantation",
+    "Automotive",
+    "Aviation",
+    "Environmental & Sustainability",
+    "NGO & Social Services",
+    "Others"
+  ];
+
+  const jobTypes = [
+    "Full-time",
+    "Part-time",
+    "Contract",
+    "Temporary",
+    "Internship",
+    "Freelance",
+    "Casual",
+    "Apprenticeship",
+    "Graduate Programme"
+  ];
+
+  function createFilterGroup(groupTitle, items, prefix) {
+
+    const heading = document.createElement("div");
+    heading.className = "multi-select-group-title";
+    heading.textContent = groupTitle;
+
+    categoryTypeOptions.appendChild(heading);
+
+    items.forEach((item, index) => {
+
+      const value = prefix + ":" + item;
 
       const option = document.createElement("option");
-      option.value = "category:" + category;
-      option.textContent = category;
+      option.value = value;
+      option.textContent = item;
 
-      categoryGroup.appendChild(option);
+      categoryTypeSelect.appendChild(option);
+
+      const label = document.createElement("label");
+      label.className = "multi-select-option";
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.value = value;
+      checkbox.id = "job-filter-" + prefix + "-" + index;
+
+      const text = document.createElement("span");
+      text.textContent = item;
+
+      label.htmlFor = checkbox.id;
+      label.append(checkbox, text);
+
+      checkbox.addEventListener("change", function () {
+
+        option.selected = checkbox.checked;
+
+        const selectedFilters = Array.from(
+          categoryTypeSelect.selectedOptions
+        );
+
+        if (selectedFilters.length === 0) {
+          categoryTypeLabel.textContent =
+            "All Categories & Job Types";
+        } else if (selectedFilters.length === 1) {
+          categoryTypeLabel.textContent =
+            selectedFilters[0].textContent;
+        } else {
+          categoryTypeLabel.textContent =
+            selectedFilters.length + " filters selected";
+        }
+
+        searchJobs();
+
+      });
+
+      categoryTypeOptions.appendChild(label);
 
     });
-
-    categoryTypeSelect.appendChild(categoryGroup);
-
-    // JOB TYPE GROUP
-    const typeGroup = document.createElement("optgroup");
-    typeGroup.label = "Job Types";
-
-    jobTypes.forEach(type => {
-
-      const option = document.createElement("option");
-      option.value = "type:" + type;
-      option.textContent = type;
-
-      typeGroup.appendChild(option);
-
-    });
-
-    categoryTypeSelect.appendChild(typeGroup);
 
   }
+
+  createFilterGroup("Categories", jobCategories, "category");
+  createFilterGroup("Job Types", jobTypes, "type");
+
+  categoryTypeLabel.textContent =
+    "All Categories & Job Types";
+
+  // Open and close dropdown.
+  if (categoryTypeDropdown.dataset.initialized !== "true") {
+
+    categoryTypeToggle.addEventListener("click", function () {
+
+      const isExpanded =
+        categoryTypeToggle.getAttribute("aria-expanded") === "true";
+
+      categoryTypeToggle.setAttribute(
+        "aria-expanded",
+        String(!isExpanded)
+      );
+
+      categoryTypeOptions.hidden = isExpanded;
+
+    });
+
+    // Close dropdown when clicking outside.
+    document.addEventListener("click", function (event) {
+
+      if (!categoryTypeDropdown.contains(event.target)) {
+
+        categoryTypeOptions.hidden = true;
+
+        categoryTypeToggle.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+
+      }
+
+    });
+
+    // Close dropdown with Escape.
+    categoryTypeDropdown.addEventListener("keydown", function (event) {
+
+      if (event.key === "Escape") {
+
+        categoryTypeOptions.hidden = true;
+
+        categoryTypeToggle.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+
+        categoryTypeToggle.focus();
+
+      }
+
+    });
+
+    categoryTypeDropdown.dataset.initialized = "true";
+
+  }
+
+}
 
   // =========================================
   // DISPLAY JOB CARDS
@@ -2763,79 +2871,86 @@ const categoryTypeSelect = document.getElementById(
   // SEARCH AND FILTER JOBS
   // =========================================
 
-  function searchJobs() {
+ 
+function searchJobs() {
 
-    const keyword = keywordInput.value
-      .trim()
-      .toLowerCase();
-
-    const location = locationInput.value
-      .trim()
-      .toLowerCase();
-
-   const selectedFilter = categoryTypeSelect.value;
-
-    const filteredJobs = publishedJobs.filter(job => {
-
-      const keywordContent = [
-        job.title,
-        job.description,
-        job.requirements
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-
-      const locationContent = [
-        job.city,
-        job.state
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-
-      const matchesKeyword =
-        !keyword || keywordContent.includes(keyword);
-
-      const matchesLocation =
-        !location || locationContent.includes(location);
-
-     let matchesCategoryType = true;
-
-if (selectedFilter.startsWith("category:")) {
-
-  const selectedCategory = selectedFilter
-    .substring(9)
+  const keyword = keywordInput.value
     .trim()
     .toLowerCase();
 
-  matchesCategoryType =
-    String(job.category || "").trim().toLowerCase() ===
-    selectedCategory;
-
-} else if (selectedFilter.startsWith("type:")) {
-
-  const selectedJobType = selectedFilter
-    .substring(5)
+  const location = locationInput.value
     .trim()
     .toLowerCase();
 
-  matchesCategoryType =
-    String(job.job_type || "").trim().toLowerCase() ===
-    selectedJobType;
+  // Read all selected filters from the hidden multiple select.
+  const selectedFilters = Array.from(
+    categoryTypeSelect.selectedOptions
+  ).map(option => option.value);
+
+  const selectedCategories = selectedFilters
+    .filter(value => value.startsWith("category:"))
+    .map(value => value.substring(9).trim().toLowerCase());
+
+  const selectedJobTypes = selectedFilters
+    .filter(value => value.startsWith("type:"))
+    .map(value => value.substring(5).trim().toLowerCase());
+
+  const filteredJobs = publishedJobs.filter(job => {
+
+    const keywordContent = [
+      job.title,
+      job.description,
+      job.requirements
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    const locationContent = [
+      job.city,
+      job.state
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    const matchesKeyword =
+      !keyword || keywordContent.includes(keyword);
+
+    const matchesLocation =
+      !location || locationContent.includes(location);
+
+    const jobCategory = String(job.category || "")
+      .trim()
+      .toLowerCase();
+
+    const jobType = String(job.job_type || "")
+      .trim()
+      .toLowerCase();
+
+    // Multiple selected categories use OR logic.
+    const matchesCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(jobCategory);
+
+    // Multiple selected job types use OR logic.
+    const matchesJobType =
+      selectedJobTypes.length === 0 ||
+      selectedJobTypes.includes(jobType);
+
+    // Category and Job Type groups use AND logic.
+    return (
+      matchesKeyword &&
+      matchesLocation &&
+      matchesCategory &&
+      matchesJobType
+    );
+
+  });
+
+  displayJobs(filteredJobs);
 
 }
-    return (
-  matchesKeyword &&
-  matchesLocation &&
-  matchesCategoryType
-);
-
-    });
-
-    displayJobs(filteredJobs);
-
-  }
 
   // =========================================
   // LOAD PUBLISHED JOBS FROM SUPABASE
@@ -2963,8 +3078,7 @@ if (selectedFilter.startsWith("category:")) {
 
   });
 
-  // Update results when filters change.
-categoryTypeSelect.addEventListener("change", searchJobs);
+
 
   // =========================================
   // LOAD JOBS WHEN OPENING FIND JOBS

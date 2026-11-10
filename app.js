@@ -4482,8 +4482,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     const applyStatus = document.getElementById("homepageApplyStatus");
-    if (applyStatus) applyStatus.textContent = "";
 
+     if (applyStatus) {
+     applyStatus.textContent = "";
+     applyStatus.hidden = true;
+  }
     detailsModal.hidden = false;
     document.body.style.overflow = "hidden";
   }

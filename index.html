@@ -801,16 +801,47 @@
        
 <div class="search-box">
 
-  <!-- CATEGORY / JOB TYPE -->
-  <div class="search-field">
-    <label for="dashboardJobCategoryType">
-      Category / Job Type
-    </label>
 
-    <select id="dashboardJobCategoryType">
-      <option value="">All Categories & Job Types</option>
-    </select>
+<!-- CATEGORY / JOB TYPE -->
+<div class="search-field">
+  <label for="dashboardJobCategoryTypeToggle">
+    Category / Job Type
+  </label>
+
+  <div
+    class="multi-select-dropdown"
+    id="dashboardJobCategoryTypeDropdown"
+  >
+    <button
+      type="button"
+      id="dashboardJobCategoryTypeToggle"
+      class="multi-select-toggle"
+      aria-expanded="false"
+      aria-controls="dashboardJobCategoryTypeOptions"
+    >
+      <span id="dashboardJobCategoryTypeLabel">
+        All Categories & Job Types
+      </span>
+      <span aria-hidden="true">▼</span>
+    </button>
+
+    <div
+      id="dashboardJobCategoryTypeOptions"
+      class="multi-select-options"
+      hidden
+    ></div>
+
+    <!-- Hidden select for selected filter values -->
+    <select
+      id="dashboardJobCategoryType"
+      multiple
+      hidden
+      aria-hidden="true"
+      tabindex="-1"
+    ></select>
   </div>
+</div>
+
 
   <!-- KEYWORD -->
   <div class="search-field">

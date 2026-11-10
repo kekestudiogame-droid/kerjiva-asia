@@ -2641,6 +2641,20 @@ select {
   font-size: 14px;
   overflow-wrap: anywhere;
 }
+/* HOMEPAGE APPLY STATUS NOTIFICATION */
+
+#homepageApplyStatus:not([hidden]) {
+  display: block;
+  padding: 12px 15px;
+  margin: 0 0 15px;
+  background: #edf3fa;
+  border: 1px solid #cbd9e8;
+  border-radius: 7px;
+  color: #123b6d;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+}
 
 @media (max-width: 600px) {
   .job-modal {

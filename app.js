@@ -961,31 +961,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (!menuLinks.length || !sections.length) return;
 
-  function showSection(sectionId) {
 
-    const targetSection = dashboard.querySelector(
-      "#" + sectionId
-    );
+function showSection(sectionId) {
+  // RETURN TO HOMEPAGE WHEN FIND JOBS IS CLICKED
+  if (sectionId === "jobs") {
+    const mainHeader = document.querySelector(".main-header");
+    const mainContent = document.querySelector("body > main");
+    const mainFooter = document.querySelector(".main-footer");
 
-    if (!targetSection) return;
+    dashboard.hidden = true;
 
-    // Sembunyikan semua section.
-    sections.forEach(section => {
-      section.style.display = "none";
-    });
+    if (mainHeader) mainHeader.hidden = false;
+    if (mainContent) mainContent.hidden = false;
+    if (mainFooter) mainFooter.hidden = false;
 
-    // Tampilkan section yang dipilih.
-    targetSection.style.display = "block";
+    const homepageJobs = document.getElementById("jobs");
+    if (homepageJobs) {
+      homepageJobs.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
 
-    // Perbarui menu aktif.
-    menuLinks.forEach(link => {
-      link.classList.toggle(
-        "active",
-        link.getAttribute("href") === "#" + sectionId
-      );
-    });
-
+    return;
   }
+
+  const targetSection = dashboard.querySelector("#" + sectionId);
+  if (!targetSection) return;
+
+  sections.forEach(section => {
+    section.style.display = "none";
+  });
+
+  targetSection.style.display = "block";
+
+  menuLinks.forEach(link => {
+    link.classList.toggle(
+      "active",
+      link.getAttribute("href") === "#" + sectionId
+    );
+  });
+}
 
   // Navigasi ketika menu sidebar diklik.
   menuLinks.forEach(link => {
@@ -1001,6 +1017,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
   });
+       
 
   // Tampilkan Dashboard sebagai halaman awal.
   showSection("jobseekerOverview");

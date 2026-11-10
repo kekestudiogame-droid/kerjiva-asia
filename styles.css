@@ -2533,7 +2533,7 @@ select {
 .job-modal-content {
   position: relative;
   width: 100%;
-  max-width: 650px;
+  max-width: 900px;
   max-height: 90vh;
   overflow-y: auto;
   padding: 30px;
@@ -2541,6 +2541,43 @@ select {
   border-radius: 12px;
   box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
 }
+
+
+/* HOMEPAGE JOB DETAILS TWO COLUMN LAYOUT */
+
+.homepage-job-details-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(220px, 1fr);
+  grid-template-areas: "main notice";
+  gap: 24px;
+  align-items: start;
+}
+
+.homepage-job-details-main {
+  grid-area: main;
+  min-width: 0;
+}
+
+.homepage-job-details-notice {
+  grid-area: notice;
+  min-width: 0;
+  position: sticky;
+  top: 10px;
+}
+
+#homepageApplyStatus:not([hidden]) {
+  display: block;
+  padding: 14px;
+  margin: 0;
+  background: #edf3fa;
+  border: 1px solid #cbd9e8;
+  border-radius: 8px;
+  color: #123b6d;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
 
 .job-modal-content h2 {
   margin-bottom: 15px;
@@ -2641,20 +2678,8 @@ select {
   font-size: 14px;
   overflow-wrap: anywhere;
 }
-/* HOMEPAGE APPLY STATUS NOTIFICATION */
 
-#homepageApplyStatus:not([hidden]) {
-  display: block;
-  padding: 12px 15px;
-  margin: 0 0 15px;
-  background: #edf3fa;
-  border: 1px solid #cbd9e8;
-  border-radius: 7px;
-  color: #123b6d;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.5;
-}
+
 
 @media (max-width: 600px) {
   .job-modal {
@@ -2672,7 +2697,20 @@ select {
     padding-right: 35px;
     font-size: 19px;
   }
+
+  .homepage-job-details-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "notice"
+      "main";
+    gap: 12px;
+  }
+
+  .homepage-job-details-notice {
+    position: static;
+  }
 }
+
 
 
 

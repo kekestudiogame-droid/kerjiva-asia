@@ -4546,7 +4546,7 @@ if (!session || !session.user) {
       "Please log in to your Jobseeker account to apply for this job.";
 
     applyStatus.hidden = false;
-    applyStatus.style.display = "block";
+   
   }
 
   applyNowButton.disabled = false;

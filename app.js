@@ -4516,16 +4516,15 @@ document.addEventListener("DOMContentLoaded", async function () {
       closeJobDetails();
     }
   });
-     // =========================================
+   
+      // =========================================
   // HOMEPAGE APPLY NOW - LOGIN CHECK
   // =========================================
 
   if (applyNowButton) {
     applyNowButton.addEventListener("click", async function () {
 
-      if (!selectedHomepageJob) {
-        return;
-      }
+      if (!selectedHomepageJob) return;
 
       const applyStatus = document.getElementById("homepageApplyStatus");
 
@@ -4534,6 +4533,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       if (applyStatus) {
         applyStatus.textContent = "";
+        applyStatus.hidden = true;
       }
 
       try {
@@ -4545,21 +4545,32 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const session = sessionData.session;
 
-        // Belum login: arahkan ke halaman Login
-        // sambil membawa ID lowongan yang dipilih.
+        // BELUM LOGIN
 
         if (!session || !session.user) {
 
-          window.location.href =
-            "login.html?applyJob=" +
-            encodeURIComponent(selectedHomepageJob.id);
+          if (applyStatus) {
+            applyStatus.textContent =
+              "Please log in to your Jobseeker account to apply for this job.";
+
+            applyStatus.hidden = false;
+          }
+
+          applyNowButton.textContent = "Redirecting...";
+
+          const jobId = selectedHomepageJob.id;
+
+          setTimeout(function () {
+            window.location.href =
+              "login.html?applyJob=" + encodeURIComponent(jobId);
+          }, 1800);
 
           return;
         }
 
         const userId = session.user.id;
 
-        // Periksa role Jobseeker
+        // CHECK JOBSEEKER ACCOUNT
 
         const { data: jobseeker, error: jobseekerError } =
           await window.supabaseAuth
@@ -4570,7 +4581,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         if (jobseekerError) throw jobseekerError;
 
-        // Periksa role Company
+        // CHECK COMPANY ACCOUNT
 
         const { data: company, error: companyError } =
           await window.supabaseAuth
@@ -4581,21 +4592,33 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         if (companyError) throw companyError;
 
+        // JOBSEEKER
+
         if (jobseeker && !company) {
 
           if (applyStatus) {
             applyStatus.textContent =
-              "Your account is ready. Please wait for the application form.";
+              "Your Jobseeker account is ready. Please wait for the application form.";
+
+            applyStatus.hidden = false;
           }
 
-        } else if (company && !jobseeker) {
+        }
+
+        // COMPANY
+
+        else if (company && !jobseeker) {
 
           if (applyStatus) {
             applyStatus.textContent =
               "Company accounts cannot apply for jobs. Please use a Jobseeker account.";
+
+            applyStatus.hidden = false;
           }
 
-        } else {
+        }
+
+        else {
 
           throw new Error(
             "Your account profile could not be identified."
@@ -4610,18 +4633,22 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (applyStatus) {
           applyStatus.textContent =
             error.message || "Unable to continue. Please try again.";
+
+          applyStatus.hidden = false;
         }
 
       } finally {
 
         applyNowButton.disabled = false;
-        applyNowButton.textContent = "Apply Now";
+
+        if (applyNowButton.textContent !== "Redirecting...") {
+          applyNowButton.textContent = "Apply Now";
+        }
 
       }
 
     });
   }
-
   function renderHomepageJobs(jobs) {
     jobsGrid.replaceChildren();
 

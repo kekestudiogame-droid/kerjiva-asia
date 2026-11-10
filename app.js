@@ -3085,124 +3085,124 @@ function populateJobFilters() {
 
   }
 
-  // =========================================
-  // LOAD JOBSEEKER APPLICATION DOCUMENTS
-  // =========================================
+        
+// =========================================
+// LOAD JOBSEEKER APPLICATION DOCUMENTS
+// =========================================
 
-  async function loadDashboardApplicationDocuments() {
+async function loadDashboardApplicationDocuments() {
 
-    const list = document.getElementById(
-      "dashboardApplyDocumentList"
-    );
+  const list = document.getElementById(
+    "dashboardApplyDocumentList"
+  );
 
-    const status = document.getElementById(
-      "dashboardApplyDocumentStatus"
-    );
+  const status = document.getElementById(
+    "dashboardApplyDocumentStatus"
+  );
 
-    list.replaceChildren();
+  list.replaceChildren();
 
-    status.textContent = "Loading your documents...";
+  status.textContent = "Loading your documents...";
 
-    dashboardApplicationDocuments = [];
+  dashboardApplicationDocuments = [];
 
-    try {
+  try {
 
-      const {
-        data: sessionData,
-        error: sessionError
-      } = await supabaseAuth.auth.getSession();
+    const {
+      data: sessionData,
+      error: sessionError
+    } = await supabaseAuth.auth.getSession();
 
-      if (sessionError) throw sessionError;
+    if (sessionError) throw sessionError;
 
-      const user = sessionData.session?.user;
+    const user = sessionData.session?.user;
 
-      if (!user) {
-        throw new Error("Please sign in again.");
-      }
-
-      const {
-        data: documents,
-        error: documentsError
-      } = await supabaseAuth
-        .from("jobseeker_documents")
-        .select(`
-          id,
-          document_type,
-          file_name,
-          file_size,
-          mime_type,
-          created_at
-        `)
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-
-      if (documentsError) throw documentsError;
-
-      dashboardApplicationDocuments = documents || [];
-
-      if (!dashboardApplicationDocuments.length) {
-
-        status.textContent =
-          "You have no documents yet. Please upload your documents in My Documents first.";
-
-        return;
-
-      }
-
-      const documentLabels = {
-        cv: "CV / Resume",
-        resume: "CV / Resume",
-        certificate: "Certificate",
-        education_certificate: "Education Certificate",
-        employment_certificate: "Work Experience Letter",
-        identity_card: "MyKad",
-        driving_licence: "Driving Licence",
-        other: "Other Documents"
-      };
-
-      dashboardApplicationDocuments.forEach(document => {
-
-        const wrapper = document.createElement("div");
-        wrapper.className = "dashboard-application-document";
-
-        const checkbox = document.createElement("input");
-
-        checkbox.type = "checkbox";
-        checkbox.name = "dashboardApplicationDocument";
-        checkbox.value = document.id;
-        checkbox.id = "dashboard-document-" + document.id;
-
-        const label = document.createElement("label");
-        label.htmlFor = checkbox.id;
-
-        const type = documentLabels[document.document_type] ||
-          document.document_type;
-
-        label.textContent =
-          type + " — " + document.file_name;
-
-        wrapper.append(checkbox, label);
-
-        list.appendChild(wrapper);
-
-      });
-
-      status.textContent =
-        "Select the documents you want to attach to your application.";
-
-    } catch (error) {
-
-      console.error(
-        "Load Dashboard Application Documents Error:",
-        error
-      );
-
-      status.textContent =
-        error.message || "Unable to load your documents.";
-
+    if (!user) {
+      throw new Error("Please sign in again.");
     }
 
+    const {
+      data: documents,
+      error: documentsError
+    } = await supabaseAuth
+      .from("jobseeker_documents")
+      .select(`
+        id,
+        document_type,
+        file_name,
+        file_size,
+        mime_type,
+        created_at
+      `)
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
+
+    if (documentsError) throw documentsError;
+
+    dashboardApplicationDocuments = documents || [];
+
+    if (!dashboardApplicationDocuments.length) {
+
+      status.textContent =
+        "You have no documents yet. Please upload your documents in My Documents first.";
+
+      return;
+    }
+
+    const documentLabels = {
+      cv: "CV / Resume",
+      resume: "CV / Resume",
+      certificate: "Certificate",
+      education_certificate: "Education Certificate",
+      employment_certificate: "Work Experience Letter",
+      identity_card: "MyKad",
+      driving_licence: "Driving Licence",
+      other: "Other Documents"
+    };
+
+    dashboardApplicationDocuments.forEach(doc => {
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "dashboard-application-document";
+
+      const checkbox = document.createElement("input");
+
+      checkbox.type = "checkbox";
+      checkbox.name = "dashboardApplicationDocument";
+      checkbox.value = doc.id;
+      checkbox.id = "dashboard-document-" + doc.id;
+
+      const label = document.createElement("label");
+      label.htmlFor = checkbox.id;
+
+      const type = documentLabels[doc.document_type] ||
+        doc.document_type;
+
+      label.textContent =
+        type + " — " + doc.file_name;
+
+      wrapper.append(checkbox, label);
+
+      list.appendChild(wrapper);
+
+    });
+
+    status.textContent =
+      "Select the documents you want to attach to your application.";
+
+  } catch (error) {
+
+    console.error(
+      "Load Dashboard Application Documents Error:",
+      error
+    );
+
+    status.textContent =
+      error.message || "Unable to load your documents.";
+
   }
+
+}
 
   // =========================================
   // OPEN APPLICATION DOCUMENT MODAL

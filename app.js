@@ -392,15 +392,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (companyError) throw companyError;
 
+      // =========================================
+      // JOBSEEKER LOGIN
+      // =========================================
+
       if (jobseeker && !company) {
 
-        window.location.href = "index.html?dashboard=jobseeker";
+        const params = new URLSearchParams(window.location.search);
+        const applyJobId = params.get("applyJob");
 
-      } else if (company && !jobseeker) {
+        if (applyJobId) {
+
+          window.location.href =
+            "index.html?applyJob=" + encodeURIComponent(applyJobId);
+
+        } else {
+
+          window.location.href = "index.html?dashboard=jobseeker";
+
+        }
+
+      }
+
+      // =========================================
+      // COMPANY LOGIN
+      // =========================================
+
+      else if (company && !jobseeker) {
 
         window.location.href = "index.html?dashboard=company";
 
-      } else {
+      }
+
+      else {
 
         await supabaseAuth.auth.signOut();
 
@@ -427,7 +451,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
-
 
 /* =====================================================
    KERJIVA MALAYSIA

@@ -40,6 +40,18 @@
 
       <!-- LOGIN FORM -->
       <form id="loginForm">
+        
+        <!-- ACCOUNT TYPE -->
+        <div class="auth-form-group">
+          <label for="loginRole">Account Type</label>
+
+          <select id="loginRole" name="role" required>
+            <option value="" selected disabled>Select account type</option>
+            <option value="jobseeker">Jobseeker</option>
+            <option value="company">Company</option>
+          </select>
+        </div>
+
 
         <div class="auth-form-group">
           <label for="loginEmail">Email Address</label>

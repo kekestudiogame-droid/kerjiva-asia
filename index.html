@@ -207,6 +207,114 @@
 
   </main>
 
+  <!-- =====================================================
+       KERJIVA MALAYSIA
+       JOB DETAILS MODAL
+       ===================================================== -->
+
+  <div
+    id="homepageJobDetailsModal"
+    class="job-modal"
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="homepageJobDetailsTitle"
+  >
+    <div class="job-modal-content">
+
+      <button
+        type="button"
+        id="closeHomepageJobDetails"
+        class="job-modal-close"
+        aria-label="Close job details"
+      >
+        &times;
+      </button>
+
+      <div id="homepageJobDetailsContent"></div>
+
+      <button
+        type="button"
+        id="homepageApplyNowBtn"
+        class="primary-btn"
+      >
+        Apply Now
+      </button>
+
+      <p
+        id="homepageApplyStatus"
+        role="status"
+        aria-live="polite"
+      ></p>
+
+    </div>
+  </div>
+
+
+  <!-- =====================================================
+       KERJIVA MALAYSIA
+       APPLY JOB DOCUMENT MODAL
+       ===================================================== -->
+
+  <div
+    id="homepageApplyDocumentsModal"
+    class="job-modal"
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="homepageApplyDocumentsTitle"
+  >
+    <div class="job-modal-content">
+
+      <button
+        type="button"
+        id="closeHomepageApplyDocuments"
+        class="job-modal-close"
+        aria-label="Close document selection"
+      >
+        &times;
+      </button>
+
+      <h2 id="homepageApplyDocumentsTitle">
+        Select Application Documents
+      </h2>
+
+      <p>
+        Select the documents you want to attach to your application.
+      </p>
+
+      <div id="homepageApplyDocumentList"></div>
+
+      <label for="homepageApplyCoverLetter">
+        Cover Letter (Optional)
+      </label>
+
+      <textarea
+        id="homepageApplyCoverLetter"
+        rows="5"
+        placeholder="Write a short cover letter..."
+      ></textarea>
+
+      <p
+        id="homepageApplyDocumentStatus"
+        role="status"
+        aria-live="polite"
+      ></p>
+
+      <button
+        type="button"
+        id="submitHomepageApplicationBtn"
+        class="primary-btn"
+      >
+        Submit Application
+      </button>
+
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+
 
   <!-- FOOTER -->
   <footer class="main-footer">

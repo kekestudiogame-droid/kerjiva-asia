@@ -4899,6 +4899,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   const jobsGrid = document.getElementById("jobsGrid");
   const keywordInput = document.getElementById("keyword");
   const locationSelect = document.getElementById("location");
+  const categorySelect = document.getElementById("jobCategory");
+  const jobTypeSelect = document.getElementById("jobType");
   const searchButton = document.getElementById("searchJobsBtn");
 
   if (!jobsGrid) return;
@@ -5333,42 +5335,66 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
-  function filterHomepageJobs() {
-    const keyword = (keywordInput?.value || "")
-      .trim()
-      .toLowerCase();
+        
+function filterHomepageJobs() {
+  const keyword = (keywordInput?.value || "")
+    .trim()
+    .toLowerCase();
 
-    const selectedLocation = (locationSelect?.value || "")
-      .trim()
-      .toLowerCase();
+  const selectedLocation = (locationSelect?.value || "")
+    .trim()
+    .toLowerCase();
 
-    const filteredJobs = homepageJobs.filter(job => {
-      const searchableText = [
-        job.title,
-        job.category,
-        job.description,
-        job.requirements,
-        job.company_name,
-        job.city,
-        job.state,
-        job.job_type
-      ].filter(Boolean).join(" ").toLowerCase();
+  const selectedCategory = (categorySelect?.value || "")
+    .trim()
+    .toLowerCase();
 
-      const matchesKeyword =
-        !keyword || searchableText.includes(keyword);
+  const selectedJobType = (jobTypeSelect?.value || "")
+    .trim()
+    .toLowerCase();
 
-      const matchesLocation =
-        !selectedLocation ||
-        selectedLocation === "all locations" ||
-        [job.city, job.state]
-          .filter(Boolean)
-          .some(value => value.toLowerCase() === selectedLocation);
+  const filteredJobs = homepageJobs.filter(job => {
+    const searchableText = [
+      job.title,
+      job.category,
+      job.description,
+      job.requirements,
+      job.company_name,
+      job.city,
+      job.state,
+      job.job_type
+    ].filter(Boolean).join(" ").toLowerCase();
 
-      return matchesKeyword && matchesLocation;
-    });
+    const matchesKeyword =
+      !keyword || searchableText.includes(keyword);
 
-    renderHomepageJobs(filteredJobs);
-  }
+    const matchesLocation =
+      !selectedLocation ||
+      selectedLocation === "all locations" ||
+      [job.city, job.state]
+        .filter(Boolean)
+        .some(value => value.toLowerCase() === selectedLocation);
+
+    const matchesCategory =
+      !selectedCategory ||
+      selectedCategory === "all categories" ||
+      (job.category || "").trim().toLowerCase() === selectedCategory;
+
+    const matchesJobType =
+      !selectedJobType ||
+      selectedJobType === "all job types" ||
+      (job.job_type || "").trim().toLowerCase() === selectedJobType;
+
+    return (
+      matchesKeyword &&
+      matchesLocation &&
+      matchesCategory &&
+      matchesJobType
+    );
+  });
+
+  renderHomepageJobs(filteredJobs);
+}
 
   async function loadHomepageJobs() {
     jobsGrid.innerHTML =
@@ -5460,9 +5486,21 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
-  if (searchButton) {
-    searchButton.addEventListener("click", filterHomepageJobs);
-  }
+        if (searchButton) {
+  searchButton.addEventListener("click", filterHomepageJobs);
+}
+
+if (categorySelect) {
+  categorySelect.addEventListener("change", filterHomepageJobs);
+}
+
+if (jobTypeSelect) {
+  jobTypeSelect.addEventListener("change", filterHomepageJobs);
+}
+
+if (locationSelect) {
+  locationSelect.addEventListener("change", filterHomepageJobs);
+}
 
   if (keywordInput) {
     keywordInput.addEventListener("keydown", function (event) {

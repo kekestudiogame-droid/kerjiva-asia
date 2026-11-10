@@ -974,6 +974,9 @@ function showSection(sectionId) {
     if (mainHeader) mainHeader.hidden = false;
     if (mainContent) mainContent.hidden = false;
     if (mainFooter) mainFooter.hidden = false;
+     menuLinks.forEach(link => {
+     link.classList.remove("active");
+     });
 
     const homepageJobs = document.getElementById("jobs");
     if (homepageJobs) {

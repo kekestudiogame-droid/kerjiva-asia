@@ -4898,3 +4898,197 @@ document.addEventListener("DOMContentLoaded", async function () {
   await loadHomepageJobs();
 });
 
+       
+/* =========================================================
+   KERJIVA MALAYSIA - SHARED APPLY JOB SYSTEM
+   Used by Homepage and Jobseeker Dashboard
+========================================================= */
+
+window.submitMalaysiaJobApplication = async function ({
+  jobId,
+  documentIds,
+  coverLetter,
+  statusElement,
+  submitButton
+}) {
+  const supabase = window.supabaseAuth;
+  const uploadedPaths = [];
+  let applicationId = null;
+
+  const showStatus = (message, isError = false) => {
+    if (!statusElement) return;
+
+    statusElement.textContent = message;
+    statusElement.hidden = false;
+    statusElement.style.display = "block";
+    statusElement.style.color = isError ? "#dc2626" : "#15803d";
+  };
+
+  const setLoading = (loading) => {
+    if (!submitButton) return;
+
+    submitButton.disabled = loading;
+    submitButton.textContent = loading
+      ? "Submitting..."
+      : "Submit Application";
+  };
+
+  try {
+    if (!supabase) {
+      throw new Error("SUPABASE_NOT_AVAILABLE");
+    }
+
+    const selectedIds = Array.isArray(documentIds)
+      ? [...new Set(documentIds)]
+      : [];
+
+    if (!jobId) {
+      throw new Error("JOB_NOT_SELECTED");
+    }
+
+    if (selectedIds.length === 0) {
+      throw new Error("DOCUMENT_REQUIRED");
+    }
+
+    setLoading(true);
+    showStatus("Preparing your application...");
+
+    // 1. Create application and document records
+    const { data: applicationData, error: applicationError } =
+      await supabase.rpc("submit_job_application", {
+        p_job_id: jobId,
+        p_document_ids: selectedIds,
+        p_cover_letter: coverLetter || null
+      });
+
+    if (applicationError) throw applicationError;
+
+    if (
+      !applicationData ||
+      !applicationData.success ||
+      !applicationData.application_id
+    ) {
+      throw new Error("APPLICATION_CREATION_FAILED");
+    }
+
+    applicationId = applicationData.application_id;
+
+    const documents = applicationData.documents || [];
+
+    if (documents.length !== selectedIds.length) {
+      throw new Error("APPLICATION_DOCUMENT_COUNT_MISMATCH");
+    }
+
+    // 2. Copy selected documents to application storage
+    for (const document of documents) {
+      showStatus(
+        `Copying document ${uploadedPaths.length + 1} of ${documents.length}...`
+      );
+
+      const {
+        data: sourceFile,
+        error: downloadError
+      } = await supabase.storage
+        .from("jobseeker-documents")
+        .download(document.source_storage_path);
+
+      if (downloadError || !sourceFile) {
+        throw downloadError || new Error("SOURCE_DOCUMENT_NOT_FOUND");
+      }
+
+      const contentType =
+        document.mime_type ||
+        sourceFile.type ||
+        "application/octet-stream";
+
+      const { error: uploadError } = await supabase.storage
+        .from("application-document-copies")
+        .upload(
+          document.copy_storage_path,
+          sourceFile,
+          {
+            contentType,
+            upsert: false
+          }
+        );
+
+      if (uploadError) throw uploadError;
+
+      uploadedPaths.push(document.copy_storage_path);
+    }
+
+    showStatus("Application submitted successfully!");
+
+    return {
+      success: true,
+      applicationId,
+      documentCount: documents.length
+    };
+
+  } catch (error) {
+    console.error("Kerjiva Apply Job Error:", error);
+
+    let cleanupError = null;
+
+    // 3. Remove copies already uploaded
+    if (uploadedPaths.length > 0) {
+      const { error: removeError } = await supabase.storage
+        .from("application-document-copies")
+        .remove(uploadedPaths);
+
+      if (removeError) {
+        cleanupError = removeError;
+      }
+    }
+
+    // 4. Remove the failed application record
+    if (applicationId && !cleanupError) {
+      const { error: rpcCleanupError } = await supabase.rpc(
+        "cleanup_failed_job_application",
+        {
+          p_application_id: applicationId
+        }
+      );
+
+      if (rpcCleanupError) {
+        cleanupError = rpcCleanupError;
+      }
+    }
+
+    if (cleanupError) {
+      console.error("Application cleanup error:", cleanupError);
+
+      showStatus(
+        "Your application needs attention. Please contact support.",
+        true
+      );
+
+      throw cleanupError;
+    }
+
+    const errorMessages = {
+      LOGIN_REQUIRED: "Please log in to apply.",
+      JOBSEEKER_PROFILE_REQUIRED: "Please complete your Jobseeker profile.",
+      JOBSEEKER_ACCOUNT_REQUIRED: "Only Jobseeker accounts can apply.",
+      JOB_NOT_AVAILABLE: "This job is no longer available.",
+      DOCUMENT_REQUIRED: "Please select at least one document.",
+      DOCUMENT_NOT_OWNED: "One or more selected documents are invalid.",
+      ALREADY_APPLIED: "You have already applied for this job."
+    };
+
+    const errorKey = error.message || error.code || "";
+
+    const message =
+      errorMessages[errorKey] ||
+      "Your application could not be submitted. Please try again.";
+
+    showStatus(message, true);
+
+    throw error;
+
+  } finally {
+    setLoading(false);
+  }
+};
+
+

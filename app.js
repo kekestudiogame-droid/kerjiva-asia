@@ -337,17 +337,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const loginSubmitBtn = document.getElementById("loginSubmitBtn");
   const loginStatus = document.getElementById("loginStatus");
    
-     // =========================================
-  // APPLY NOW LOGIN NOTIFICATION
-  // =========================================
-
-  const loginParams = new URLSearchParams(window.location.search);
-  const applyJobId = loginParams.get("applyJob");
-
-  if (applyJobId && loginStatus) {
-    loginStatus.textContent =
-      "Please log in to your Jobseeker account to apply for this job.";
-  }
 
   if (!loginEmail || !loginPassword || !loginSubmitBtn || !loginStatus) {
     return;

@@ -2565,64 +2565,107 @@ const categoryTypeSelect = document.getElementById(
 
   }
 
+ 
   // =========================================
   // POPULATE FILTER OPTIONS
   // =========================================
 
- function populateJobFilters() {
+  function populateJobFilters() {
 
-  categoryTypeSelect.replaceChildren();
+    categoryTypeSelect.replaceChildren();
 
-  const defaultOption = document.createElement("option");
-  defaultOption.value = "";
-  defaultOption.textContent = "All Categories & Job Types";
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "All Categories & Job Types";
 
-  categoryTypeSelect.appendChild(defaultOption);
+    categoryTypeSelect.appendChild(defaultOption);
 
-  const filterOptions = [];
+    // MASTER JOB CATEGORIES
+    const jobCategories = [
+      "Accounting & Finance",
+      "Administration & Office Support",
+      "Architecture & Interior Design",
+      "Banking & Financial Services",
+      "Beauty, Wellness & Personal Care",
+      "Construction & Building",
+      "Customer Service",
+      "Design & Creative",
+      "Education & Training",
+      "Engineering",
+      "Food & Beverage",
+      "Government & Public Services",
+      "Healthcare & Medical",
+      "Hospitality & Tourism",
+      "Human Resources",
+      "Information Technology",
+      "Insurance",
+      "Legal",
+      "Logistics, Transport & Supply Chain",
+      "Manufacturing & Production",
+      "Marketing & Communications",
+      "Media & Entertainment",
+      "Oil, Gas & Energy",
+      "Property & Real Estate",
+      "Retail & Merchandising",
+      "Sales & Business Development",
+      "Science & Research",
+      "Security & Safety",
+      "Telecommunications",
+      "Agriculture & Plantation",
+      "Automotive",
+      "Aviation",
+      "Environmental & Sustainability",
+      "NGO & Social Services",
+      "Others"
+    ];
 
-  publishedJobs.forEach(job => {
+    // MASTER JOB TYPES
+    const jobTypes = [
+      "Full-time",
+      "Part-time",
+      "Contract",
+      "Temporary",
+      "Internship",
+      "Freelance",
+      "Casual",
+      "Apprenticeship",
+      "Graduate Programme"
+    ];
 
-    if (job.category) {
-      filterOptions.push({
-        value: "category:" + job.category,
-        label: job.category
-      });
-    }
+    // CATEGORY GROUP
+    const categoryGroup = document.createElement("optgroup");
+    categoryGroup.label = "Categories";
 
-    if (job.job_type) {
-      filterOptions.push({
-        value: "type:" + job.job_type,
-        label: job.job_type
-      });
-    }
+    jobCategories.forEach(category => {
 
-  });
+      const option = document.createElement("option");
+      option.value = "category:" + category;
+      option.textContent = category;
 
-  const uniqueOptions = [
-    ...new Map(
-      filterOptions.map(option => [
-        option.value.toLowerCase(),
-        option
-      ])
-    ).values()
-  ];
+      categoryGroup.appendChild(option);
 
-  uniqueOptions.sort((a, b) =>
-    a.label.localeCompare(b.label)
-  );
+    });
 
-  uniqueOptions.forEach(item => {
+    categoryTypeSelect.appendChild(categoryGroup);
 
-    const option = document.createElement("option");
-    option.value = item.value;
-    option.textContent = item.label;
+    // JOB TYPE GROUP
+    const typeGroup = document.createElement("optgroup");
+    typeGroup.label = "Job Types";
 
-    categoryTypeSelect.appendChild(option);
+    jobTypes.forEach(type => {
 
-  });
+      const option = document.createElement("option");
+      option.value = "type:" + type;
+      option.textContent = type;
 
-}
+      typeGroup.appendChild(option);
+
+    });
+
+    categoryTypeSelect.appendChild(typeGroup);
+
+  }
+
   // =========================================
   // DISPLAY JOB CARDS
   // =========================================

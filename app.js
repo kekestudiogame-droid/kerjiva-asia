@@ -321,6 +321,7 @@ metadata = {
     });
 
    
+
 /* =====================================================
    KERJIVA MALAYSIA
    USER LOGIN
@@ -332,13 +333,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (!loginForm) return;
 
+  const loginRole = document.getElementById("loginRole");
   const loginEmail = document.getElementById("loginEmail");
   const loginPassword = document.getElementById("loginPassword");
   const loginSubmitBtn = document.getElementById("loginSubmitBtn");
   const loginStatus = document.getElementById("loginStatus");
-   
 
-  if (!loginEmail || !loginPassword || !loginSubmitBtn || !loginStatus) {
+  if (
+    !loginRole ||
+    !loginEmail ||
+    !loginPassword ||
+    !loginSubmitBtn ||
+    !loginStatus
+  ) {
     return;
   }
 
@@ -351,6 +358,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    const selectedRole = loginRole.value;
     const email = loginEmail.value.trim();
     const password = loginPassword.value;
 
@@ -362,10 +370,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
 
-      const { data, error } = await supabaseAuth.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
+      // =========================================
+      // SIGN IN TO SUPABASE
+      // =========================================
+
+      const { data, error } =
+        await supabaseAuth.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
 
       if (error) throw error;
 
@@ -375,6 +388,24 @@ document.addEventListener("DOMContentLoaded", function () {
         throw new Error("Unable to identify your account.");
       }
 
+      // =========================================
+      // EMAIL VERIFICATION CHECK
+      // =========================================
+
+      if (!user.email_confirmed_at) {
+
+        await supabaseAuth.auth.signOut();
+
+        throw new Error(
+          "Please verify your email address before logging in."
+        );
+
+      }
+
+      // =========================================
+      // CHECK JOBSEEKER PROFILE
+      // =========================================
+
       const { data: jobseeker, error: jobseekerError } =
         await supabaseAuth
           .from("jobseeker_profiles")
@@ -383,6 +414,10 @@ document.addEventListener("DOMContentLoaded", function () {
           .maybeSingle();
 
       if (jobseekerError) throw jobseekerError;
+
+      // =========================================
+      // CHECK COMPANY PROFILE
+      // =========================================
 
       const { data: company, error: companyError } =
         await supabaseAuth
@@ -394,10 +429,46 @@ document.addEventListener("DOMContentLoaded", function () {
       if (companyError) throw companyError;
 
       // =========================================
+      // IDENTIFY ACTUAL ACCOUNT ROLE
+      // =========================================
+
+      let actualRole = null;
+
+      if (jobseeker && !company) {
+        actualRole = "jobseeker";
+      } else if (company && !jobseeker) {
+        actualRole = "company";
+      }
+
+      if (!actualRole) {
+
+        await supabaseAuth.auth.signOut();
+
+        throw new Error(
+          "Your account profile could not be identified. Please contact support."
+        );
+
+      }
+
+      // =========================================
+      // VALIDATE SELECTED ROLE
+      // =========================================
+
+      if (selectedRole !== actualRole) {
+
+        await supabaseAuth.auth.signOut();
+
+        throw new Error(
+          "The selected account type does not match your registered account. Please select the correct account type."
+        );
+
+      }
+
+      // =========================================
       // JOBSEEKER LOGIN
       // =========================================
 
-      if (jobseeker && !company) {
+      if (actualRole === "jobseeker") {
 
         const params = new URLSearchParams(window.location.search);
         const applyJobId = params.get("applyJob");
@@ -409,7 +480,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         } else {
 
-          window.location.href = "index.html?dashboard=jobseeker";
+          window.location.href =
+            "index.html?dashboard=jobseeker";
 
         }
 
@@ -419,19 +491,10 @@ document.addEventListener("DOMContentLoaded", function () {
       // COMPANY LOGIN
       // =========================================
 
-      else if (company && !jobseeker) {
+      else if (actualRole === "company") {
 
-        window.location.href = "index.html?dashboard=company";
-
-      }
-
-      else {
-
-        await supabaseAuth.auth.signOut();
-
-        throw new Error(
-          "Your account profile could not be identified. Please contact support."
-        );
+        window.location.href =
+          "index.html?dashboard=company";
 
       }
 
@@ -452,6 +515,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+
 
 /* =====================================================
    KERJIVA MALAYSIA

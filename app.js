@@ -6097,9 +6097,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   // Load when opening My Jobs
-  const myJobsLink = document.querySelector(
-    '.dashboard-nav a[href="#companyMyJobs"]'
-  );
+ const myJobsLink = document.querySelector(
+  '#companyDashboard .dashboard-nav a[href="#companyMyJobs"]'
+);
 
   if (myJobsLink) {
     myJobsLink.addEventListener("click", loadCompanyJobs);

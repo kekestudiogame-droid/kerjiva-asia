@@ -2890,6 +2890,56 @@ select {
   }
 }
 
+/* COMPANY DASHBOARD TITLE & BACK HOME BUTTON */
+
+.company-dashboard-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.company-dashboard-title-row h2 {
+  margin: 0;
+}
+
+.company-back-home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 17px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.company-back-home-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .company-dashboard-title-row {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .company-back-home-btn {
+    padding: 9px 13px;
+    font-size: 13px;
+  }
+}
+
+
 
 
 

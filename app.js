@@ -130,6 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+
 /* =====================================================
    KERJIVA MALAYSIA
    USER REGISTRATION
@@ -171,14 +172,16 @@ document.addEventListener("DOMContentLoaded", function () {
     registerStatus.textContent = "";
 
     if (password.length < 8) {
-      registerStatus.textContent =
-        "Password must contain at least 8 characters.";
+      const message = "Password must contain at least 8 characters.";
+      registerStatus.textContent = message;
+      showKerjivaNotification(message, "error");
       return;
     }
 
     if (password !== confirmPasswordValue) {
-      registerStatus.textContent =
-        "Password and Confirm Password do not match.";
+      const message = "Password and Confirm Password do not match.";
+      registerStatus.textContent = message;
+      showKerjivaNotification(message, "error");
       confirmPassword.focus();
       return;
     }
@@ -186,10 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let email = "";
     let metadata = {};
 
-    // =========================================
     // JOBSEEKER REGISTRATION DATA
-    // =========================================
-
     if (role === "jobseeker") {
 
       email = document
@@ -213,59 +213,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    // =========================================
     // COMPANY REGISTRATION DATA
-    // =========================================
-
     else if (role === "company") {
 
       email = document
         .getElementById("companyRegisterEmail")
         .value.trim();
 
-    
-metadata = {
-  role: "company",
+      metadata = {
+        role: "company",
 
-  company_name: document
-    .getElementById("registerCompanyName")
-    .value.trim(),
+        company_name: document
+          .getElementById("registerCompanyName")
+          .value.trim(),
 
-  registration_number: document
-    .getElementById("companyRegistrationNumber")
-    .value.trim(),
+        registration_number: document
+          .getElementById("companyRegistrationNumber")
+          .value.trim(),
 
-  contact_person: document
-    .getElementById("companyContactPerson")
-    .value.trim(),
+        contact_person: document
+          .getElementById("companyContactPerson")
+          .value.trim(),
 
-  company_phone: document
-    .getElementById("companyRegisterPhone")
-    .value.trim(),
+        company_phone: document
+          .getElementById("companyRegisterPhone")
+          .value.trim(),
 
-  company_address: document
-    .getElementById("companyAddress")
-    .value.trim(),
+        company_address: document
+          .getElementById("companyAddress")
+          .value.trim(),
 
-  website: document
-    .getElementById("companyWebsite")
-    .value.trim()
-};
-
+        website: document
+          .getElementById("companyWebsite")
+          .value.trim()
+      };
 
     }
 
     else {
 
-      registerStatus.textContent =
-        "Please select a valid account type.";
+      const message = "Please select a valid account type.";
+      registerStatus.textContent = message;
+      showKerjivaNotification(message, "error");
       return;
 
     }
-
-    // =========================================
-    // SUBMIT REGISTRATION TO SUPABASE
-    // =========================================
 
     const originalButtonText = registerSubmitBtn.textContent;
 
@@ -289,16 +281,22 @@ metadata = {
 
       if (data.user) {
 
-        registerStatus.textContent =
+        const successMessage =
           "Registration successful! Please check your email and click the verification link before logging in.";
+
+        registerStatus.textContent = successMessage;
+
+        showKerjivaNotification(successMessage, "success");
 
         registerForm.reset();
 
         // Restore the default Jobseeker form
-        if (registerRole) {
-          registerRole.value = "jobseeker";
-          registerRole.dispatchEvent(new Event("change"));
-        }
+        registerRole.value = "jobseeker";
+        registerRole.dispatchEvent(new Event("change"));
+
+      } else {
+
+        throw new Error("Registration could not be completed. Please try again.");
 
       }
 
@@ -306,8 +304,12 @@ metadata = {
 
       console.error("Kerjiva Malaysia Registration Error:", error);
 
-      registerStatus.textContent =
+      const errorMessage =
         error.message || "Registration failed. Please try again.";
+
+      registerStatus.textContent = errorMessage;
+
+      showKerjivaNotification(errorMessage, "error");
 
     } finally {
 
@@ -318,9 +320,8 @@ metadata = {
 
   });
 
-    });
+});
 
-   
 
 /* =====================================================
    KERJIVA MALAYSIA

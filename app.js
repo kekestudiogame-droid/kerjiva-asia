@@ -267,18 +267,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
 
-      const { data, error } = await supabaseAuth.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-        data: metadata,
-        emailRedirectTo: new URL(
-       "login.html",
-        window.location.href
-       ).href
-      }
-        }
-      });
+    
+const { data, error } = await supabaseAuth.auth.signUp({
+  email: email,
+  password: password,
+  options: {
+    data: metadata,
+    emailRedirectTo: new URL(
+      "login.html",
+      window.location.href
+    ).href
+  }
+});
+
 
       if (error) {
         throw error;

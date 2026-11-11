@@ -5520,7 +5520,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       return;
     }
 
-    jobs.slice(0, 6).forEach(job => {
+      jobs.forEach(job => {
       const card = document.createElement("article");
       card.className = "job-card";
 

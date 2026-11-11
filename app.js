@@ -5400,139 +5400,335 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
    
-      // =========================================
-  // HOMEPAGE APPLY NOW - LOGIN CHECK
-  // =========================================
+// HOMEPAGE APPLY NOW - LOGIN CHECK + DOCUMENT SELECTION
+if (applyNowButton) {
+  applyNowButton.addEventListener("click", async function () {
+    if (!selectedHomepageJob) return;
 
-  if (applyNowButton) {
-    applyNowButton.addEventListener("click", async function () {
+    const applyStatus = document.getElementById("homepageApplyStatus");
 
-      if (!selectedHomepageJob) return;
+    const documentsModal = document.getElementById(
+      "homepageApplyDocumentsModal"
+    );
+    const documentList = document.getElementById(
+      "homepageApplyDocumentList"
+    );
+    const documentStatus = document.getElementById(
+      "homepageApplyDocumentStatus"
+    );
+    const coverLetterInput = document.getElementById(
+      "homepageApplyCoverLetter"
+    );
+    const submitButton = document.getElementById(
+      "submitHomepageApplicationBtn"
+    );
+    const closeDocumentsButton = document.getElementById(
+      "closeHomepageApplyDocuments"
+    );
 
-      const applyStatus = document.getElementById("homepageApplyStatus");
+    applyNowButton.disabled = true;
+    applyNowButton.textContent = "Please wait...";
 
-      applyNowButton.disabled = true;
-      applyNowButton.textContent = "Please wait...";
+    if (applyStatus) {
+      applyStatus.textContent = "";
+      applyStatus.hidden = true;
+    }
 
-      if (applyStatus) {
-        applyStatus.textContent = "";
-        applyStatus.hidden = true;
-      }
+    try {
+      // 1. CHECK LOGIN SESSION
+      const { data: sessionData, error: sessionError } =
+        await window.supabaseAuth.auth.getSession();
 
-      try {
+      if (sessionError) throw sessionError;
 
-        const { data: sessionData, error: sessionError } =
-          await window.supabaseAuth.auth.getSession();
+      const session = sessionData.session;
 
-        if (sessionError) throw sessionError;
-
-        const session = sessionData.session;
-
-              
-        // BELUM LOGIN
-
-        if (!session || !session.user) {
-
-          if (applyStatus) {
-            applyStatus.textContent =
-              "Please log in to your Jobseeker account to apply for this job.";
-
-            applyStatus.hidden = false;
-          }
-
-          applyNowButton.textContent = "Redirecting...";
-
-          const jobId = selectedHomepageJob.id;
-
-          setTimeout(function () {
-            window.location.href =
-              "login.html?applyJob=" + encodeURIComponent(jobId);
-          }, 1800);
-
-          return;
-        }
-
-        const userId = session.user.id;
-
-        // CHECK JOBSEEKER ACCOUNT
-
-        const { data: jobseeker, error: jobseekerError } =
-          await window.supabaseAuth
-            .from("jobseeker_profiles")
-            .select("id")
-            .eq("user_id", userId)
-            .maybeSingle();
-
-        if (jobseekerError) throw jobseekerError;
-
-        // CHECK COMPANY ACCOUNT
-
-        const { data: company, error: companyError } =
-          await window.supabaseAuth
-            .from("companies")
-            .select("id")
-            .eq("user_id", userId)
-            .maybeSingle();
-
-        if (companyError) throw companyError;
-
-        // JOBSEEKER
-
-        if (jobseeker && !company) {
-
-          if (applyStatus) {
-            applyStatus.textContent =
-              "Your Jobseeker account is ready. Please wait for the application form.";
-
-            applyStatus.hidden = false;
-          }
-
-        }
-
-        // COMPANY
-
-        else if (company && !jobseeker) {
-
-          if (applyStatus) {
-            applyStatus.textContent =
-              "Company accounts cannot apply for jobs. Please use a Jobseeker account.";
-
-            applyStatus.hidden = false;
-          }
-
-        }
-
-        else {
-
-          throw new Error(
-            "Your account profile could not be identified."
-          );
-
-        }
-
-      } catch (error) {
-
-        console.error("Homepage Apply Now Error:", error);
-
+      // NOT LOGGED IN
+      if (!session || !session.user) {
         if (applyStatus) {
           applyStatus.textContent =
-            error.message || "Unable to continue. Please try again.";
-
+            "Please log in to your Jobseeker account to apply for this job.";
           applyStatus.hidden = false;
         }
 
-      } finally {
+        applyNowButton.textContent = "Redirecting...";
 
-        applyNowButton.disabled = false;
+        const jobId = selectedHomepageJob.id;
 
-        if (applyNowButton.textContent !== "Redirecting...") {
-          applyNowButton.textContent = "Apply Now";
-        }
+        setTimeout(function () {
+          window.location.href =
+            "login.html?applyJob=" + encodeURIComponent(jobId);
+        }, 1800);
 
+        return;
       }
 
+      const userId = session.user.id;
+
+      // 2. CHECK JOBSEEKER PROFILE
+      const { data: jobseeker, error: jobseekerError } =
+        await window.supabaseAuth
+          .from("jobseeker_profiles")
+          .select("id")
+          .eq("user_id", userId)
+          .maybeSingle();
+
+      if (jobseekerError) throw jobseekerError;
+
+      // 3. CHECK COMPANY PROFILE
+      const { data: company, error: companyError } =
+        await window.supabaseAuth
+          .from("companies")
+          .select("id")
+          .eq("user_id", userId)
+          .maybeSingle();
+
+      if (companyError) throw companyError;
+
+      // COMPANY ACCOUNT
+      if (company && !jobseeker) {
+        throw new Error("JOBSEEKER_ACCOUNT_REQUIRED");
+      }
+
+      // NO JOBSEEKER PROFILE
+      if (!jobseeker) {
+        throw new Error("JOBSEEKER_PROFILE_REQUIRED");
+      }
+
+      // 4. LOAD JOBSEEKER DOCUMENTS
+      if (!documentsModal || !documentList || !submitButton) {
+        throw new Error("APPLICATION_MODAL_NOT_FOUND");
+      }
+
+      documentList.innerHTML =
+        '<p class="document-loading">Loading your documents...</p>';
+
+      if (documentStatus) {
+        documentStatus.textContent = "";
+        documentStatus.hidden = true;
+      }
+
+      if (coverLetterInput) {
+        coverLetterInput.value = "";
+      }
+
+      submitButton.disabled = true;
+
+      const { data: documents, error: documentsError } =
+        await window.supabaseAuth
+          .from("jobseeker_documents")
+          .select("id, document_type, file_name, created_at")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false });
+
+      if (documentsError) throw documentsError;
+
+      documentList.innerHTML = "";
+
+      if (!documents || documents.length === 0) {
+        documentList.innerHTML = `
+          <p class="empty-documents">
+            You have no documents yet. Please upload your documents
+            in My Documents before applying.
+          </p>
+        `;
+      } else {
+        const documentTypeLabels = {
+          cv: "CV / Resume",
+          certificate: "Certificate",
+          education_certificate: "Education Certificate",
+          employment_certificate: "Employment Certificate",
+          identity_card: "Identity Card",
+          driving_licence: "Driving Licence",
+          other: "Other Document"
+        };
+
+        documents.forEach(function (doc) {
+          const label = document.createElement("label");
+          label.className = "application-document-option";
+
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.name = "homepageApplicationDocument";
+          checkbox.value = doc.id;
+
+          const details = document.createElement("span");
+          details.className = "application-document-details";
+
+          const fileName = document.createElement("strong");
+          fileName.textContent = doc.file_name || "Unnamed document";
+
+          const documentType = document.createElement("small");
+          documentType.textContent =
+            documentTypeLabels[doc.document_type] ||
+            doc.document_type ||
+            "Document";
+
+          details.appendChild(fileName);
+          details.appendChild(documentType);
+
+          label.appendChild(checkbox);
+          label.appendChild(details);
+
+          documentList.appendChild(label);
+        });
+      }
+
+      submitButton.disabled = !documents || documents.length === 0;
+
+      // 5. OPEN DOCUMENT SELECTION MODAL
+      documentsModal.hidden = false;
+      documentsModal.style.display = "flex";
+
+      // CLOSE DOCUMENT MODAL
+      if (closeDocumentsButton) {
+        closeDocumentsButton.onclick = function () {
+          documentsModal.hidden = true;
+          documentsModal.style.display = "none";
+        };
+      }
+
+    } catch (error) {
+      console.error("Homepage Apply Now Error:", error);
+
+      if (applyStatus) {
+        const messages = {
+          JOBSEEKER_ACCOUNT_REQUIRED:
+            "Company accounts cannot apply for jobs. Please use a Jobseeker account.",
+          JOBSEEKER_PROFILE_REQUIRED:
+            "Please complete your Jobseeker profile before applying."
+        };
+
+        applyStatus.textContent =
+          messages[error.message] ||
+          error.message ||
+          "Unable to continue. Please try again.";
+
+        applyStatus.hidden = false;
+      }
+
+    } finally {
+      applyNowButton.disabled = false;
+
+      if (applyNowButton.textContent !== "Redirecting...") {
+        applyNowButton.textContent = "Apply Now";
+      }
+    }
+  });
+}
+
+
+// =====================================================
+// HOMEPAGE - SUBMIT APPLICATION
+// USE SHARED MALAYSIA APPLY JOB SYSTEM
+// =====================================================
+
+const homepageSubmitButton = document.getElementById(
+  "submitHomepageApplicationBtn"
+);
+
+if (homepageSubmitButton) {
+  homepageSubmitButton.addEventListener("click", async function () {
+    if (!selectedHomepageJob) return;
+
+    const documentsModal = document.getElementById(
+      "homepageApplyDocumentsModal"
+    );
+    const documentStatus = document.getElementById(
+      "homepageApplyDocumentStatus"
+    );
+    const coverLetterInput = document.getElementById(
+      "homepageApplyCoverLetter"
+    );
+    const applyStatus = document.getElementById(
+      "homepageApplyStatus"
+    );
+
+    const selectedDocumentIds = Array.from(
+      document.querySelectorAll(
+        'input[name="homepageApplicationDocument"]:checked'
+      )
+    ).map(function (checkbox) {
+      return checkbox.value;
     });
-  }
+
+    if (selectedDocumentIds.length === 0) {
+      if (documentStatus) {
+        documentStatus.textContent =
+          "Please select at least one document.";
+        documentStatus.hidden = false;
+      }
+      return;
+    }
+
+    try {
+      if (typeof window.submitMalaysiaJobApplication !== "function") {
+        throw new Error("SHARED_APPLY_SYSTEM_NOT_AVAILABLE");
+      }
+
+      const result = await window.submitMalaysiaJobApplication({
+        jobId: selectedHomepageJob.id,
+        documentIds: selectedDocumentIds,
+        coverLetter: coverLetterInput
+          ? coverLetterInput.value.trim()
+          : "",
+        statusElement: documentStatus,
+        submitButton: homepageSubmitButton
+      });
+
+      if (!result || !result.success) {
+        throw new Error("APPLICATION_SUBMISSION_FAILED");
+      }
+
+      // CLOSE DOCUMENT MODAL AFTER SUCCESS
+      if (documentsModal) {
+        documentsModal.hidden = true;
+        documentsModal.style.display = "none";
+      }
+
+      // SHOW SUCCESS IN JOB DETAILS
+      if (applyStatus) {
+        applyStatus.textContent =
+          "Your application has been submitted successfully!";
+        applyStatus.hidden = false;
+      }
+
+      console.log(
+        "Homepage Application Submitted:",
+        result.applicationId,
+        "Documents:",
+        result.documentCount
+      );
+
+    } catch (error) {
+      console.error("Homepage Application Submission Error:", error);
+
+      if (
+        error.message === "DOCUMENT_REQUIRED" &&
+        documentStatus
+      ) {
+        documentStatus.textContent =
+          "Please select at least one document.";
+        documentStatus.hidden = false;
+      } else if (
+        error.message === "ALREADY_APPLIED" &&
+        documentStatus
+      ) {
+        documentStatus.textContent =
+          "You have already applied for this job.";
+        documentStatus.hidden = false;
+      } else if (
+        error.message === "SHARED_APPLY_SYSTEM_NOT_AVAILABLE" &&
+        documentStatus
+      ) {
+        documentStatus.textContent =
+          "Application system is temporarily unavailable. Please try again.";
+        documentStatus.hidden = false;
+      }
+    }
+  });
+}
+
   function renderHomepageJobs(jobs) {
     jobsGrid.replaceChildren();
 

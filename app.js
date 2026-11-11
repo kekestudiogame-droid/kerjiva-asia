@@ -840,6 +840,29 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 /* =====================================================
    KERJIVA MALAYSIA
+   COMPANY BACK TO HOMEPAGE
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const companyBackHomeBtn = document.getElementById(
+    "companyBackHomeBtn"
+  );
+
+  if (!companyBackHomeBtn) return;
+
+  companyBackHomeBtn.addEventListener("click", function () {
+
+    // Kembali ke Homepage tanpa mengakhiri sesi login.
+    window.location.href = "index.html";
+
+  });
+
+});
+
+
+/* =====================================================
+   KERJIVA MALAYSIA
    JOBSEEKER MY PROFILE
    LOAD, EDIT, SAVE & CANCEL
    ===================================================== */

@@ -6401,5 +6401,506 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+/* =========================================================
+   KERJIVA MALAYSIA - COMPANY INCOMING APPLICANTS
+   Load Applications, Applicant Profiles and Documents
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("dashboard") !== "company") return;
+  if (params.has("preview")) return;
+
+  const supabase = window.supabaseAuth;
+
+  const applicantsList = document.getElementById(
+    "companyApplicantsList"
+  );
+
+  const applicantDetails = document.getElementById(
+    "companyApplicantDetails"
+  );
+
+  const applicantProfile = document.getElementById(
+    "companyApplicantProfile"
+  );
+
+  const applicantDocuments = document.getElementById(
+    "companyApplicantDocuments"
+  );
+
+  if (
+    !supabase ||
+    !applicantsList ||
+    !applicantDetails ||
+    !applicantProfile ||
+    !applicantDocuments
+  ) return;
+
+  let applicationsCache = [];
+  let profilesCache = [];
+  let jobsCache = [];
+  let documentsCache = [];
+
+  async function loadIncomingApplicants() {
+
+    applicantsList.textContent = "Loading incoming applicants...";
+
+    applicantDetails.hidden = true;
+
+    try {
+
+      // 1. Get logged-in company user
+      const {
+        data: sessionData,
+        error: sessionError
+      } = await supabase.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      const user = sessionData?.session?.user;
+
+      if (!user) {
+        applicantsList.textContent =
+          "Please log in to view incoming applicants.";
+        return;
+      }
+
+      // 2. Get company ID
+      const {
+        data: company,
+        error: companyError
+      } = await supabase
+        .from("companies")
+        .select("id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (companyError) throw companyError;
+
+      if (!company) {
+        applicantsList.textContent =
+          "Company profile not found.";
+        return;
+      }
+
+      // 3. Get company jobs
+      const {
+        data: jobs,
+        error: jobsError
+      } = await supabase
+        .from("jobs")
+        .select("id, title, city, state")
+        .eq("company_id", company.id);
+
+      if (jobsError) throw jobsError;
+
+      jobsCache = jobs || [];
+
+      if (jobsCache.length === 0) {
+        applicantsList.textContent =
+          "No job postings found.";
+        return;
+      }
+
+      const jobIds = jobsCache.map(job => job.id);
+
+      // 4. Get applications for company jobs
+      const {
+        data: applications,
+        error: applicationsError
+      } = await supabase
+        .from("applications")
+        .select(`
+          id,
+          job_id,
+          user_id,
+          cover_letter,
+          status,
+          applied_at
+        `)
+        .in("job_id", jobIds)
+        .order("applied_at", { ascending: false });
+
+      if (applicationsError) throw applicationsError;
+
+      applicationsCache = applications || [];
+
+      if (applicationsCache.length === 0) {
+        applicantsList.textContent =
+          "No applicants yet.";
+        return;
+      }
+
+      // 5. Get applicant profiles
+      const applicantUserIds = [
+        ...new Set(
+          applicationsCache.map(app => app.user_id)
+        )
+      ];
+
+      const {
+        data: profiles,
+        error: profilesError
+      } = await supabase
+        .from("jobseeker_profiles")
+        .select(`
+          user_id,
+          full_name,
+          email,
+          phone,
+          headline,
+          about_me,
+          education_level,
+          field_of_study,
+          institution,
+          graduation_year,
+          experience_years,
+          skills,
+          city,
+          state,
+          linkedin_url,
+          portfolio_url,
+          avatar_url
+        `)
+        .in("user_id", applicantUserIds);
+
+      if (profilesError) throw profilesError;
+
+      profilesCache = profiles || [];
+
+      // 6. Get application documents
+      const applicationIds = applicationsCache.map(
+        app => app.id
+      );
+
+      const {
+        data: documents,
+        error: documentsError
+      } = await supabase
+        .from("application_documents")
+        .select(`
+          id,
+          application_id,
+          file_name,
+          storage_path,
+          file_size,
+          mime_type,
+          created_at
+        `)
+        .in("application_id", applicationIds)
+        .order("created_at", { ascending: true });
+
+      if (documentsError) throw documentsError;
+
+      documentsCache = documents || [];
+
+      // 7. Render incoming applicants
+      applicantsList.replaceChildren();
+
+      applicationsCache.forEach(function (application) {
+
+        const job = jobsCache.find(
+          item => item.id === application.job_id
+        );
+
+        const profile = profilesCache.find(
+          item => item.user_id === application.user_id
+        );
+
+        const card = document.createElement("div");
+        card.className = "company-applicant-card";
+
+        const name = document.createElement("h3");
+        name.textContent =
+          profile?.full_name || "Applicant";
+
+        const position = document.createElement("p");
+        position.textContent =
+          "Position: " + (job?.title || "Unknown Job");
+
+        const location = document.createElement("p");
+        location.textContent =
+          [job?.city, job?.state]
+            .filter(Boolean)
+            .join(", ");
+
+        const status = document.createElement("p");
+        status.textContent =
+          "Status: " +
+          (application.status || "pending").toUpperCase();
+
+        const date = document.createElement("p");
+        date.textContent = application.applied_at
+          ? "Applied: " +
+            new Date(application.applied_at).toLocaleDateString(
+              "en-MY"
+            )
+          : "Application date unavailable";
+
+        const viewButton = document.createElement("button");
+        viewButton.type = "button";
+        viewButton.textContent = "View Details";
+
+        viewButton.addEventListener("click", function () {
+          showApplicantDetails(application.id);
+        });
+
+        card.append(
+          name,
+          position,
+          location,
+          status,
+          date,
+          viewButton
+        );
+
+        applicantsList.appendChild(card);
+
+      });
+
+      console.log(
+        "Company Incoming Applicants Loaded:",
+        applicationsCache.length
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Company Incoming Applicants Error:",
+        error
+      );
+
+      applicantsList.textContent =
+        "Unable to load incoming applicants. Please try again.";
+
+    }
+
+  }
+
+
+  // 8. Show applicant profile and application documents
+  async function showApplicantDetails(applicationId) {
+
+    const application = applicationsCache.find(
+      item => item.id === applicationId
+    );
+
+    if (!application) return;
+
+    const profile = profilesCache.find(
+      item => item.user_id === application.user_id
+    );
+
+    const job = jobsCache.find(
+      item => item.id === application.job_id
+    );
+
+    if (!profile) {
+      applicantProfile.textContent =
+        "Applicant profile is unavailable.";
+    } else {
+
+      applicantProfile.replaceChildren();
+
+      const profileFields = [
+        ["Full Name", profile.full_name],
+        ["Email", profile.email],
+        ["Phone", profile.phone],
+        ["Headline", profile.headline],
+        ["About Me", profile.about_me],
+        ["Education", profile.education_level],
+        ["Field of Study", profile.field_of_study],
+        ["Institution", profile.institution],
+        ["Graduation Year", profile.graduation_year],
+        ["Experience", profile.experience_years],
+        ["Skills", profile.skills],
+        ["City", profile.city],
+        ["State", profile.state]
+      ];
+
+      profileFields.forEach(function ([label, value]) {
+
+        if (value === null || value === undefined || value === "") {
+          return;
+        }
+
+        const row = document.createElement("p");
+        const strong = document.createElement("strong");
+
+        strong.textContent = label + ": ";
+
+        row.append(
+          strong,
+          document.createTextNode(String(value))
+        );
+
+        applicantProfile.appendChild(row);
+
+      });
+
+      // Optional profile links
+      [
+        ["LinkedIn", profile.linkedin_url],
+        ["Portfolio", profile.portfolio_url]
+      ].forEach(function ([label, url]) {
+
+        if (!url) return;
+
+        const row = document.createElement("p");
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.textContent = label;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+
+        row.appendChild(link);
+        applicantProfile.appendChild(row);
+
+      });
+
+    }
+
+    // Cover letter
+    const coverTitle = document.createElement("h4");
+    coverTitle.textContent = "Cover Letter";
+
+    const coverText = document.createElement("p");
+    coverText.textContent =
+      application.cover_letter || "No cover letter provided.";
+
+    applicantProfile.append(
+      coverTitle,
+      coverText
+    );
+
+    // Job information
+    const jobInfo = document.createElement("p");
+    jobInfo.textContent =
+      "Applied Position: " + (job?.title || "Unknown Job");
+
+    applicantProfile.prepend(jobInfo);
+
+    // Application documents
+    applicantDocuments.replaceChildren();
+
+    const attachedDocuments = documentsCache.filter(
+      doc => doc.application_id === applicationId
+    );
+
+    if (attachedDocuments.length === 0) {
+
+      applicantDocuments.textContent =
+        "No application documents attached.";
+
+    } else {
+
+      for (const documentItem of attachedDocuments) {
+
+        const documentRow = document.createElement("div");
+        documentRow.className = "company-applicant-document";
+
+        const fileName = document.createElement("p");
+        fileName.textContent =
+          documentItem.file_name || "Application Document";
+
+        const openButton = document.createElement("button");
+        openButton.type = "button";
+        openButton.textContent = "Open Document";
+
+        openButton.addEventListener("click", async function () {
+
+          openButton.disabled = true;
+          openButton.textContent = "Preparing document...";
+
+          try {
+
+            const {
+              data,
+              error
+            } = await supabase.storage
+              .from("application-document-copies")
+              .createSignedUrl(
+                documentItem.storage_path,
+                600
+              );
+
+            if (error) throw error;
+
+            if (!data?.signedUrl) {
+              throw new Error("Document URL unavailable.");
+            }
+
+            const link = document.createElement("a");
+
+            link.href = data.signedUrl;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.textContent = "Open " +
+              (documentItem.file_name || "Document");
+
+            documentRow.appendChild(link);
+
+            openButton.remove();
+
+          } catch (error) {
+
+            console.error(
+              "Applicant Document Error:",
+              error
+            );
+
+            openButton.textContent = "Unable to open document";
+            openButton.disabled = false;
+
+          }
+
+        });
+
+        documentRow.append(
+          fileName,
+          openButton
+        );
+
+        applicantDocuments.appendChild(documentRow);
+
+      }
+
+    }
+
+    applicantDetails.hidden = false;
+
+    applicantDetails.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  }
+
+
+  // 9. Load when opening Incoming Applicants
+  const applicantsLink = document.querySelector(
+    '#companyDashboard .dashboard-nav a[href="#companyApplicants"]'
+  );
+
+  if (applicantsLink) {
+    applicantsLink.addEventListener(
+      "click",
+      loadIncomingApplicants
+    );
+  }
+
+  // Also load if Incoming Applicants is the initial section
+  if (window.location.hash === "#companyApplicants") {
+    loadIncomingApplicants();
+  }
+
+});
+
+
+
 
 

@@ -2711,6 +2711,186 @@ select {
   }
 }
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   HOMEPAGE HAMBURGER NAVIGATION
+   ===================================================== */
+
+/* HEADER LAYOUT */
+
+.main-header {
+  position: relative;
+  z-index: 1000;
+}
+
+.header-content {
+  flex-wrap: nowrap;
+  min-height: 82px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-left: auto;
+}
+
+/* HAMBURGER WRAPPER */
+
+.hamburger-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* HAMBURGER BUTTON */
+
+.hamburger-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--white);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.hamburger-btn:hover {
+  background: #edf3fa;
+  border-color: var(--primary);
+}
+
+.hamburger-btn span {
+  display: block;
+  width: 21px;
+  height: 2px;
+  border-radius: 3px;
+  background: var(--primary);
+}
+
+/* DROPDOWN MENU */
+
+.hamburger-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 245px;
+  padding: 10px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(18, 59, 109, 0.15);
+  z-index: 1001;
+}
+
+/* Class for opening the menu later with JavaScript */
+
+.hamburger-dropdown.is-open {
+  display: flex;
+  flex-direction: column;
+  animation: hamburgerFadeIn 0.2s ease;
+}
+
+.hamburger-dropdown a {
+  display: block;
+  padding: 11px 13px;
+  border-radius: 7px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s;
+}
+
+.hamburger-dropdown a:hover {
+  background: #edf3fa;
+  color: var(--primary);
+}
+
+.hamburger-divider {
+  height: 1px;
+  margin: 7px 5px;
+  background: var(--border);
+}
+
+.hamburger-dropdown .dashboard-menu-item {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+@keyframes hamburgerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* TABLET */
+
+@media (max-width: 900px) {
+  .header-content {
+    flex-wrap: nowrap;
+    padding: 12px 0;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+  .header-content {
+    gap: 10px;
+  }
+
+  .header-actions {
+    gap: 7px;
+  }
+
+  .login-btn,
+  .register-btn {
+    padding: 8px 11px;
+    font-size: 12px;
+  }
+
+  .hamburger-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .hamburger-dropdown {
+    width: 225px;
+  }
+}
+
+/* SMALL MOBILE */
+
+@media (max-width: 380px) {
+  .header-content {
+    justify-content: space-between;
+  }
+
+  .logo {
+    width: auto;
+    text-align: left;
+  }
+
+  .header-actions {
+    justify-content: flex-end;
+  }
+}
+
+
 
 
 

@@ -6900,6 +6900,329 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+        
+/* =========================================================
+   KERJIVA MALAYSIA - COMPANY DASHBOARD OVERVIEW
+   Dynamic Statistics, Recent Applications and Realtime
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("dashboard") !== "company") return;
+  if (params.has("preview")) return;
+
+  const supabase = window.supabaseAuth;
+
+  const totalJobsEl = document.getElementById("companyTotalJobs");
+  const publishedJobsEl = document.getElementById("companyPublishedJobs");
+  const draftJobsEl = document.getElementById("companyDraftJobs");
+  const totalApplicantsEl = document.getElementById("companyTotalApplicants");
+  const recentApplicantsEl = document.getElementById("companyRecentApplicants");
+
+  if (
+    !supabase ||
+    !totalJobsEl ||
+    !publishedJobsEl ||
+    !draftJobsEl ||
+    !totalApplicantsEl ||
+    !recentApplicantsEl
+  ) return;
+
+  let realtimeChannel = null;
+  let isLoading = false;
+  let refreshAfterLoad = false;
+  let refreshTimer = null;
+
+  async function loadCompanyOverview() {
+
+    if (isLoading) {
+      refreshAfterLoad = true;
+      return;
+    }
+
+    isLoading = true;
+
+    try {
+
+      // 1. Get logged-in user
+      const {
+        data: sessionData,
+        error: sessionError
+      } = await supabase.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      const user = sessionData?.session?.user;
+
+      if (!user) {
+        recentApplicantsEl.textContent =
+          "Please log in to view company statistics.";
+        return;
+      }
+
+      // 2. Get company ID
+      const {
+        data: company,
+        error: companyError
+      } = await supabase
+        .from("companies")
+        .select("id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (companyError) throw companyError;
+
+      if (!company) {
+        recentApplicantsEl.textContent =
+          "Company profile not found.";
+        return;
+      }
+
+      // 3. Get company jobs
+      const {
+        data: jobs,
+        error: jobsError
+      } = await supabase
+        .from("jobs")
+        .select("id, title, status")
+        .eq("company_id", company.id);
+
+      if (jobsError) throw jobsError;
+
+      const companyJobs = jobs || [];
+      const jobIds = companyJobs.map(job => job.id);
+
+      // 4. Update job statistics
+      totalJobsEl.textContent = companyJobs.length;
+
+      publishedJobsEl.textContent =
+        companyJobs.filter(job =>
+          (job.status || "").toLowerCase() === "published"
+        ).length;
+
+      draftJobsEl.textContent =
+        companyJobs.filter(job =>
+          (job.status || "").toLowerCase() === "draft"
+        ).length;
+
+      // 5. Handle company with no jobs
+      if (jobIds.length === 0) {
+
+        totalApplicantsEl.textContent = "0";
+
+        recentApplicantsEl.textContent =
+          "No applications yet.";
+
+      } else {
+
+        // 6. Count all applications for company jobs
+        const {
+          count: applicationCount,
+          error: countError
+        } = await supabase
+          .from("applications")
+          .select("id", { count: "exact", head: true })
+          .in("job_id", jobIds);
+
+        if (countError) throw countError;
+
+        totalApplicantsEl.textContent =
+          applicationCount || 0;
+
+        // 7. Get five most recent applications
+        const {
+          data: applications,
+          error: applicationsError
+        } = await supabase
+          .from("applications")
+          .select(`
+            id,
+            job_id,
+            user_id,
+            status,
+            applied_at
+          `)
+          .in("job_id", jobIds)
+          .order("applied_at", { ascending: false })
+          .limit(5);
+
+        if (applicationsError) throw applicationsError;
+
+        const recentApplications = applications || [];
+
+        if (recentApplications.length === 0) {
+
+          recentApplicantsEl.textContent =
+            "No applications yet.";
+
+        } else {
+
+          // 8. Get applicant names
+          const applicantIds = [
+            ...new Set(
+              recentApplications.map(app => app.user_id)
+            )
+          ];
+
+          const {
+            data: profiles,
+            error: profilesError
+          } = await supabase
+            .from("jobseeker_profiles")
+            .select("user_id, full_name")
+            .in("user_id", applicantIds);
+
+          if (profilesError) throw profilesError;
+
+          const applicantProfiles = profiles || [];
+
+          // 9. Render recent applications
+          recentApplicantsEl.replaceChildren();
+
+          recentApplications.forEach(function (application) {
+
+            const job = companyJobs.find(
+              item => item.id === application.job_id
+            );
+
+            const profile = applicantProfiles.find(
+              item => item.user_id === application.user_id
+            );
+
+            const card = document.createElement("div");
+            card.className = "company-recent-application-card";
+
+            const name = document.createElement("h4");
+            name.textContent =
+              profile?.full_name || "Applicant";
+
+            const position = document.createElement("p");
+            position.textContent =
+              "Position: " + (job?.title || "Unknown Job");
+
+            const status = document.createElement("p");
+            status.textContent =
+              "Status: " +
+              (application.status || "pending").toUpperCase();
+
+            const date = document.createElement("p");
+            date.textContent = application.applied_at
+              ? "Applied: " +
+                new Date(application.applied_at).toLocaleDateString("en-MY")
+              : "Application date unavailable";
+
+            card.append(name, position, status, date);
+            recentApplicantsEl.appendChild(card);
+
+          });
+
+        }
+      }
+
+      // 10. Subscribe to Supabase Realtime once
+      if (!realtimeChannel) {
+
+        realtimeChannel = supabase
+          .channel("company-overview-" + company.id)
+
+          .on(
+            "postgres_changes",
+            {
+              event: "*",
+              schema: "public",
+              table: "jobs",
+              filter: "company_id=eq." + company.id
+            },
+            queueOverviewRefresh
+          )
+
+          .on(
+            "postgres_changes",
+            {
+              event: "*",
+              schema: "public",
+              table: "applications"
+            },
+            queueOverviewRefresh
+          )
+
+          .subscribe(function (status) {
+
+            console.log(
+              "Company Overview Realtime:",
+              status
+            );
+
+          });
+
+      }
+
+      console.log("Company Overview Updated:", {
+        totalJobs: companyJobs.length,
+        totalApplicants: applicationCount || 0
+      });
+
+    } catch (error) {
+
+      console.error(
+        "Company Overview Error:",
+        error
+      );
+
+      recentApplicantsEl.textContent =
+        "Unable to load company overview. Please try again.";
+
+    } finally {
+
+      isLoading = false;
+
+      if (refreshAfterLoad) {
+        refreshAfterLoad = false;
+        loadCompanyOverview();
+      }
+
+    }
+
+  }
+
+  // Refresh after a Realtime database event
+  function queueOverviewRefresh() {
+
+    if (refreshTimer) {
+      clearTimeout(refreshTimer);
+    }
+
+    refreshTimer = setTimeout(function () {
+      loadCompanyOverview();
+    }, 500);
+
+  }
+
+  // Load when opening Company Overview
+  const overviewLink = document.querySelector(
+    '#companyDashboard .dashboard-nav a[href="#companyOverview"]'
+  );
+
+  if (overviewLink) {
+    overviewLink.addEventListener(
+      "click",
+      loadCompanyOverview
+    );
+  }
+
+  // Load when Company Dashboard first opens
+  if (
+    !window.location.hash ||
+    window.location.hash === "#companyOverview"
+  ) {
+    loadCompanyOverview();
+  }
+
+});
+
+
 
 
 

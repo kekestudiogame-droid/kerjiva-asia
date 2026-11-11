@@ -5611,7 +5611,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
         
-function filterHomepageJobs() {
+function filterHomepageJobs(shouldScroll = false) {
   const keyword = (keywordInput?.value || "")
     .trim()
     .toLowerCase();
@@ -5668,7 +5668,14 @@ function filterHomepageJobs() {
     );
   });
 
-  renderHomepageJobs(filteredJobs);
+           renderHomepageJobs(filteredJobs);
+
+// Scroll to Homepage job results after user searches.
+if (shouldScroll) {
+  jobsGrid.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 }
 
   async function loadHomepageJobs() {
@@ -5761,8 +5768,10 @@ function filterHomepageJobs() {
     }
   }
 
-        if (searchButton) {
-  searchButton.addEventListener("click", filterHomepageJobs);
+       if (searchButton) {
+  searchButton.addEventListener("click", function () {
+    filterHomepageJobs(true);
+  });
 }
 
 if (categorySelect) {

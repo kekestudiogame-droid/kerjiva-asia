@@ -7159,10 +7159,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       }
 
-      console.log("Company Overview Updated:", {
-        totalJobs: companyJobs.length,
-        totalApplicants: applicationCount || 0
-      });
+          console.log("Company Overview Updated:", {
+           totalJobs: companyJobs.length,
+           totalApplicants: totalApplicantsEl.textContent
+          });
 
     } catch (error) {
 

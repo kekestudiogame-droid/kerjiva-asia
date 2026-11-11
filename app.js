@@ -5994,3 +5994,122 @@ window.submitMalaysiaJobApplication = async function ({
 };
 
 
+/* =========================================================
+   KERJIVA MALAYSIA - COMPANY MY JOBS
+   Load Published and Draft Jobs
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", async function () {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("dashboard") !== "company") return;
+  if (params.has("preview")) return;
+
+  const supabase = window.supabaseAuth;
+  const jobsList = document.getElementById("companyJobsList");
+
+  if (!supabase || !jobsList) return;
+
+  async function loadCompanyJobs() {
+    jobsList.textContent = "Loading your job postings...";
+
+    try {
+      // 1. Get logged-in company user
+      const {
+        data: sessionData,
+        error: sessionError
+      } = await supabase.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      const user = sessionData?.session?.user;
+
+      if (!user) {
+        jobsList.textContent = "Please log in to view your job postings.";
+        return;
+      }
+
+      // 2. Get company ID
+      const {
+        data: company,
+        error: companyError
+      } = await supabase
+        .from("companies")
+        .select("id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (companyError) throw companyError;
+
+      if (!company) {
+        jobsList.textContent = "Company profile not found.";
+        return;
+      }
+
+      // 3. Get all jobs belonging to this company
+      const {
+        data: jobs,
+        error: jobsError
+      } = await supabase
+        .from("jobs")
+        .select("*")
+        .eq("company_id", company.id)
+        .order("created_at", { ascending: false });
+
+      if (jobsError) throw jobsError;
+
+      // 4. Show empty state
+      if (!jobs || jobs.length === 0) {
+        jobsList.textContent = "No job postings yet.";
+        return;
+      }
+
+      // 5. Render job list
+      jobsList.replaceChildren();
+
+      jobs.forEach(function (job) {
+        const jobCard = document.createElement("div");
+        jobCard.className = "company-job-card";
+
+        const title = document.createElement("h3");
+        title.textContent = job.title || "Untitled Job";
+
+        const location = document.createElement("p");
+        location.textContent = [job.city, job.state]
+          .filter(Boolean)
+          .join(", ");
+
+        const status = document.createElement("p");
+        status.textContent =
+          "Status: " + (job.status || "Unknown").toUpperCase();
+
+        jobCard.append(title, location, status);
+        jobsList.appendChild(jobCard);
+      });
+
+      console.log("Company My Jobs Loaded:", jobs.length);
+
+    } catch (error) {
+      console.error("Company My Jobs Error:", error);
+      jobsList.textContent =
+        "Unable to load your job postings. Please try again.";
+    }
+  }
+
+  // Load when opening My Jobs
+  const myJobsLink = document.querySelector(
+    '.dashboard-nav a[href="#companyMyJobs"]'
+  );
+
+  if (myJobsLink) {
+    myJobsLink.addEventListener("click", loadCompanyJobs);
+  }
+
+  // Also load if My Jobs is the initial section
+  if (window.location.hash === "#companyMyJobs") {
+    loadCompanyJobs();
+  }
+});
+
+
+

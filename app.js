@@ -448,6 +448,7 @@ function showPendingKerjivaNotification() {
   }
 }
 
+          
 /* =====================================================
    KERJIVA MALAYSIA
    USER LOGIN
@@ -475,6 +476,9 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
+  // DISPLAY PENDING NOTIFICATION AFTER RETURNING TO LOGIN
+  showPendingKerjivaNotification();
+
   loginForm.addEventListener("submit", async function (event) {
 
     event.preventDefault();
@@ -492,14 +496,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loginSubmitBtn.disabled = true;
     loginSubmitBtn.textContent = "Signing In...";
-    loginStatus.textContent = "Please wait...";
+    loginStatus.textContent = "";
 
     try {
 
-      // =========================================
       // SIGN IN TO SUPABASE
-      // =========================================
-
       const { data, error } =
         await supabaseAuth.auth.signInWithPassword({
           email: email,
@@ -514,24 +515,16 @@ document.addEventListener("DOMContentLoaded", function () {
         throw new Error("Unable to identify your account.");
       }
 
-      // =========================================
       // EMAIL VERIFICATION CHECK
-      // =========================================
-
       if (!user.email_confirmed_at) {
-
         await supabaseAuth.auth.signOut();
 
         throw new Error(
           "Please verify your email address before logging in."
         );
-
       }
 
-      // =========================================
       // CHECK JOBSEEKER PROFILE
-      // =========================================
-
       const { data: jobseeker, error: jobseekerError } =
         await supabaseAuth
           .from("jobseeker_profiles")
@@ -541,10 +534,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (jobseekerError) throw jobseekerError;
 
-      // =========================================
       // CHECK COMPANY PROFILE
-      // =========================================
-
       const { data: company, error: companyError } =
         await supabaseAuth
           .from("companies")
@@ -554,10 +544,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (companyError) throw companyError;
 
-      // =========================================
       // IDENTIFY ACTUAL ACCOUNT ROLE
-      // =========================================
-
       let actualRole = null;
 
       if (jobseeker && !company) {
@@ -567,69 +554,91 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       if (!actualRole) {
-
         await supabaseAuth.auth.signOut();
 
         throw new Error(
           "Your account profile could not be identified. Please contact support."
         );
-
       }
 
-      // =========================================
       // VALIDATE SELECTED ROLE
-      // =========================================
-
       if (selectedRole !== actualRole) {
-
         await supabaseAuth.auth.signOut();
 
         throw new Error(
           "The selected account type does not match your registered account. Please select the correct account type."
         );
-
       }
 
-      // =========================================
-      // JOBSEEKER LOGIN
-      // =========================================
+      // SAVE LOGIN SUCCESS NOTIFICATION
+      saveKerjivaNotification(
+        "You have successfully logged in.",
+        "success"
+      );
 
+      // JOBSEEKER LOGIN
       if (actualRole === "jobseeker") {
 
         const params = new URLSearchParams(window.location.search);
         const applyJobId = params.get("applyJob");
 
         if (applyJobId) {
-
           window.location.href =
             "index.html?applyJob=" + encodeURIComponent(applyJobId);
-
         } else {
-
           window.location.href =
             "index.html?dashboard=jobseeker";
-
         }
-
       }
 
-      // =========================================
       // COMPANY LOGIN
-      // =========================================
-
       else if (actualRole === "company") {
 
         window.location.href =
           "index.html?dashboard=company";
-
       }
 
     } catch (error) {
 
       console.error("Kerjiva Malaysia Login Error:", error);
 
-      loginStatus.textContent =
-        error.message || "Login failed. Please try again.";
+      const errorMessage = (error.message || "").toLowerCase();
+
+      let displayMessage = "Login failed. Please try again.";
+
+      // WRONG EMAIL OR PASSWORD
+      if (
+        errorMessage.includes("invalid login credentials") ||
+        errorMessage.includes("invalid email") ||
+        errorMessage.includes("invalid password")
+      ) {
+        displayMessage = "Invalid email or password.";
+      }
+
+      // EMAIL NOT VERIFIED
+      else if (
+        errorMessage.includes("email not confirmed") ||
+        errorMessage.includes("verify your email")
+      ) {
+        displayMessage =
+          "Please verify your email address before logging in.";
+      }
+
+      // ACCOUNT TYPE MISMATCH
+      else if (errorMessage.includes("account type")) {
+        displayMessage =
+          "The selected account type does not match your registered account. Please select the correct account type.";
+      }
+
+      // PROFILE NOT FOUND
+      else if (errorMessage.includes("profile could not be identified")) {
+        displayMessage =
+          "Your account profile could not be identified. Please contact support.";
+      }
+
+      loginStatus.textContent = displayMessage;
+
+      showKerjivaNotification(displayMessage, "error");
 
     } finally {
 
@@ -642,7 +651,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-
+    
 /* =====================================================
    KERJIVA MALAYSIA
    AUTHENTICATED DASHBOARD ROUTING & LOGOUT
@@ -730,6 +739,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
 
       console.log("Kerjiva Malaysia Dashboard Active:", actualRole);
+       showPendingKerjivaNotification();
 
     } catch (error) {
       console.error("Kerjiva Malaysia Dashboard Routing Error:", error);
@@ -739,6 +749,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
+                
   // =====================================================
   // JOBSEEKER LOGOUT
   // =====================================================
@@ -747,20 +758,37 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   if (jobseekerLogoutBtn) {
     jobseekerLogoutBtn.addEventListener("click", async function () {
+
       jobseekerLogoutBtn.disabled = true;
 
       try {
+
         const { error } = await supabaseAuth.auth.signOut();
+
         if (error) throw error;
 
+        saveKerjivaNotification(
+          "You have successfully logged out.",
+          "success"
+        );
+
         window.location.href = "login.html";
+
       } catch (error) {
+
         console.error("Jobseeker Logout Error:", error);
-        alert("Unable to sign out. Please try again.");
+
+        showKerjivaNotification(
+          "Unable to sign out. Please try again.",
+          "error"
+        );
+
         jobseekerLogoutBtn.disabled = false;
+
       }
     });
   }
+
 
   // =====================================================
   // COMPANY LOGOUT
@@ -770,22 +798,38 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   if (companyLogoutBtn) {
     companyLogoutBtn.addEventListener("click", async function () {
+
       companyLogoutBtn.disabled = true;
 
       try {
+
         const { error } = await supabaseAuth.auth.signOut();
+
         if (error) throw error;
 
+        saveKerjivaNotification(
+          "You have successfully logged out.",
+          "success"
+        );
+
         window.location.href = "login.html";
+
       } catch (error) {
+
         console.error("Company Logout Error:", error);
-        alert("Unable to sign out. Please try again.");
+
+        showKerjivaNotification(
+          "Unable to sign out. Please try again.",
+          "error"
+        );
+
         companyLogoutBtn.disabled = false;
+
       }
     });
   }
-});
-
+   
+    });
 
 /* =====================================================
    KERJIVA MALAYSIA

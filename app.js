@@ -5678,6 +5678,8 @@ if (shouldScroll) {
   });
 }
 
+} // END filterHomepageJobs
+
   async function loadHomepageJobs() {
     jobsGrid.innerHTML =
       '<div class="job-card-loading">Loading latest jobs...</div>';

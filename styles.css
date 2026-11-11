@@ -2938,6 +2938,261 @@ select {
     font-size: 13px;
   }
 }
+      
+/* =====================================================
+   KERJIVA MALAYSIA
+   COMPANY INCOMING APPLICANTS
+   ===================================================== */
+
+/* APPLICANT LIST */
+
+#companyDashboard #companyApplicantsList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+#companyDashboard .company-applicant-card {
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#companyDashboard .company-applicant-card:hover {
+  border-color: #b8c9dc;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
+}
+
+#companyDashboard .company-applicant-card h3 {
+  margin-bottom: 14px;
+  color: var(--primary);
+  font-size: 19px;
+  font-weight: 800;
+}
+
+#companyDashboard .company-applicant-card p {
+  margin: 7px 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+/* APPLICATION STATUS */
+
+#companyDashboard .company-applicant-card p:nth-of-type(3) {
+  display: inline-block;
+  width: fit-content;
+  margin-top: 10px;
+  padding: 5px 11px;
+  border-radius: 20px;
+  background: #fff3df;
+  color: #a65b08;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* VIEW DETAILS BUTTON */
+
+#companyDashboard .company-applicant-card button {
+  min-height: 40px;
+  margin-top: 13px;
+  padding: 10px 19px;
+  border: none;
+  border-radius: 7px;
+  background: var(--primary);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+#companyDashboard .company-applicant-card button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+/* APPLICANT DETAILS PANEL */
+
+#companyDashboard #companyApplicantDetails {
+  margin-top: 25px;
+  scroll-margin-top: 20px;
+}
+
+#companyDashboard #companyApplicantDetails h3 {
+  margin-bottom: 17px;
+  color: var(--primary);
+  font-size: 19px;
+}
+
+/* APPLICANT PROFILE */
+
+#companyDashboard #companyApplicantProfile {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+#companyDashboard #companyApplicantProfile p {
+  min-width: 0;
+  margin: 0;
+  padding: 13px 15px;
+  border: 1px solid #edf1f5;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+#companyDashboard #companyApplicantProfile p strong {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--primary);
+  font-size: 12px;
+}
+
+/* APPLIED POSITION */
+
+#companyDashboard #companyApplicantProfile > p:first-child {
+  grid-column: 1 / -1;
+  background: #eef5fc;
+  border-color: #dce8f5;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* PROFILE LINKS */
+
+#companyDashboard #companyApplicantProfile a {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+#companyDashboard #companyApplicantProfile a:hover {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+/* COVER LETTER */
+
+#companyDashboard #companyApplicantProfile h4 {
+  grid-column: 1 / -1;
+  margin: 12px 0 -5px;
+  padding-top: 17px;
+  border-top: 1px solid var(--border);
+  color: var(--primary);
+  font-size: 16px;
+}
+
+#companyDashboard #companyApplicantProfile h4 + p {
+  grid-column: 1 / -1;
+  padding: 17px;
+  border: 1px solid #e8edf3;
+  border-left: 4px solid var(--secondary);
+  border-radius: 8px;
+  background: #f8fafc;
+  color: var(--text);
+  white-space: pre-wrap;
+  line-height: 1.8;
+}
+
+/* APPLICATION DOCUMENTS */
+
+#companyDashboard #companyApplicantDocuments {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#companyDashboard .company-applicant-document {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 15px 17px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #ffffff;
+}
+
+#companyDashboard .company-applicant-document p {
+  min-width: 0;
+  margin: 0;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* OPEN DOCUMENT BUTTON AND LINK */
+
+#companyDashboard .company-applicant-document button,
+#companyDashboard .company-applicant-document a {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 9px 15px;
+  border: none;
+  border-radius: 7px;
+  background: var(--secondary);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+#companyDashboard .company-applicant-document button:hover,
+#companyDashboard .company-applicant-document a:hover {
+  opacity: 0.85;
+}
+
+#companyDashboard .company-applicant-document button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 650px) {
+
+  #companyDashboard .company-applicant-card {
+    padding: 17px;
+  }
+
+  #companyDashboard #companyApplicantProfile {
+    grid-template-columns: 1fr;
+  }
+
+  #companyDashboard #companyApplicantProfile > p:first-child,
+  #companyDashboard #companyApplicantProfile h4,
+  #companyDashboard #companyApplicantProfile h4 + p {
+    grid-column: auto;
+  }
+
+  #companyDashboard .company-applicant-document {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  #companyDashboard .company-applicant-document button,
+  #companyDashboard .company-applicant-document a {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+}
+
 
 
 

@@ -271,7 +271,12 @@ document.addEventListener("DOMContentLoaded", function () {
         email: email,
         password: password,
         options: {
-          data: metadata
+        data: metadata,
+        emailRedirectTo: new URL(
+       "login.html",
+        window.location.href
+       ).href
+      }
         }
       });
 

@@ -324,6 +324,132 @@ metadata = {
 
 /* =====================================================
    KERJIVA MALAYSIA
+   SHARED NOTIFICATION SYSTEM
+   ===================================================== */
+
+function showKerjivaNotification(message, type = "success") {
+
+  let notification = document.getElementById("kerjivaNotification");
+
+  if (!notification) {
+
+    const style = document.createElement("style");
+
+    style.id = "kerjivaNotificationStyle";
+
+    style.textContent = `
+      #kerjivaNotification {
+        position: fixed;
+        top: 24px;
+        right: 24px;
+        z-index: 99999;
+        max-width: calc(100% - 32px);
+        padding: 14px 20px;
+        border-radius: 8px;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.5;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.25s ease, transform 0.25s ease;
+      }
+
+      #kerjivaNotification.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      #kerjivaNotification.success {
+        background: #198754;
+      }
+
+      #kerjivaNotification.error {
+        background: #dc3545;
+      }
+
+      @media (max-width: 600px) {
+        #kerjivaNotification {
+          top: 16px;
+          right: 16px;
+          left: 16px;
+          max-width: none;
+          text-align: center;
+        }
+      }
+    `;
+
+    document.head.appendChild(style);
+
+    notification = document.createElement("div");
+    notification.id = "kerjivaNotification";
+    notification.setAttribute("role", "status");
+    notification.setAttribute("aria-live", "polite");
+
+    document.body.appendChild(notification);
+  }
+
+  notification.textContent = message;
+  notification.className = type === "error" ? "error" : "success";
+
+  // Restart notification animation
+  void notification.offsetWidth;
+
+  notification.classList.add("show");
+
+  if (notification.hideTimer) {
+    clearTimeout(notification.hideTimer);
+  }
+
+  notification.hideTimer = setTimeout(function () {
+    notification.classList.remove("show");
+  }, 3500);
+}
+
+
+// SAVE NOTIFICATION BEFORE PAGE REDIRECT
+function saveKerjivaNotification(message, type = "success") {
+
+  sessionStorage.setItem(
+    "kerjivaPendingNotification",
+    JSON.stringify({
+      message: message,
+      type: type
+    })
+  );
+}
+
+
+// DISPLAY AND REMOVE SAVED NOTIFICATION
+function showPendingKerjivaNotification() {
+
+  const savedNotification = sessionStorage.getItem(
+    "kerjivaPendingNotification"
+  );
+
+  if (!savedNotification) return;
+
+  sessionStorage.removeItem("kerjivaPendingNotification");
+
+  try {
+
+    const notification = JSON.parse(savedNotification);
+
+    if (notification.message) {
+      showKerjivaNotification(
+        notification.message,
+        notification.type
+      );
+    }
+
+  } catch (error) {
+    console.error("Kerjiva Notification Error:", error);
+  }
+}
+
+/* =====================================================
+   KERJIVA MALAYSIA
    USER LOGIN
    ===================================================== */
 

@@ -725,14 +725,27 @@ document.addEventListener("DOMContentLoaded", async function () {
         actualRole = "company";
       }
 
+     
       if (!actualRole) {
         await supabaseAuth.auth.signOut();
         window.location.href = "login.html";
         return;
       }
 
+      // VALIDATE REQUESTED DASHBOARD AGAINST LOGIN ROLE
+      if (requestedDashboard !== actualRole) {
+        alert(
+          "Access denied. Your account does not have permission to open this dashboard."
+        );
+
+        // Return to Homepage without ending the login session.
+        window.location.href = "index.html";
+        return;
+      }
+
       // Sembunyikan homepage.
       if (mainHeader) mainHeader.hidden = true;
+
       if (mainContent) mainContent.hidden = true;
       if (mainFooter) mainFooter.hidden = true;
 

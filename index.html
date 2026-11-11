@@ -16,29 +16,61 @@
 
 <body>
 
-  <!-- HEADER -->
-  <header class="main-header">
-    <div class="container header-content">
+        
+<!-- HEADER -->
+<header class="main-header">
+  <div class="container header-content">
 
-      <a href="index.html" class="logo">
-        <span>Kerjiva</span>
-        <small>Malaysia</small>
-      </a>
+    <a href="index.html" class="logo">
+      <span>Kerjiva</span>
+      <small>Malaysia</small>
+    </a>
 
-      <nav class="main-nav">
-        <a href="#home">Home</a>
-        <a href="#jobs">Find Jobs</a>
-        <a href="#companies">Companies</a>
-        <a href="#about">About Us</a>
-      </nav>
+    <div class="header-actions">
 
-      <div class="header-actions">
-        <a href="login.html" class="login-btn">Log In</a>
-        <a href="register.html" class="register-btn">Sign Up</a>
+      <a href="login.html" class="login-btn">Log In</a>
+      <a href="register.html" class="register-btn">Sign Up</a>
+
+      <div class="hamburger-wrapper">
+
+        <button
+          type="button"
+          class="hamburger-btn"
+          id="hamburgerMenuBtn"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          aria-controls="hamburgerDropdown"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <nav class="hamburger-dropdown" id="hamburgerDropdown">
+
+          <a href="#home">Home</a>
+          <a href="#jobs">Find Jobs</a>
+          <a href="#companies">Companies</a>
+          <a href="#about">About Us</a>
+
+          <div class="hamburger-divider"></div>
+
+          <a href="#" class="dashboard-menu-item">
+            Jobseeker Dashboard
+          </a>
+
+          <a href="#" class="dashboard-menu-item">
+            Company Dashboard
+          </a>
+
+        </nav>
+
       </div>
 
     </div>
-  </header>
+
+  </div>
+</header>
 
 
   <!-- HERO SECTION -->

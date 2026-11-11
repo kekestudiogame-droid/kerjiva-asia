@@ -6112,4 +6112,62 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   HOMEPAGE HAMBURGER MENU
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const menuButton = document.getElementById("hamburgerMenuBtn");
+  const dropdownMenu = document.getElementById("hamburgerDropdown");
+
+  if (!menuButton || !dropdownMenu) return;
+
+  function closeHamburgerMenu() {
+    dropdownMenu.classList.remove("is-open");
+    menuButton.setAttribute("aria-expanded", "false");
+  }
+
+  menuButton.addEventListener("click", function (event) {
+    event.stopPropagation();
+
+    const isOpen = dropdownMenu.classList.contains("is-open");
+
+    if (isOpen) {
+      closeHamburgerMenu();
+    } else {
+      dropdownMenu.classList.add("is-open");
+      menuButton.setAttribute("aria-expanded", "true");
+    }
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener("click", function (event) {
+    if (
+      !dropdownMenu.contains(event.target) &&
+      !menuButton.contains(event.target)
+    ) {
+      closeHamburgerMenu();
+    }
+  });
+
+  // Close menu with Escape key
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      closeHamburgerMenu();
+    }
+  });
+
+  // Close menu after selecting a navigation link
+  dropdownMenu.querySelectorAll("a").forEach(function (link) {
+    link.addEventListener("click", function () {
+      closeHamburgerMenu();
+    });
+  });
+
+});
+
+
+
 

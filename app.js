@@ -6640,23 +6640,68 @@ document.addEventListener("DOMContentLoaded", function () {
             )
           : "Application date unavailable";
 
-        const viewButton = document.createElement("button");
-        viewButton.type = "button";
-        viewButton.textContent = "View Details";
+     
+const viewButton = document.createElement("button");
+viewButton.type = "button";
+viewButton.textContent = "View Details";
 
-        viewButton.addEventListener("click", function () {
-          showApplicantDetails(application.id);
-        });
+viewButton.addEventListener("click", function () {
+  showApplicantDetails(application.id);
+});
 
-        card.append(
-          name,
-          position,
-          location,
-          status,
-          date,
-          viewButton
-        );
+// Invite to Interview button
+const inviteButton = document.createElement("button");
+inviteButton.type = "button";
+inviteButton.textContent = "Invite to Interview";
 
+inviteButton.addEventListener("click", function () {
+
+  const applicationInput = document.getElementById(
+    "companyInterviewApplicationId"
+  );
+
+  const interviewStatus = document.getElementById(
+    "companyInterviewStatus"
+  );
+
+  const interviewLink = document.querySelector(
+    '#companyDashboard .dashboard-nav a[href="#companyInterviews"]'
+  );
+
+  if (!applicationInput || !interviewLink) {
+    console.error("Interview form or navigation link not found.");
+    return;
+  }
+
+  // Store the selected applicant's application ID
+  applicationInput.value = application.id;
+
+  if (interviewStatus) {
+    interviewStatus.textContent =
+      "Creating interview invitation for " +
+      (profile?.full_name || "Applicant");
+  }
+
+  // Open Interview Invitations section
+  interviewLink.click();
+
+  // Scroll to the invitation form
+  document.getElementById("companyInterviewForm")?.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+});
+
+       card.append(
+       name,
+       position,
+       location,
+       status,
+       date,
+       viewButton,
+       inviteButton
+      );
         applicantsList.appendChild(card);
 
       });

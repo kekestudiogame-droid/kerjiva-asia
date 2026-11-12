@@ -7894,6 +7894,13 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (interviewError) throw interviewError;
 
       if (requestId !== loadRequestId) return;
+       
+       // Update Interview Invitations Dashboard Statistic.
+         if (totalInterviewsElement) {
+         totalInterviewsElement.textContent = String(
+         interviews?.length || 0
+       );
+      }
 
       if (!interviews || interviews.length === 0) {
 

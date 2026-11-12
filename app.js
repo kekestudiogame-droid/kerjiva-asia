@@ -7268,6 +7268,359 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+/* =========================================================
+   KERJIVA MALAYSIA - COMPANY SEND INTERVIEW INVITATION
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("dashboard") !== "company") return;
+  if (params.has("preview")) return;
+
+  const supabase = window.supabaseAuth;
+
+  const form = document.getElementById("companyInterviewForm");
+  const statusEl = document.getElementById("companyInterviewStatus");
+  const interviewList = document.getElementById("companyInterviewList");
+
+  const applicationInput = document.getElementById(
+    "companyInterviewApplicationId"
+  );
+
+  const typeInput = document.getElementById("companyInterviewType");
+  const dateInput = document.getElementById("companyInterviewDate");
+  const timeInput = document.getElementById("companyInterviewTime");
+  const locationInput = document.getElementById("companyInterviewLocation");
+  const meetingLinkInput = document.getElementById("companyInterviewMeetingLink");
+  const messageInput = document.getElementById("companyInterviewMessage");
+
+  if (
+    !supabase ||
+    !form ||
+    !statusEl ||
+    !interviewList ||
+    !applicationInput
+  ) return;
+
+  async function loadCompanyInterviews(companyId) {
+
+    interviewList.textContent = "Loading interview invitations...";
+
+    try {
+
+      const { data: interviews, error } = await supabase
+        .from("interviews")
+        .select(`
+          id,
+          application_id,
+          jobseeker_id,
+          interview_date,
+          interview_type,
+          interview_location,
+          meeting_link,
+          message,
+          status,
+          created_at
+        `)
+        .eq("company_id", companyId)
+        .order("interview_date", { ascending: true });
+
+      if (error) throw error;
+
+      if (!interviews || interviews.length === 0) {
+        interviewList.textContent = "No interview invitations yet.";
+        return;
+      }
+
+      const userIds = [
+        ...new Set(interviews.map(item => item.jobseeker_id))
+      ];
+
+      const { data: profiles, error: profilesError } = await supabase
+        .from("jobseeker_profiles")
+        .select("user_id, full_name")
+        .in("user_id", userIds);
+
+      if (profilesError) throw profilesError;
+
+      interviewList.replaceChildren();
+
+      interviews.forEach(function (interview) {
+
+        const profile = (profiles || []).find(
+          item => item.user_id === interview.jobseeker_id
+        );
+
+        const card = document.createElement("div");
+        card.className = "company-interview-card";
+
+        const name = document.createElement("h3");
+        name.textContent = profile?.full_name || "Applicant";
+
+        const date = document.createElement("p");
+        date.textContent =
+          "Date: " +
+          new Date(interview.interview_date).toLocaleString("en-MY", {
+            timeZone: "Asia/Kuala_Lumpur",
+            dateStyle: "medium",
+            timeStyle: "short"
+          }) +
+          " (Malaysia Time)";
+
+        const type = document.createElement("p");
+        type.textContent =
+          "Type: " + (interview.interview_type || "-");
+
+        const status = document.createElement("p");
+        status.textContent =
+          "Status: " + (interview.status || "pending").toUpperCase();
+
+        card.append(name, date, type, status);
+
+        if (interview.interview_location) {
+          const location = document.createElement("p");
+          location.textContent =
+            "Location: " + interview.interview_location;
+          card.appendChild(location);
+        }
+
+        if (interview.meeting_link) {
+          const link = document.createElement("a");
+          link.href = interview.meeting_link;
+          link.textContent = "Open Meeting Link";
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          card.appendChild(link);
+        }
+
+        if (interview.message) {
+          const message = document.createElement("p");
+          message.textContent =
+            "Message: " + interview.message;
+          card.appendChild(message);
+        }
+
+        interviewList.appendChild(card);
+
+      });
+
+    } catch (error) {
+
+      console.error("Load Company Interviews Error:", error);
+
+      interviewList.textContent =
+        "Unable to load interview invitations.";
+
+    }
+
+  }
+
+
+  form.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+    statusEl.textContent = "";
+
+    const applicationId = applicationInput.value.trim();
+    const interviewType = typeInput.value;
+    const interviewDate = dateInput.value;
+    const interviewTime = timeInput.value;
+    const interviewLocation = locationInput.value.trim();
+    const meetingLink = meetingLinkInput.value.trim();
+    const message = messageInput.value.trim();
+
+    if (!applicationId) {
+      statusEl.textContent =
+        "Please select an applicant first.";
+      return;
+    }
+
+    if (!interviewType || !interviewDate || !interviewTime) {
+      statusEl.textContent =
+        "Please complete interview type, date and time.";
+      return;
+    }
+
+    if (
+      interviewType === "In-person" &&
+      !interviewLocation
+    ) {
+      statusEl.textContent =
+        "Please enter the interview location.";
+      return;
+    }
+
+    if (
+      interviewType === "Online" &&
+      !meetingLink
+    ) {
+      statusEl.textContent =
+        "Please enter the online meeting link.";
+      return;
+    }
+
+    // Malaysia uses UTC+08:00
+    const interviewDateTime = new Date(
+      `${interviewDate}T${interviewTime}:00+08:00`
+    );
+
+    if (Number.isNaN(interviewDateTime.getTime())) {
+      statusEl.textContent =
+        "Invalid interview date or time.";
+      return;
+    }
+
+    if (interviewDateTime.getTime() <= Date.now()) {
+      statusEl.textContent =
+        "Interview date and time must be in the future.";
+      return;
+    }
+
+    const sendButton = document.getElementById(
+      "sendCompanyInterviewBtn"
+    );
+
+    sendButton.disabled = true;
+    sendButton.textContent = "Sending...";
+
+    try {
+
+      const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      const user = sessionData?.session?.user;
+
+      if (!user) {
+        throw new Error("Please log in again.");
+      }
+
+      // Get company profile
+      const { data: company, error: companyError } = await supabase
+        .from("companies")
+        .select("id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (companyError) throw companyError;
+
+      if (!company) {
+        throw new Error("Company profile not found.");
+      }
+
+      // Verify the selected application belongs to this company
+      const { data: application, error: applicationError } =
+        await supabase
+          .from("applications")
+          .select("id, user_id")
+          .eq("id", applicationId)
+          .maybeSingle();
+
+      if (applicationError) throw applicationError;
+
+      if (!application) {
+        throw new Error("Selected application was not found.");
+      }
+
+      // Insert interview invitation
+      const { error: insertError } = await supabase
+        .from("interviews")
+        .insert({
+          application_id: application.id,
+          company_id: company.id,
+          jobseeker_id: application.user_id,
+          interview_date: interviewDateTime.toISOString(),
+          interview_type: interviewType,
+          interview_location: interviewLocation || null,
+          meeting_link: meetingLink || null,
+          message: message || null,
+          status: "pending"
+        });
+
+      if (insertError) throw insertError;
+
+      statusEl.textContent =
+        "Interview invitation sent successfully!";
+
+      form.reset();
+      applicationInput.value = "";
+
+      await loadCompanyInterviews(company.id);
+
+      console.log("Interview Invitation Sent Successfully.");
+
+    } catch (error) {
+
+      console.error("Send Interview Invitation Error:", error);
+
+      statusEl.textContent =
+        error.message || "Unable to send interview invitation.";
+
+    } finally {
+
+      sendButton.disabled = false;
+      sendButton.textContent = "Send Invitation";
+
+    }
+
+  });
+
+
+  // Load invitations when opening the Interview Invitations menu
+  const interviewsLink = document.querySelector(
+    '#companyDashboard .dashboard-nav a[href="#companyInterviews"]'
+  );
+
+  async function refreshCompanyInterviews() {
+
+    const { data: sessionData, error } =
+      await supabase.auth.getSession();
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    const user = sessionData?.session?.user;
+
+    if (!user) return;
+
+    const { data: company, error: companyError } = await supabase
+      .from("companies")
+      .select("id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (companyError) {
+      console.error(companyError);
+      return;
+    }
+
+    if (company) {
+      await loadCompanyInterviews(company.id);
+    }
+
+  }
+
+  if (interviewsLink) {
+    interviewsLink.addEventListener(
+      "click",
+      refreshCompanyInterviews
+    );
+  }
+
+  if (window.location.hash === "#companyInterviews") {
+    refreshCompanyInterviews();
+  }
+
+});
+
+
+
 
 
 

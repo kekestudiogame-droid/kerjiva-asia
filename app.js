@@ -290,10 +290,9 @@ const { data, error } = await supabaseAuth.auth.signUp({
         const successMessage =
           "Registration successful! Please check your email and click the verification link before logging in.";
 
-        registerStatus.textContent = successMessage;
+      registerStatus.textContent = "";
 
-        showKerjivaNotification(successMessage, "success");
-
+      showKerjivaNotification(successMessage, "success");
         registerForm.reset();
 
         // Restore the default Jobseeker form

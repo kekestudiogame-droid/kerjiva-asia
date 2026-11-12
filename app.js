@@ -7656,6 +7656,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   const interviewList = document.getElementById(
     "jobseekerInterviewList"
   );
+   const totalInterviewsElement = document.getElementById(
+    "totalInterviews"
+  );
 
   if (!dashboard || !interviewList) return;
 

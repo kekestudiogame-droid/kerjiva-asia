@@ -3192,6 +3192,9 @@ select {
   }
 
 }
+#companyDashboard .company-applicant-card button + button {
+  margin-left: 10px;
+}
 
 
 

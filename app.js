@@ -7630,6 +7630,512 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   JOBSEEKER INTERVIEW INVITATIONS
+   LOAD AND DISPLAY COMPANY INVITATIONS
+   SUPABASE REALTIME
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", async function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  // Run only on the actual Jobseeker Dashboard.
+  if (
+    params.get("dashboard") !== "jobseeker" ||
+    params.has("preview")
+  ) {
+    return;
+  }
+
+  const dashboard = document.getElementById(
+    "jobseekerDashboard"
+  );
+
+  const interviewList = document.getElementById(
+    "jobseekerInterviewList"
+  );
+
+  if (!dashboard || !interviewList) return;
+
+  let currentUser = null;
+  let interviewChannel = null;
+  let loadRequestId = 0;
+
+  // =========================================
+  // EMPTY STATE
+  // =========================================
+
+  function showInterviewEmptyState() {
+
+    interviewList.replaceChildren();
+
+    const emptyState = document.createElement("div");
+    emptyState.className = "dashboard-empty-state";
+
+    const heading = document.createElement("h3");
+    heading.textContent = "No Interview Invitations";
+
+    const description = document.createElement("p");
+    description.textContent =
+      "Interview invitations from companies will appear here.";
+
+    emptyState.append(heading, description);
+
+    interviewList.appendChild(emptyState);
+
+  }
+
+  // =========================================
+  // FORMAT INTERVIEW DATE AND TIME
+  // MALAYSIA TIMEZONE (GMT+8)
+  // =========================================
+
+  function formatInterviewDate(dateValue) {
+
+    if (!dateValue) return "Date unavailable";
+
+    const date = new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) {
+      return "Date unavailable";
+    }
+
+    return new Intl.DateTimeFormat("en-MY", {
+      timeZone: "Asia/Kuala_Lumpur",
+      dateStyle: "full"
+    }).format(date);
+
+  }
+
+  function formatInterviewTime(dateValue) {
+
+    if (!dateValue) return "Time unavailable";
+
+    const date = new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) {
+      return "Time unavailable";
+    }
+
+    return new Intl.DateTimeFormat("en-MY", {
+      timeZone: "Asia/Kuala_Lumpur",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    }).format(date);
+
+  }
+
+  function formatInterviewStatus(status) {
+
+    if (!status) return "Status not set";
+
+    return String(status)
+      .replace(/[_-]+/g, " ")
+      .replace(/\b\w/g, character => character.toUpperCase());
+
+  }
+
+  // =========================================
+  // CREATE INTERVIEW CARD
+  // =========================================
+
+  function createInterviewCard(interview, job, company) {
+
+    const card = document.createElement("div");
+    card.className = "jobseeker-interview-card";
+
+    const heading = document.createElement("h3");
+    heading.textContent = job
+      ? job.title
+      : "Job details unavailable";
+
+    const companyName = document.createElement("p");
+    companyName.textContent = company
+      ? company.company_name
+      : "Company information unavailable";
+
+    const date = document.createElement("p");
+    date.textContent =
+      "Interview Date: " +
+      formatInterviewDate(interview.interview_date);
+
+    const time = document.createElement("p");
+    time.textContent =
+      "Interview Time: " +
+      formatInterviewTime(interview.interview_date) +
+      " (Malaysia Time)";
+
+    const type = document.createElement("p");
+    type.textContent =
+      "Interview Type: " +
+      (interview.interview_type || "Not specified");
+
+    const status = document.createElement("p");
+    status.className = "interview-status";
+    status.textContent =
+      "Status: " +
+      formatInterviewStatus(interview.status);
+
+    card.append(
+      heading,
+      companyName,
+      date,
+      time,
+      type,
+      status
+    );
+
+    // In-person interview location.
+    if (interview.interview_location) {
+
+      const location = document.createElement("p");
+      location.textContent =
+        "Location: " + interview.interview_location;
+
+      card.appendChild(location);
+
+    }
+
+    // Online interview meeting link.
+    if (interview.meeting_link) {
+
+      const linkLabel = document.createElement("p");
+      linkLabel.textContent = "Meeting Link:";
+
+      const meetingLink = document.createElement("a");
+      meetingLink.textContent = "Join Online Interview";
+      meetingLink.target = "_blank";
+      meetingLink.rel = "noopener noreferrer";
+
+      try {
+
+        const url = new URL(interview.meeting_link);
+
+        if (
+          url.protocol === "https:" ||
+          url.protocol === "http:"
+        ) {
+
+          meetingLink.href = url.href;
+
+          card.append(linkLabel, meetingLink);
+
+        }
+
+      } catch (error) {
+
+        console.warn(
+          "Invalid interview meeting link:",
+          interview.meeting_link
+        );
+
+      }
+
+    }
+
+    // Company invitation message.
+    if (interview.message) {
+
+      const messageHeading = document.createElement("h4");
+      messageHeading.textContent = "Message from Company";
+
+      const message = document.createElement("p");
+      message.textContent = interview.message;
+      message.className = "interview-message";
+
+      card.append(messageHeading, message);
+
+    }
+
+    return card;
+
+  }
+
+  // =========================================
+  // LOAD JOBSEEKER INTERVIEW INVITATIONS
+  // =========================================
+
+  async function loadJobseekerInterviews() {
+
+    if (!currentUser) return;
+
+    const requestId = ++loadRequestId;
+
+    interviewList.textContent =
+      "Loading interview invitations...";
+
+    try {
+
+      // 1. Get invitations belonging to this Jobseeker.
+      const { data: interviews, error: interviewError } =
+        await supabaseAuth
+          .from("interviews")
+          .select(`
+            id,
+            application_id,
+            company_id,
+            interview_date,
+            interview_type,
+            interview_location,
+            meeting_link,
+            message,
+            status,
+            created_at
+          `)
+          .eq("jobseeker_id", currentUser.id)
+          .order("interview_date", { ascending: true });
+
+      if (interviewError) throw interviewError;
+
+      if (requestId !== loadRequestId) return;
+
+      if (!interviews || interviews.length === 0) {
+
+        showInterviewEmptyState();
+        return;
+
+      }
+
+      // 2. Get related applications.
+      const applicationIds = [
+        ...new Set(
+          interviews
+            .map(item => item.application_id)
+            .filter(Boolean)
+        )
+      ];
+
+      let applications = [];
+
+      if (applicationIds.length > 0) {
+
+        const { data, error } = await supabaseAuth
+          .from("applications")
+          .select("id, job_id")
+          .in("id", applicationIds);
+
+        if (error) throw error;
+
+        applications = data || [];
+
+      }
+
+      if (requestId !== loadRequestId) return;
+
+      const applicationMap = new Map(
+        applications.map(item => [item.id, item])
+      );
+
+      // 3. Get related jobs.
+      const jobIds = [
+        ...new Set(
+          applications
+            .map(item => item.job_id)
+            .filter(Boolean)
+        )
+      ];
+
+      let jobs = [];
+
+      if (jobIds.length > 0) {
+
+        const { data, error } = await supabaseAuth
+          .from("jobs")
+          .select("id, title")
+          .in("id", jobIds);
+
+        if (error) throw error;
+
+        jobs = data || [];
+
+      }
+
+      if (requestId !== loadRequestId) return;
+
+      const jobMap = new Map(
+        jobs.map(item => [item.id, item])
+      );
+
+      // 4. Get related companies.
+      const companyIds = [
+        ...new Set(
+          interviews
+            .map(item => item.company_id)
+            .filter(Boolean)
+        )
+      ];
+
+      let companies = [];
+
+      if (companyIds.length > 0) {
+
+        const { data, error } = await supabaseAuth
+          .from("companies")
+          .select("id, company_name")
+          .in("id", companyIds);
+
+        if (error) throw error;
+
+        companies = data || [];
+
+      }
+
+      if (requestId !== loadRequestId) return;
+
+      const companyMap = new Map(
+        companies.map(item => [item.id, item])
+      );
+
+      // 5. Display interview invitations.
+      interviewList.replaceChildren();
+
+      interviews.forEach(interview => {
+
+        const application = applicationMap.get(
+          interview.application_id
+        );
+
+        const job = application
+          ? jobMap.get(application.job_id)
+          : null;
+
+        const company = companyMap.get(
+          interview.company_id
+        );
+
+        const card = createInterviewCard(
+          interview,
+          job,
+          company
+        );
+
+        interviewList.appendChild(card);
+
+      });
+
+      console.log(
+        "Jobseeker Interview Invitations Loaded:",
+        interviews.length
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Load Jobseeker Interview Invitations Error:",
+        error
+      );
+
+      if (requestId === loadRequestId) {
+
+        interviewList.textContent =
+          "Unable to load interview invitations. Please try again.";
+
+      }
+
+    }
+
+  }
+
+  // =========================================
+  // REFRESH WHEN OPENING INTERVIEW INVITATIONS
+  // =========================================
+
+  const menuLinks = dashboard.querySelectorAll(
+    ".dashboard-menu .dashboard-menu-link"
+  );
+
+  menuLinks.forEach(link => {
+
+    link.addEventListener("click", function () {
+
+      if (
+        this.getAttribute("href") === "#jobseekerInterviews"
+      ) {
+
+        loadJobseekerInterviews();
+
+      }
+
+    });
+
+  });
+
+  // =========================================
+  // INITIALIZE SESSION
+  // =========================================
+
+  try {
+
+    const { data: sessionData, error: sessionError } =
+      await supabaseAuth.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    if (!sessionData.session?.user) {
+      throw new Error("Please sign in again.");
+    }
+
+    currentUser = sessionData.session.user;
+
+    // Load invitations when Jobseeker Dashboard opens.
+    await loadJobseekerInterviews();
+
+    // =========================================
+    // SUPABASE REALTIME SUBSCRIPTION
+    // =========================================
+
+    interviewChannel = supabaseAuth
+      .channel("jobseeker-interviews-" + currentUser.id)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "interviews",
+          filter: "jobseeker_id=eq." + currentUser.id
+        },
+        function () {
+
+          loadJobseekerInterviews();
+
+        }
+      )
+      .subscribe(function (status) {
+
+        if (
+          status === "CHANNEL_ERROR" ||
+          status === "TIMED_OUT"
+        ) {
+
+          console.warn(
+            "Jobseeker Interview Realtime is unavailable:",
+            status
+          );
+
+        }
+
+      });
+
+  } catch (error) {
+
+    console.error(
+      "Initialize Jobseeker Interview Invitations Error:",
+      error
+    );
+
+    interviewList.textContent =
+      error.message ||
+      "Unable to initialize Interview Invitations.";
+
+  }
+
+});
+
+
+
 
 
 

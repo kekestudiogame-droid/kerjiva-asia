@@ -2452,6 +2452,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   const applicationList = document.getElementById(
     "jobseekerApplicationsList"
   );
+   const totalApplicationsElement = document.getElementById(
+    "totalApplications"
+  );
 
   if (!dashboard || !applicationList) return;
 
@@ -2529,6 +2532,13 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (applicationError) throw applicationError;
 
       if (requestId !== loadRequestId) return;
+       
+       // Update Total Applications for the current Jobseeker.
+      if (totalApplicationsElement) {
+         totalApplicationsElement.textContent = String(
+         applications?.length || 0
+        );
+       }
 
       if (!applications || applications.length === 0) {
         showEmptyState();

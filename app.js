@@ -285,21 +285,32 @@ const { data, error } = await supabaseAuth.auth.signUp({
         throw error;
       }
 
-      if (data.user) {
+    
+if (data.user) {
 
-        const successMessage =
-          "Registration successful! Please check your email and click the verification link before logging in.";
+  // SAVE EMAIL WAITING FOR VERIFICATION
+  localStorage.setItem(
+    "kerjivaPendingEmailVerification",
+    JSON.stringify({
+      email: email.toLowerCase().trim()
+    })
+  );
 
-      registerStatus.textContent = "";
+  const successMessage =
+    "Registration successful! Please check your email and click the verification link before logging in.";
 
-      showKerjivaNotification(successMessage, "success");
-        registerForm.reset();
+  registerStatus.textContent = "";
 
-        // Restore the default Jobseeker form
-        registerRole.value = "jobseeker";
-        registerRole.dispatchEvent(new Event("change"));
+  showKerjivaNotification(successMessage, "success");
 
-      } else {
+  registerForm.reset();
+
+  // Restore the default Jobseeker form
+  registerRole.value = "jobseeker";
+  registerRole.dispatchEvent(new Event("change"));
+
+} else {
+
 
         throw new Error("Registration could not be completed. Please try again.");
 

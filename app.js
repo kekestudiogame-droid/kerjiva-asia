@@ -465,6 +465,174 @@ function showPendingKerjivaNotification() {
   }
 }
 
+
+// ========================================
+// EMAIL VERIFICATION CALLBACK
+// ========================================
+document.addEventListener("DOMContentLoaded", async function () {
+  const isVerificationCallback =
+    new URLSearchParams(window.location.search)
+      .get("emailVerification") === "1";
+
+  if (!isVerificationCallback) return;
+
+          
+  const hashParams = new URLSearchParams(
+    window.location.hash.replace(/^#/, "")
+  );
+
+  const queryParams = new URLSearchParams(
+    window.location.search
+  );
+
+  const callbackError =
+    hashParams.get("error_description") ||
+    hashParams.get("error") ||
+    hashParams.get("error_code") ||
+    queryParams.get("error_description") ||
+    queryParams.get("error") ||
+    queryParams.get("error_code");
+
+
+  if (callbackError) {
+    showKerjivaNotification(
+      "Email verification failed. Please request a new verification link.",
+      "error"
+    );
+    return;
+  }
+
+  try {
+    const { data, error } =
+      await supabaseAuth.auth.getSession();
+
+    if (error) throw error;
+
+    const session = data.session;
+    const pendingData = localStorage.getItem(
+      "kerjivaPendingEmailVerification"
+    );
+
+    if (!session || !session.user || !pendingData) {
+      showKerjivaNotification(
+        "We could not confirm your email verification. Please try the verification link again.",
+        "error"
+      );
+      return;
+    }
+
+    const pending = JSON.parse(pendingData);
+
+    const verifiedEmail =
+      (session.user.email || "").toLowerCase().trim();
+
+    const pendingEmail =
+      (pending.email || "").toLowerCase().trim();
+
+    if (
+      !session.user.email_confirmed_at ||
+      !verifiedEmail ||
+      verifiedEmail !== pendingEmail
+    ) {
+      showKerjivaNotification(
+        "Email verification could not be confirmed for this registration.",
+        "error"
+      );
+      return;
+    }
+
+    // CREATE VERIFICATION SUCCESS DIALOG
+    const overlay = document.createElement("div");
+
+    overlay.id = "emailVerificationSuccessDialog";
+
+    overlay.style.cssText = `
+      position: fixed;
+      inset: 0;
+      z-index: 100000;
+      background: rgba(0, 0, 0, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    `;
+
+    const dialog = document.createElement("div");
+
+    dialog.style.cssText = `
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    `;
+
+    const message = document.createElement("p");
+
+    message.textContent =
+      "Email successfully verified. Your registration is complete.";
+
+    message.style.cssText = `
+      color: #333333;
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0 0 24px;
+    `;
+
+    const okButton = document.createElement("button");
+
+    okButton.type = "button";
+    okButton.textContent = "OK";
+
+    okButton.style.cssText = `
+      min-width: 100px;
+      padding: 11px 28px;
+      border: none;
+      border-radius: 6px;
+      background: #198754;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    `;
+
+    okButton.addEventListener("click", async function () {
+      okButton.disabled = true;
+
+      try {
+        await supabaseAuth.auth.signOut({ scope: "local" });
+      } catch (signOutError) {
+        console.error(
+          "Verification callback sign-out error:",
+          signOutError
+        );
+      }
+
+      localStorage.removeItem(
+        "kerjivaPendingEmailVerification"
+      );
+
+      window.location.replace("index.html");
+    });
+
+    dialog.appendChild(message);
+    dialog.appendChild(okButton);
+    overlay.appendChild(dialog);
+    document.body.appendChild(overlay);
+
+  } catch (error) {
+    console.error("Email Verification Callback Error:", error);
+
+    showKerjivaNotification(
+      "Unable to verify your email right now. Please try again.",
+      "error"
+    );
+  }
+});
+
+
           
 /* =====================================================
    KERJIVA MALAYSIA

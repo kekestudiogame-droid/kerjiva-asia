@@ -645,6 +645,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   localStorage.removeItem(
     "kerjivaPendingEmailVerification"
   );
+      // CLOSE VERIFICATION TAB
+     window.close();
 
 });
     dialog.appendChild(message);

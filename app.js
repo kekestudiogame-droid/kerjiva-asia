@@ -465,6 +465,21 @@ function showPendingKerjivaNotification() {
   }
 }
 
+// ========================================
+// RETURN TO LOGIN AFTER EMAIL VERIFICATION
+// ========================================
+window.addEventListener("storage", function (event) {
+
+  if (event.key !== "kerjivaEmailVerificationComplete") {
+    return;
+  }
+
+  if (!event.newValue) return;
+
+  window.location.replace("login.html");
+
+});
+
 
 // ========================================
 // EMAIL VERIFICATION CALLBACK

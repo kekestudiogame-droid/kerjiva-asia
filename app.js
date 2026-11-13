@@ -273,10 +273,10 @@ const { data, error } = await supabaseAuth.auth.signUp({
   password: password,
   options: {
     data: metadata,
-    emailRedirectTo: new URL(
-      "login.html",
-      window.location.href
-    ).href
+  emailRedirectTo: new URL(
+  "login.html?emailVerification=1",
+  window.location.href
+  ).href
   }
 });
 

@@ -613,25 +613,37 @@ document.addEventListener("DOMContentLoaded", async function () {
       cursor: pointer;
     `;
 
-    okButton.addEventListener("click", async function () {
-      okButton.disabled = true;
+   okButton.addEventListener("click", async function () {
 
-      try {
-        await supabaseAuth.auth.signOut({ scope: "local" });
-      } catch (signOutError) {
-        console.error(
-          "Verification callback sign-out error:",
-          signOutError
-        );
-      }
+  okButton.disabled = true;
 
-      localStorage.removeItem(
-        "kerjivaPendingEmailVerification"
-      );
+  try {
 
-      window.location.replace("index.html");
-    });
+    await supabaseAuth.auth.signOut({ scope: "local" });
 
+  } catch (signOutError) {
+
+    console.error(
+      "Verification callback sign-out error:",
+      signOutError
+    );
+
+  }
+
+  // SEND SIGNAL TO THE FIRST TAB
+  localStorage.setItem(
+    "kerjivaEmailVerificationComplete",
+    JSON.stringify({
+      email: pendingEmail,
+      timestamp: Date.now()
+    })
+  );
+
+  localStorage.removeItem(
+    "kerjivaPendingEmailVerification"
+  );
+
+});
     dialog.appendChild(message);
     dialog.appendChild(okButton);
     overlay.appendChild(dialog);

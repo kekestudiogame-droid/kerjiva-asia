@@ -616,6 +616,9 @@ document.addEventListener("DOMContentLoaded", async function () {
    okButton.addEventListener("click", async function () {
 
   okButton.disabled = true;
+      
+       // CLOSE SUCCESS DIALOG
+  overlay.remove();
 
   try {
 

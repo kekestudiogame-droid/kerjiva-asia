@@ -8556,22 +8556,104 @@ document.addEventListener("DOMContentLoaded", async function () {
      
       if (error) throw error;
 
-      statusText.style.color = "#16803c";
-      statusText.textContent =
-        "Your password has been updated successfully. You can now log in with your new password.";
-
+    
       resetPasswordForm.reset();
 
       submitBtn.textContent = "Password Updated";
       submitBtn.disabled = true;
 
-      // SEND PASSWORD RESET SUCCESS SIGNAL TO FIRST TAB
-      localStorage.setItem(
-        "kerjivaPasswordResetComplete",
-        JSON.stringify({
-          timestamp: Date.now()
-        })
-      );
+      // CREATE PASSWORD RESET SUCCESS DIALOG
+      const overlay = document.createElement("div");
+
+      overlay.style.cssText = `
+        position: fixed;
+        inset: 0;
+        z-index: 100000;
+        background: rgba(0, 0, 0, 0.55);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      `;
+
+      const dialog = document.createElement("div");
+
+      dialog.style.cssText = `
+        width: 100%;
+        max-width: 420px;
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 28px 24px;
+        text-align: center;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      `;
+
+      const message = document.createElement("p");
+
+      message.textContent =
+        "Your password has been updated successfully. You can now log in with your new password.";
+
+      message.style.cssText = `
+        color: #333333;
+        font-size: 16px;
+        line-height: 1.6;
+        margin: 0 0 24px;
+      `;
+
+      const okButton = document.createElement("button");
+
+      okButton.type = "button";
+      okButton.textContent = "OK";
+
+      okButton.style.cssText = `
+        min-width: 100px;
+        padding: 11px 28px;
+        border: none;
+        border-radius: 6px;
+        background: #198754;
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+      `;
+
+      okButton.addEventListener("click", async function () {
+
+        okButton.disabled = true;
+
+        overlay.remove();
+
+        try {
+
+          await supabaseAuth.auth.signOut({ scope: "local" });
+
+        } catch (signOutError) {
+
+          console.error(
+            "Password reset sign-out error:",
+            signOutError
+          );
+
+        }
+
+        // SEND SIGNAL TO THE FIRST TAB
+        localStorage.setItem(
+          "kerjivaPasswordResetComplete",
+          JSON.stringify({
+            timestamp: Date.now()
+          })
+        );
+
+        // CLOSE RESET PASSWORD TAB
+        window.close();
+
+      });
+
+      dialog.appendChild(message);
+      dialog.appendChild(okButton);
+      overlay.appendChild(dialog);
+      document.body.appendChild(overlay);
+
 
        
     } catch (error) {

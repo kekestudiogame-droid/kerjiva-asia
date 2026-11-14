@@ -8553,14 +8553,15 @@ document.addEventListener("DOMContentLoaded", async function () {
           password: newPassword
         });
 
+     
       if (error) throw error;
 
-         statusText.style.color = "#16803c";
-         statusText.textContent =
-           "Your password has been updated successfully. You can now log in with your new password.";
+      statusText.style.color = "#16803c";
+      statusText.textContent =
+        "Your password has been updated successfully. You can now log in with your new password.";
 
-          resetPasswordForm.reset();
-       
+      resetPasswordForm.reset();
+
       submitBtn.textContent = "Password Updated";
       submitBtn.disabled = true;
 
@@ -8571,6 +8572,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           timestamp: Date.now()
         })
       );
+
        
     } catch (error) {
 

@@ -549,6 +549,36 @@ window.addEventListener("storage", function (event) {
 
 });
 
+// ========================================
+// RETURN TO LOGIN AFTER PASSWORD RESET
+// ========================================
+window.addEventListener("storage", function (event) {
+
+  if (event.key !== "kerjivaPasswordResetComplete") {
+    return;
+  }
+
+  if (!event.newValue) return;
+
+  try {
+
+    const resetData = JSON.parse(event.newValue);
+
+    saveKerjivaNotification(
+      "Your password has been updated successfully. Please log in with your new password.",
+      "success"
+    );
+
+    window.location.replace("login.html");
+
+  } catch (error) {
+
+    console.error("Password Reset Notification Error:", error);
+
+  }
+
+});
+
 
 // ========================================
 // EMAIL VERIFICATION CALLBACK
@@ -8529,9 +8559,18 @@ document.addEventListener("DOMContentLoaded", async function () {
          statusText.textContent =
            "Your password has been updated successfully. You can now log in with your new password.";
 
-      resetPasswordForm.reset();
+          resetPasswordForm.reset();
+       
       submitBtn.textContent = "Password Updated";
       submitBtn.disabled = true;
+
+      // SEND PASSWORD RESET SUCCESS SIGNAL TO FIRST TAB
+      localStorage.setItem(
+        "kerjivaPasswordResetComplete",
+        JSON.stringify({
+          timestamp: Date.now()
+        })
+      );
        
     } catch (error) {
 

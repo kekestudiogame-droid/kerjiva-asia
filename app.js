@@ -8486,6 +8486,69 @@ document.addEventListener("DOMContentLoaded", async function () {
   ) {
     return;
   }
+   
+  // RESET PASSWORD NOTIFICATION
+  function showResetPasswordNotification(message) {
+
+    statusText.textContent = "";
+
+    showKerjivaNotification(message, "success");
+
+    const notification = document.getElementById(
+      "kerjivaNotification"
+    );
+
+    if (!notification) return;
+
+    let style = document.getElementById(
+      "resetPasswordNotificationStyle"
+    );
+
+    if (!style) {
+
+      style = document.createElement("style");
+
+      style.id = "resetPasswordNotificationStyle";
+
+      style.textContent = `
+        #kerjivaNotification {
+          top: 24px;
+          left: 50%;
+          right: auto;
+          width: max-content;
+          max-width: calc(100% - 32px);
+          text-align: center;
+          transform: translate(-50%, -10px);
+        }
+
+        #kerjivaNotification.show {
+          transform: translate(-50%, 0);
+        }
+
+        #kerjivaNotification.success {
+          background: #198754;
+        }
+
+        @media (max-width: 600px) {
+          #kerjivaNotification {
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            width: auto;
+            max-width: none;
+            transform: translateY(-10px);
+          }
+
+          #kerjivaNotification.show {
+            transform: translateY(0);
+          }
+        }
+      `;
+
+      document.head.appendChild(style);
+    }
+  }
+
 
   // VALIDATE PASSWORD RESET SESSION
   try {
@@ -8497,10 +8560,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     if (!data.session || !data.session.user) {
 
-      statusText.style.color = "#dc2626";
-      statusText.textContent =
-        "This password reset link is invalid or has expired. Please request a new link.";
-
+     showResetPasswordNotification(
+       "This password reset link is invalid or has expired. Please request a new link."
+     );
       submitBtn.disabled = true;
       return;
     }
@@ -8509,10 +8571,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     console.error("Reset Password Session Error:", error);
 
-    statusText.style.color = "#dc2626";
-    statusText.textContent =
-      "Unable to verify your reset link. Please request a new link.";
-
+   showResetPasswordNotification(
+    "Unable to verify your reset link. Please request a new link."
+    );
     submitBtn.disabled = true;
     return;
 
@@ -8533,10 +8594,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     if (newPassword !== confirmPassword) {
 
-      statusText.style.color = "#dc2626";
-      statusText.textContent =
-        "The passwords do not match.";
-
+    showResetPasswordNotification(
+      "The passwords do not match."
+     );
       return;
     }
 
@@ -8660,9 +8720,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       console.error("Reset Password Error:", error);
 
-      statusText.style.color = "#dc2626";
-      statusText.textContent =
-        "Unable to update your password. Please try again.";
+     showResetPasswordNotification(
+      "Unable to update your password. Please try again."
+     );
 
       submitBtn.disabled = false;
 
@@ -8679,72 +8739,72 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
+
 /* =====================================================
    KERJIVA MALAYSIA
    SHOW / HIDE RESET PASSWORD
    ===================================================== */
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("click", function (event) {
 
-  const toggleButtons = document.querySelectorAll(
+  if (!(event.target instanceof Element)) return;
+
+  const button = event.target.closest(
     ".password-toggle-btn"
   );
 
-  toggleButtons.forEach(function (button) {
+  if (!button) return;
 
-    button.addEventListener("click", function () {
+  event.preventDefault();
 
-      const targetId = button.dataset.passwordTarget;
-      const passwordInput = document.getElementById(targetId);
+  const targetId = button.dataset.passwordTarget;
+  const passwordInput = document.getElementById(targetId);
 
-      if (!passwordInput) return;
+  if (!passwordInput) return;
 
-      const isPasswordHidden =
-        passwordInput.type === "password";
+  const isPasswordHidden =
+    passwordInput.type === "password";
 
-      passwordInput.type =
-        isPasswordHidden ? "text" : "password";
+  passwordInput.type =
+    isPasswordHidden ? "text" : "password";
 
-      button.setAttribute(
-        "aria-label",
-        isPasswordHidden ? "Hide password" : "Show password"
-      );
+  button.setAttribute(
+    "aria-label",
+    isPasswordHidden ? "Hide password" : "Show password"
+  );
 
-      button.innerHTML = isPasswordHidden
-        ? `
-          <svg xmlns="http://www.w3.org/2000/svg"
-            width="21" height="21" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
-            <path d="M3 3l18 18"/>
-            <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/>
-            <path d="M9.9 5.2A11 11 0 0 1 12 5
-              c6.4 0 10 7 10 7a16 16 0 0 1-4 4.7"/>
-            <path d="M6.2 6.2C3.5 8 2 12 2 12
-              s3.6 7 10 7c1 0 2-.2 2.9-.5"/>
-          </svg>
-        `
-        : `
-          <svg xmlns="http://www.w3.org/2000/svg"
-            width="21" height="21" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
-            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-        `;
+  button.setAttribute(
+    "aria-pressed",
+    String(isPasswordHidden)
+  );
 
-    });
-
-  });
+  button.innerHTML = isPasswordHidden
+    ? `
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="21" height="21" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M3 3l18 18"/>
+        <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/>
+        <path d="M9.9 5.2A11 11 0 0 1 12 5
+          c6.4 0 10 7 10 7a16 16 0 0 1-4 4.7"/>
+        <path d="M6.2 6.2C3.5 8 2 12 2 12
+          s3.6 7 10 7c1 0 2-.2 2.9-.5"/>
+      </svg>
+    `
+    : `
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="21" height="21" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+    `;
 
 });
-
-
-
-
 
 
 

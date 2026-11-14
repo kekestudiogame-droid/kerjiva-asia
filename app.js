@@ -8704,8 +8704,8 @@ document.addEventListener("DOMContentLoaded", async function () {
           })
         );
 
-      // RETURN RESET PASSWORD TAB TO LOGIN
-          window.location.replace("login.html");
+   // CLOSE RESET PASSWORD TAB
+      window.close();
 
       });
 

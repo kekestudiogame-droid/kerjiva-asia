@@ -8679,6 +8679,71 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   SHOW / HIDE RESET PASSWORD
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const toggleButtons = document.querySelectorAll(
+    ".password-toggle-btn"
+  );
+
+  toggleButtons.forEach(function (button) {
+
+    button.addEventListener("click", function () {
+
+      const targetId = button.dataset.passwordTarget;
+      const passwordInput = document.getElementById(targetId);
+
+      if (!passwordInput) return;
+
+      const isPasswordHidden =
+        passwordInput.type === "password";
+
+      passwordInput.type =
+        isPasswordHidden ? "text" : "password";
+
+      button.setAttribute(
+        "aria-label",
+        isPasswordHidden ? "Hide password" : "Show password"
+      );
+
+      button.innerHTML = isPasswordHidden
+        ? `
+          <svg xmlns="http://www.w3.org/2000/svg"
+            width="21" height="21" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M3 3l18 18"/>
+            <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/>
+            <path d="M9.9 5.2A11 11 0 0 1 12 5
+              c6.4 0 10 7 10 7a16 16 0 0 1-4 4.7"/>
+            <path d="M6.2 6.2C3.5 8 2 12 2 12
+              s3.6 7 10 7c1 0 2-.2 2.9-.5"/>
+          </svg>
+        `
+        : `
+          <svg xmlns="http://www.w3.org/2000/svg"
+            width="21" height="21" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        `;
+
+    });
+
+  });
+
+});
+
+
+
 
 
 

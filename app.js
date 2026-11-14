@@ -8424,6 +8424,139 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   RESET PASSWORD
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", async function () {
+
+  const resetPasswordForm =
+    document.getElementById("resetPasswordForm");
+
+  if (!resetPasswordForm) return;
+
+  const passwordInput =
+    document.getElementById("resetPassword");
+
+  const confirmPasswordInput =
+    document.getElementById("confirmResetPassword");
+
+  const submitBtn =
+    document.getElementById("resetPasswordSubmitBtn");
+
+  const statusText =
+    document.getElementById("resetPasswordStatus");
+
+  if (
+    !passwordInput ||
+    !confirmPasswordInput ||
+    !submitBtn ||
+    !statusText
+  ) {
+    return;
+  }
+
+  // VALIDATE PASSWORD RESET SESSION
+  try {
+
+    const { data, error } =
+      await supabaseAuth.auth.getSession();
+
+    if (error) throw error;
+
+    if (!data.session || !data.session.user) {
+
+      statusText.style.color = "#dc2626";
+      statusText.textContent =
+        "This password reset link is invalid or has expired. Please request a new link.";
+
+      submitBtn.disabled = true;
+      return;
+    }
+
+  } catch (error) {
+
+    console.error("Reset Password Session Error:", error);
+
+    statusText.style.color = "#dc2626";
+    statusText.textContent =
+      "Unable to verify your reset link. Please request a new link.";
+
+    submitBtn.disabled = true;
+    return;
+
+  }
+
+  // UPDATE PASSWORD
+  resetPasswordForm.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+    if (!resetPasswordForm.checkValidity()) {
+      resetPasswordForm.reportValidity();
+      return;
+    }
+
+    const newPassword = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    if (newPassword !== confirmPassword) {
+
+      statusText.style.color = "#dc2626";
+      statusText.textContent =
+        "The passwords do not match.";
+
+      return;
+    }
+
+    const originalButtonText = submitBtn.textContent;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Updating...";
+    statusText.textContent = "";
+
+    try {
+
+      const { error } =
+        await supabaseAuth.auth.updateUser({
+          password: newPassword
+        });
+
+      if (error) throw error;
+
+         statusText.style.color = "#16803c";
+         statusText.textContent =
+           "Your password has been updated successfully. You can now log in with your new password.";
+
+      resetPasswordForm.reset();
+      submitBtn.textContent = "Password Updated";
+      submitBtn.disabled = true;
+       
+    } catch (error) {
+
+      console.error("Reset Password Error:", error);
+
+      statusText.style.color = "#dc2626";
+      statusText.textContent =
+        "Unable to update your password. Please try again.";
+
+      submitBtn.disabled = false;
+
+    } finally {
+
+      if (!submitBtn.disabled) {
+        submitBtn.textContent = originalButtonText;
+      }
+
+    }
+
+  });
+
+});
+
+
+
 
 
 

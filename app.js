@@ -32,6 +32,75 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 /* =========================================================
+   FORGOT PASSWORD
+   KERJIVA MALAYSIA
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const forgotPasswordForm = document.getElementById("forgotPasswordForm");
+
+  if (!forgotPasswordForm) return;
+
+  const emailInput = document.getElementById("forgotPasswordEmail");
+  const submitBtn = document.getElementById("forgotPasswordSubmitBtn");
+  const statusText = document.getElementById("forgotPasswordStatus");
+
+  forgotPasswordForm.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+    const email = emailInput.value.trim().toLowerCase();
+
+    if (!email) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending...";
+    statusText.textContent = "";
+    statusText.style.color = "";
+
+    try {
+
+      const { error } = await supabaseAuth.auth.resetPasswordForEmail(
+        email,
+        {
+          redirectTo: new URL(
+            "reset-password.html",
+            window.location.href
+          ).href
+        }
+      );
+
+      if (error) throw error;
+
+      statusText.style.color = "#16803c";
+      statusText.textContent =
+        "If an account exists with this email address, a password reset link will be sent.";
+
+      forgotPasswordForm.reset();
+
+    } catch (error) {
+
+      console.error("Forgot Password Error:", error);
+
+      statusText.style.color = "#dc2626";
+      statusText.textContent =
+        "Unable to send the reset link. Please try again later.";
+
+    } finally {
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Send Reset Link";
+
+    }
+
+  });
+
+});
+
+
+
+/* =========================================================
    TEMPORARY DASHBOARD PREVIEW
    KERJIVA MALAYSIA
    REMOVE AFTER LOGIN SYSTEM IS COMPLETED

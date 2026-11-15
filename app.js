@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+
 /* =========================================================
    FORGOT PASSWORD
    KERJIVA MALAYSIA
@@ -57,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
     submitBtn.disabled = true;
     submitBtn.textContent = "Sending...";
     statusText.textContent = "";
-    statusText.style.color = "";
 
     try {
 
@@ -73,9 +73,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (error) throw error;
 
-      statusText.style.color = "#16803c";
-      statusText.textContent =
-        "If an account exists with this email address, a password reset link will be sent.";
+      statusText.textContent = "";
+
+      showKerjivaNotification(
+        "If an account exists with this email address, a password reset link will be sent.",
+        "success"
+      );
 
       forgotPasswordForm.reset();
 
@@ -83,9 +86,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       console.error("Forgot Password Error:", error);
 
-      statusText.style.color = "#dc2626";
-      statusText.textContent =
-        "Unable to send the reset link. Please try again later.";
+      statusText.textContent = "";
+
+      showKerjivaNotification(
+        "Unable to send the reset link. Please try again later.",
+        "error"
+      );
 
     } finally {
 
@@ -97,8 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
-
-
 
 /* =========================================================
    TEMPORARY DASHBOARD PREVIEW

@@ -98,31 +98,38 @@
 </header>
 
 
-  <!-- HERO SECTION -->
-  <main>
 
-    <section class="hero-section" id="home">
-      <div class="container hero-content">
+<!-- HERO SECTION -->
+<section class="hero-section" id="home">
+  <div class="container hero-content">
 
-        <div class="hero-text">
-          <span class="hero-label">YOUR CAREER STARTS HERE</span>
+    <div class="hero-text">
+      <span class="hero-label" data-i18n="hero_label">
+        YOUR CAREER STARTS HERE
+      </span>
 
-          <h1>Find the Right Job for You.</h1>
+      <h1 data-i18n="hero_title">
+        Find the Right Job for You.
+      </h1>
 
-          <p>
-            Discover new career opportunities and connect
-            with companies across Malaysia.
-          </p>
+      <p data-i18n="hero_description">
+        Discover new career opportunities and connect
+        with companies across Malaysia.
+      </p>
 
-          <div class="hero-buttons">
-            <a href="#jobs" class="primary-btn">Explore Jobs</a>
-            <a href="register.html" class="secondary-btn">Create an Account</a>
-          </div>
-        </div>
+      <div class="hero-buttons">
+        <a href="#jobs" class="primary-btn" data-i18n="hero_explore">
+          Explore Jobs
+        </a>
 
+        <a href="register.html" class="secondary-btn" data-i18n="hero_register">
+          Create an Account
+        </a>
       </div>
-    </section>
+    </div>
 
+  </div>
+</section>
 
         
 <!-- JOB SEARCH -->
@@ -133,249 +140,302 @@
 
       <!-- JOB TITLE -->
       <div class="search-field">
-        <label for="keyword">Job Title or Keyword</label>
+        <label for="keyword" data-i18n="search_job_title">
+          Job Title or Keyword
+        </label>
+
         <input
           type="text"
           id="keyword"
           placeholder="e.g. Marketing Executive"
+          data-i18n-placeholder="search_job_placeholder"
         >
       </div>
 
-      <!-- LOCATION -->
-      <div class="search-field">
-        <label for="location">State / City</label>
-        <select id="location">
-          <option value="">All Locations</option>
-          <option>Kuala Lumpur</option>
-          <option>Selangor</option>
-          <option>Johor</option>
-          <option>Penang</option>
-          <option>Perak</option>
-          <option>Melaka</option>
-          <option>Negeri Sembilan</option>
-          <option>Pahang</option>
-          <option>Terengganu</option>
-          <option>Kelantan</option>
-          <option>Kedah</option>
-          <option>Perlis</option>
-          <option>Sabah</option>
-          <option>Sarawak</option>
-          <option>Putrajaya</option>
-          <option>Labuan</option>
-        </select>
-      </div>
 
-      <!-- JOB CATEGORY -->
-      <div class="search-field">
-        <label for="jobCategory">Job Category</label>
-        <select id="jobCategory">
-          <option value="">All Categories</option>
-          <option value="Accounting & Finance">Accounting & Finance</option>
-          <option value="Administration & Office Support">Administration & Office Support</option>
-          <option value="Architecture & Interior Design">Architecture & Interior Design</option>
-          <option value="Banking & Financial Services">Banking & Financial Services</option>
-          <option value="Beauty, Wellness & Personal Care">Beauty, Wellness & Personal Care</option>
-          <option value="Construction & Building">Construction & Building</option>
-          <option value="Customer Service">Customer Service</option>
-          <option value="Design & Creative">Design & Creative</option>
-          <option value="Education & Training">Education & Training</option>
-          <option value="Engineering">Engineering</option>
-          <option value="Food & Beverage">Food & Beverage</option>
-          <option value="Government & Public Services">Government & Public Services</option>
-          <option value="Healthcare & Medical">Healthcare & Medical</option>
-          <option value="Hospitality & Tourism">Hospitality & Tourism</option>
-          <option value="Human Resources">Human Resources</option>
-          <option value="Information Technology">Information Technology</option>
-          <option value="Insurance">Insurance</option>
-          <option value="Legal">Legal</option>
-          <option value="Logistics, Transport & Supply Chain">Logistics, Transport & Supply Chain</option>
-          <option value="Manufacturing & Production">Manufacturing & Production</option>
-          <option value="Marketing & Communications">Marketing & Communications</option>
-          <option value="Media & Entertainment">Media & Entertainment</option>
-          <option value="Oil, Gas & Energy">Oil, Gas & Energy</option>
-          <option value="Property & Real Estate">Property & Real Estate</option>
-          <option value="Retail & Merchandising">Retail & Merchandising</option>
-          <option value="Sales & Business Development">Sales & Business Development</option>
-          <option value="Science & Research">Science & Research</option>
-          <option value="Security & Safety">Security & Safety</option>
-          <option value="Telecommunications">Telecommunications</option>
-          <option value="Agriculture & Plantation">Agriculture & Plantation</option>
-          <option value="Automotive">Automotive</option>
-          <option value="Aviation">Aviation</option>
-          <option value="Environmental & Sustainability">Environmental & Sustainability</option>
-          <option value="NGO & Social Services">NGO & Social Services</option>
-          <option value="Others">Others</option>
-        </select>
-      </div>
+   
+<!-- LOCATION -->
+<div class="search-field">
+  <label for="location" data-i18n="search_location_label">
+    State / City
+  </label>
 
-      <!-- JOB TYPE -->
-      <div class="search-field">
-        <label for="jobType">Job Type</label>
-        <select id="jobType">
-          <option value="">All Job Types</option>
-          <option value="Full-time">Full-time</option>
-          <option value="Part-time">Part-time</option>
-          <option value="Contract">Contract</option>
-          <option value="Temporary">Temporary</option>
-          <option value="Internship">Internship</option>
-          <option value="Freelance">Freelance</option>
-          <option value="Casual">Casual</option>
-          <option value="Apprenticeship">Apprenticeship</option>
-          <option value="Graduate Programme">Graduate Programme</option>
-        </select>
-      </div>
+  <select id="location">
+    <option value="" data-i18n="search_all_locations">All Locations</option>
+    <option>Kuala Lumpur</option>
+    <option>Selangor</option>
+    <option>Johor</option>
+    <option>Penang</option>
+    <option>Perak</option>
+    <option>Melaka</option>
+    <option>Negeri Sembilan</option>
+    <option>Pahang</option>
+    <option>Terengganu</option>
+    <option>Kelantan</option>
+    <option>Kedah</option>
+    <option>Perlis</option>
+    <option>Sabah</option>
+    <option>Sarawak</option>
+    <option>Putrajaya</option>
+    <option>Labuan</option>
+  </select>
+</div>
 
-          <button type="button" id="searchJobsBtn" class="search-btn">
-           Find Jobs
-          </button>
+   
+<!-- JOB CATEGORY -->
+<div class="search-field">
+  <label for="jobCategory" data-i18n="search_category_label">
+    Job Category
+  </label>
 
-    </div>
- 
+  <select id="jobCategory">
+    <option value="" data-i18n="search_all_categories">All Categories</option>
+    <option value="Accounting & Finance" data-i18n="category_accounting">Accounting & Finance</option>
+    <option value="Administration & Office Support" data-i18n="category_administration">Administration & Office Support</option>
+    <option value="Architecture & Interior Design" data-i18n="category_architecture">Architecture & Interior Design</option>
+    <option value="Banking & Financial Services" data-i18n="category_banking">Banking & Financial Services</option>
+    <option value="Beauty, Wellness & Personal Care" data-i18n="category_beauty">Beauty, Wellness & Personal Care</option>
+    <option value="Construction & Building" data-i18n="category_construction">Construction & Building</option>
+    <option value="Customer Service" data-i18n="category_customer_service">Customer Service</option>
+    <option value="Design & Creative" data-i18n="category_design">Design & Creative</option>
+    <option value="Education & Training" data-i18n="category_education">Education & Training</option>
+    <option value="Engineering" data-i18n="category_engineering">Engineering</option>
+    <option value="Food & Beverage" data-i18n="category_food_beverage">Food & Beverage</option>
+    <option value="Government & Public Services" data-i18n="category_government">Government & Public Services</option>
+    <option value="Healthcare & Medical" data-i18n="category_healthcare">Healthcare & Medical</option>
+    <option value="Hospitality & Tourism" data-i18n="category_hospitality">Hospitality & Tourism</option>
+    <option value="Human Resources" data-i18n="category_hr">Human Resources</option>
+    <option value="Information Technology" data-i18n="category_it">Information Technology</option>
+    <option value="Insurance" data-i18n="category_insurance">Insurance</option>
+    <option value="Legal" data-i18n="category_legal">Legal</option>
+    <option value="Logistics, Transport & Supply Chain" data-i18n="category_logistics">Logistics, Transport & Supply Chain</option>
+    <option value="Manufacturing & Production" data-i18n="category_manufacturing">Manufacturing & Production</option>
+    <option value="Marketing & Communications" data-i18n="category_marketing">Marketing & Communications</option>
+    <option value="Media & Entertainment" data-i18n="category_media">Media & Entertainment</option>
+    <option value="Oil, Gas & Energy" data-i18n="category_energy">Oil, Gas & Energy</option>
+    <option value="Property & Real Estate" data-i18n="category_property">Property & Real Estate</option>
+    <option value="Retail & Merchandising" data-i18n="category_retail">Retail & Merchandising</option>
+    <option value="Sales & Business Development" data-i18n="category_sales">Sales & Business Development</option>
+    <option value="Science & Research" data-i18n="category_science">Science & Research</option>
+    <option value="Security & Safety" data-i18n="category_security">Security & Safety</option>
+    <option value="Telecommunications" data-i18n="category_telecommunications">Telecommunications</option>
+    <option value="Agriculture & Plantation" data-i18n="category_agriculture">Agriculture & Plantation</option>
+    <option value="Automotive" data-i18n="category_automotive">Automotive</option>
+    <option value="Aviation" data-i18n="category_aviation">Aviation</option>
+    <option value="Environmental & Sustainability" data-i18n="category_environmental">Environmental & Sustainability</option>
+    <option value="NGO & Social Services" data-i18n="category_ngo">NGO & Social Services</option>
+    <option value="Others" data-i18n="category_others">Others</option>
+  </select>
+</div>
+
+    
+<!-- JOB TYPE -->
+<div class="search-field">
+  <label for="jobType" data-i18n="search_job_type_label">
+    Job Type
+  </label>
+
+  <select id="jobType">
+    <option value="" data-i18n="search_all_job_types">All Job Types</option>
+    <option value="Full-time" data-i18n="jobtype_fulltime">Full-time</option>
+    <option value="Part-time" data-i18n="jobtype_parttime">Part-time</option>
+    <option value="Contract" data-i18n="jobtype_contract">Contract</option>
+    <option value="Temporary" data-i18n="jobtype_temporary">Temporary</option>
+    <option value="Internship" data-i18n="jobtype_internship">Internship</option>
+    <option value="Freelance" data-i18n="jobtype_freelance">Freelance</option>
+    <option value="Casual" data-i18n="jobtype_casual">Casual</option>
+    <option value="Apprenticeship" data-i18n="jobtype_apprenticeship">Apprenticeship</option>
+    <option value="Graduate Programme" data-i18n="jobtype_graduate">Graduate Programme</option>
+  </select>
+</div>
+
+<button
+  type="button"
+  id="searchJobsBtn"
+  class="search-btn"
+  data-i18n="search_button"
+>
+  Find Jobs
+</button>
+
+</div>
+
   </div>
 </section>
 
-    <!-- LATEST JOBS -->
-    <section class="jobs-section" id="jobs">
-      <div class="container">
+  
+<!-- LATEST JOBS -->
+<section class="jobs-section" id="jobs">
+  <div class="container">
 
-        <div class="section-heading">
-          <div>
-            <span class="section-label">CAREER OPPORTUNITIES</span>
-            <h2>Latest Job Opportunities</h2>
-            <p>Explore the latest opportunities from companies in Malaysia.</p>
-          </div>
+    <div class="section-heading">
+      <div>
+        <span class="section-label" data-i18n="jobs_section_label">
+          CAREER OPPORTUNITIES
+        </span>
 
-          <a href="jobs.html" class="view-all-link">View All Jobs →</a>
-        </div>
+        <h2 data-i18n="jobs_section_title">
+          Latest Job Opportunities
+        </h2>
 
-        <div id="jobsGrid" class="jobs-grid">
-
-          <div class="empty-jobs">
-            <h3>No Jobs Available Yet</h3>
-            <p>New job opportunities will appear here soon.</p>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- JOB SEEKER SECTION -->
-    <section class="career-section" id="jobseekers">
-      <div class="container career-content">
-
-        <div class="career-text">
-          <span class="section-label">FOR JOB SEEKERS</span>
-
-          <h2>Build Your Career with Kerjiva</h2>
-
-          <p>
-            Create your profile, explore job opportunities,
-            and connect with companies that match your career goals.
-          </p>
-
-          <a href="register.html" class="primary-btn">
-            Find Your Next Job
-          </a>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- COMPANY SECTION -->
-    <section class="company-section" id="companies">
-      <div class="container company-content">
-
-        <div class="company-text">
-          <span class="section-label">FOR COMPANIES</span>
-
-          <h2>Find the Right Talent for Your Business</h2>
-
-          <p>
-            Connect with qualified candidates and discover
-            new talent for your company's future.
-          </p>
-
-          <a href="register.html" class="primary-btn">
-            Register Your Company
-          </a>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- ABOUT SECTION -->
-    <section class="about-section" id="about">
-      <div class="container">
-
-        <span class="section-label">ABOUT KERJIVA</span>
-
-        <h2>Connecting People with Opportunities</h2>
-
-        <p>
-          Kerjiva Malaysia is a career platform designed to
-          connect job seekers with companies and make finding
-          the right career opportunity easier.
+        <p data-i18n="jobs_section_description">
+          Explore the latest opportunities from companies in Malaysia.
         </p>
-
       </div>
-    </section>
 
-  </main>
+      <a href="jobs.html" class="view-all-link" data-i18n="jobs_view_all">
+        View All Jobs →
+      </a>
+    </div>
 
-  <!-- =====================================================
-       KERJIVA MALAYSIA
-       JOB DETAILS MODAL
-       ===================================================== -->
+    <div id="jobsGrid" class="jobs-grid">
 
-  <div
-    id="homepageJobDetailsModal"
-    class="job-modal"
-    hidden
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="homepageJobDetailsTitle"
-  >
-       
-<div class="job-modal-content">
+      <div class="empty-jobs">
+        <h3 data-i18n="jobs_empty_title">No Jobs Available Yet</h3>
 
-  <button
-    type="button"
-    id="closeHomepageJobDetails"
-    class="job-modal-close"
-    aria-label="Close job details"
-  >
-    &times;
-  </button>
-
-  <div class="homepage-job-details-layout">
-
-    <div class="homepage-job-details-main">
-
-      <div id="homepageJobDetailsContent"></div>
-
-      <button
-        type="button"
-        id="homepageApplyNowBtn"
-        class="primary-btn"
-      >
-        Apply Now
-      </button>
+        <p data-i18n="jobs_empty_description">
+          New job opportunities will appear here soon.
+        </p>
+      </div>
 
     </div>
 
-    <div class="homepage-job-details-notice">
+  </div>
+</section>
 
-      <p
-        id="homepageApplyStatus"
-        class="homepage-apply-status"
-        role="status"
-        aria-live="polite"
-        hidden
-      ></p>
+  
+<!-- JOB SEEKER SECTION -->
+<section class="career-section" id="jobseekers">
+  <div class="container career-content">
+
+    <div class="career-text">
+      <span class="section-label" data-i18n="jobseeker_section_label">
+        FOR JOB SEEKERS
+      </span>
+
+      <h2 data-i18n="jobseeker_section_title">
+        Build Your Career with Kerjiva
+      </h2>
+
+      <p data-i18n="jobseeker_section_description">
+        Create your profile, explore job opportunities,
+        and connect with companies that match your career goals.
+      </p>
+
+      <a href="register.html" class="primary-btn" data-i18n="jobseeker_section_button">
+        Find Your Next Job
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- COMPANY SECTION -->
+<section class="company-section" id="companies">
+  <div class="container company-content">
+
+    <div class="company-text">
+      <span class="section-label" data-i18n="company_section_label">
+        FOR COMPANIES
+      </span>
+
+      <h2 data-i18n="company_section_title">
+        Find the Right Talent for Your Business
+      </h2>
+
+      <p data-i18n="company_section_description">
+        Connect with qualified candidates and discover
+        new talent for your company's future.
+      </p>
+
+      <a href="register.html" class="primary-btn" data-i18n="company_section_button">
+        Register Your Company
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ABOUT SECTION -->
+<section class="about-section" id="about">
+  <div class="container">
+
+    <span class="section-label" data-i18n="about_section_label">
+      ABOUT KERJIVA
+    </span>
+
+    <h2 data-i18n="about_section_title">
+      Connecting People with Opportunities
+    </h2>
+
+    <p data-i18n="about_section_description">
+      Kerjiva Malaysia is a career platform designed to
+      connect job seekers with companies and make finding
+      the right career opportunity easier.
+    </p>
+
+  </div>
+</section>
+
+</main>
+
+  
+<!-- =====================================================
+     KERJIVA MALAYSIA
+     JOB DETAILS MODAL
+     ===================================================== -->
+
+<div
+  id="homepageJobDetailsModal"
+  class="job-modal"
+  hidden
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="homepageJobDetailsTitle"
+>
+
+  <div class="job-modal-content">
+
+    <button
+      type="button"
+      id="closeHomepageJobDetails"
+      class="job-modal-close"
+      aria-label="Close job details"
+      data-i18n-aria-label="job_details_close"
+    >
+      &times;
+    </button>
+
+    <div class="homepage-job-details-layout">
+
+      <div class="homepage-job-details-main">
+
+        <div id="homepageJobDetailsContent"></div>
+
+        <button
+          type="button"
+          id="homepageApplyNowBtn"
+          class="primary-btn"
+          data-i18n="job_details_apply"
+        >
+          Apply Now
+        </button>
+
+      </div>
+
+      <div class="homepage-job-details-notice">
+
+        <p
+          id="homepageApplyStatus"
+          class="homepage-apply-status"
+          role="status"
+          aria-live="polite"
+          hidden
+        ></p>
+
+      </div>
 
     </div>
 
@@ -383,105 +443,121 @@
 
 </div>
 
+
+<!-- =====================================================
+     KERJIVA MALAYSIA
+     APPLY JOB DOCUMENT MODAL
+     ===================================================== -->
+
+<div
+  id="homepageApplyDocumentsModal"
+  class="job-modal"
+  hidden
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="homepageApplyDocumentsTitle"
+>
+  <div class="job-modal-content">
+
+    <button
+      type="button"
+      id="closeHomepageApplyDocuments"
+      class="job-modal-close"
+      aria-label="Close document selection"
+      data-i18n-aria-label="apply_documents_close"
+    >
+      &times;
+    </button>
+
+    <h2
+      id="homepageApplyDocumentsTitle"
+      data-i18n="apply_documents_title"
+    >
+      Select Application Documents
+    </h2>
+
+    <p data-i18n="apply_documents_description">
+      Select the documents you want to attach to your application.
+    </p>
+
+    <div id="homepageApplyDocumentList"></div>
+
+    <label for="homepageApplyCoverLetter" data-i18n="apply_cover_letter_label">
+      Cover Letter (Optional)
+    </label>
+
+    <textarea
+      id="homepageApplyCoverLetter"
+      rows="5"
+      placeholder="Write a short cover letter..."
+      data-i18n-placeholder="apply_cover_letter_placeholder"
+    ></textarea>
+
+    <p
+      id="homepageApplyDocumentStatus"
+      role="status"
+      aria-live="polite"
+    ></p>
+
+    <button
+      type="button"
+      id="submitHomepageApplicationBtn"
+      class="primary-btn"
+      data-i18n="apply_submit_button"
+    >
+      Submit Application
+    </button>
+
   </div>
+</div>
 
 
-  <!-- =====================================================
-       KERJIVA MALAYSIA
-       APPLY JOB DOCUMENT MODAL
-       ===================================================== -->
+<!-- FOOTER -->
 
-  <div
-    id="homepageApplyDocumentsModal"
-    class="job-modal"
-    hidden
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="homepageApplyDocumentsTitle"
-  >
-    <div class="job-modal-content">
+<footer class="main-footer">
+  <div class="container footer-content">
 
-      <button
-        type="button"
-        id="closeHomepageApplyDocuments"
-        class="job-modal-close"
-        aria-label="Close document selection"
-      >
-        &times;
-      </button>
+    <div class="footer-brand">
+      <h2>Kerjiva Malaysia</h2>
 
-      <h2 id="homepageApplyDocumentsTitle">
-        Select Application Documents
-      </h2>
-
-      <p>
-        Select the documents you want to attach to your application.
+      <p data-i18n="footer_brand_description">
+        Find the Right Job for You.
       </p>
-
-      <div id="homepageApplyDocumentList"></div>
-
-      <label for="homepageApplyCoverLetter">
-        Cover Letter (Optional)
-      </label>
-
-      <textarea
-        id="homepageApplyCoverLetter"
-        rows="5"
-        placeholder="Write a short cover letter..."
-      ></textarea>
-
-      <p
-        id="homepageApplyDocumentStatus"
-        role="status"
-        aria-live="polite"
-      ></p>
-
-      <button
-        type="button"
-        id="submitHomepageApplicationBtn"
-        class="primary-btn"
-      >
-        Submit Application
-      </button>
-
     </div>
+
+    <div class="footer-links">
+      <h3 data-i18n="footer_explore">Explore</h3>
+
+      <a href="#home" data-i18n="footer_home">Home</a>
+      <a href="#jobs" data-i18n="footer_find_jobs">Find Jobs</a>
+      <a href="#companies" data-i18n="footer_companies">Companies</a>
+      <a href="#about" data-i18n="footer_about">About Us</a>
+    </div>
+
+    <div class="footer-links">
+      <h3 data-i18n="footer_information">Information</h3>
+
+      <a href="contact.html" data-i18n="footer_contact">Contact Us</a>
+      <a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a>
+      <a href="terms.html" data-i18n="footer_terms">Terms & Conditions</a>
+    </div>
+
   </div>
 
+  <div class="footer-bottom">
+    <p data-i18n="footer_copyright">
+      © 2026 Kerjiva Malaysia. All rights reserved.
+    </p>
+  </div>
+</footer>
 
-  <!-- FOOTER -->
-
-
-  <!-- FOOTER -->
-  <footer class="main-footer">
-    <div class="container footer-content">
-
-      <div class="footer-brand">
-        <h2>Kerjiva Malaysia</h2>
-        <p>Find the Right Job for You.</p>
-      </div>
-
-      <div class="footer-links">
-        <h3>Explore</h3>
-        <a href="#home">Home</a>
-        <a href="#jobs">Find Jobs</a>
-        <a href="#companies">Companies</a>
-        <a href="#about">About Us</a>
-      </div>
-
-      <div class="footer-links">
-        <h3>Information</h3>
-        <a href="contact.html">Contact Us</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms & Conditions</a>
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      <p>© 2026 Kerjiva Malaysia. All rights reserved.</p>
-    </div>
-  </footer>
   
+
+  
+
+
+
+
 <!-- =====================================================
      KERJIVA MALAYSIA
      JOBSEEKER DASHBOARD
@@ -489,214 +565,260 @@
 
 <section id="jobseekerDashboard" class="dashboard-page" hidden>
 
-  <!-- DASHBOARD HEADER -->
-  <header class="dashboard-header">
-    <div class="dashboard-brand">
-      <a href="#home" class="logo">
-        Kerjiva
-        <small>MALAYSIA</small>
-      </a>
-    </div>
 
-    <div class="dashboard-header-right">
-      <span id="jobseekerWelcome">Welcome, Job Seeker</span>
+<!-- DASHBOARD HEADER -->
+<header class="dashboard-header">
+  <div class="dashboard-brand">
+    <a href="#home" class="logo">
+      Kerjiva
+      <small>MALAYSIA</small>
+    </a>
+  </div>
 
-      <button type="button" id="jobseekerNotificationBtn">
-        Notifications
-      </button>
+  <div class="dashboard-header-right">
+    <span id="jobseekerWelcome">Welcome, Job Seeker</span>
 
-      <button type="button" id="jobseekerLogoutBtn">
-        Logout
-      </button>
-    </div>
-  </header>
+    <button
+      type="button"
+      id="jobseekerNotificationBtn"
+      data-i18n="dashboard_notifications"
+    >
+      Notifications
+    </button>
+
+    <button
+      type="button"
+      id="jobseekerLogoutBtn"
+      data-i18n="dashboard_logout"
+    >
+      Logout
+    </button>
+  </div>
+</header>
+
 
 
   <div class="dashboard-layout">
 
-    <!-- SIDEBAR -->
-    <aside class="dashboard-sidebar">
+  
+<!-- SIDEBAR -->
+<aside class="dashboard-sidebar">
 
-      <div class="sidebar-profile">
-        <div class="profile-avatar" id="jobseekerAvatar">
-          JS
-        </div>
+  <div class="sidebar-profile">
+    <div class="profile-avatar" id="jobseekerAvatar">
+      JS
+    </div>
 
-        <h3 id="jobseekerSidebarName">Job Seeker</h3>
-        <p>Job Seeker Account</p>
+    <h3 id="jobseekerSidebarName">Job Seeker</h3>
+    <p data-i18n="dashboard_jobseeker_account">Job Seeker Account</p>
+  </div>
+
+  <nav class="dashboard-menu">
+
+    <a href="#jobseekerOverview" class="dashboard-menu-link active" data-i18n="dashboard_menu">
+      Dashboard
+    </a>
+
+    <a href="#jobseekerProfile" class="dashboard-menu-link" data-i18n="dashboard_my_profile">
+      My Profile
+    </a>
+
+    <a href="#jobseekerDocuments" class="dashboard-menu-link" data-i18n="dashboard_my_documents">
+      My Documents
+    </a>
+
+    <a href="#jobs" class="dashboard-menu-link" id="backToHomepage" data-i18n="dashboard_find_jobs">
+      Find Jobs
+    </a>
+
+    <a href="#jobseekerApplications" class="dashboard-menu-link" data-i18n="dashboard_my_applications">
+      My Applications
+    </a>
+
+    <a href="#jobseekerInterviews" class="dashboard-menu-link" data-i18n="dashboard_interview_invitations">
+      Interview Invitations
+    </a>
+
+    <a href="#jobseekerSettings" class="dashboard-menu-link" data-i18n="dashboard_account_settings">
+      Account Settings
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <p>Kerjiva Malaysia</p>
+    <small data-i18n="dashboard_career_partner">Your Career Partner</small>
+  </div>
+
+</aside>
+
+
+<!-- MAIN DASHBOARD CONTENT -->
+<main class="dashboard-main">
+
+  <!-- OVERVIEW -->
+  <section id="jobseekerOverview" class="dashboard-content-section">
+
+    <div class="dashboard-page-heading">
+      <div>
+        <span class="section-label" data-i18n="jobseeker_portal_label">
+          JOBSEEKER PORTAL
+        </span>
+
+        <h1 data-i18n="jobseeker_dashboard_title">
+          My Dashboard
+        </h1>
+
+        <p data-i18n="jobseeker_dashboard_description">
+          Manage your career, applications and job opportunities.
+        </p>
       </div>
 
-      <nav class="dashboard-menu">
-
-        <a href="#jobseekerOverview" class="dashboard-menu-link active">
-          Dashboard
-        </a>
-
-        <a href="#jobseekerProfile" class="dashboard-menu-link">
-          My Profile
-        </a>
-
-        <a href="#jobseekerDocuments" class="dashboard-menu-link">
-          My Documents
-        </a>
-
-       <a href="#jobs" class="dashboard-menu-link" id="backToHomepage">
-          Find Jobs
-        </a>
-
-        <a href="#jobseekerApplications" class="dashboard-menu-link">
-          My Applications
-        </a>
-
-        <a href="#jobseekerInterviews" class="dashboard-menu-link">
-          Interview Invitations
-        </a>
-
-        <a href="#jobseekerSettings" class="dashboard-menu-link">
-          Account Settings
-        </a>
-
-      </nav>
-
-      <div class="sidebar-footer">
-        <p>Kerjiva Malaysia</p>
-        <small>Your Career Partner</small>
-      </div>
-
-    </aside>
+      <a
+        href="#jobs"
+        class="primary-btn"
+        id="dashboardFindJobBtn"
+        data-i18n="jobseeker_find_job_button"
+      >
+        Find a Job
+      </a>
+    </div>
 
 
-    <!-- MAIN DASHBOARD CONTENT -->
-    <main class="dashboard-main">
+<!-- STATISTICS -->
+<div class="dashboard-stats">
 
-      <!-- OVERVIEW -->
-      <section id="jobseekerOverview" class="dashboard-content-section">
+  <div class="dashboard-stat-card">
+    <span data-i18n="stats_total_applications">Total Applications</span>
+    <h2 id="totalApplications">0</h2>
+    <p data-i18n="stats_applications_submitted">Applications submitted</p>
+  </div>
 
-        <div class="dashboard-page-heading">
-          <div>
-            <span class="section-label">JOBSEEKER PORTAL</span>
-            <h1>My Dashboard</h1>
-            <p>Manage your career, applications and job opportunities.</p>
-          </div>
+  <div class="dashboard-stat-card">
+    <span data-i18n="stats_under_review">Under Review</span>
+    <h2 id="pendingApplications">0</h2>
+    <p data-i18n="stats_applications_reviewed">Applications being reviewed</p>
+  </div>
 
-         <a href="#jobs" class="primary-btn" id="dashboardFindJobBtn">
-          Find a Job
-        </a>
-        </div>
+  <div class="dashboard-stat-card">
+    <span data-i18n="stats_interview_invitations">Interview Invitations</span>
+    <h2 id="totalInterviews">0</h2>
+    <p data-i18n="stats_invitations_received">Invitations received</p>
+  </div>
 
+  <div class="dashboard-stat-card">
+    <span data-i18n="stats_saved_jobs">Saved Jobs</span>
+    <h2 id="totalSavedJobs">0</h2>
+    <p data-i18n="stats_jobs_saved">Jobs saved for later</p>
+  </div>
 
-        <!-- STATISTICS -->
-        <div class="dashboard-stats">
+</div>
 
-          <div class="dashboard-stat-card">
-            <span>Total Applications</span>
-            <h2 id="totalApplications">0</h2>
-            <p>Applications submitted</p>
-          </div>
+ 
+<!-- PROFILE COMPLETION -->
+<div class="dashboard-panel profile-completion">
 
-          <div class="dashboard-stat-card">
-            <span>Under Review</span>
-            <h2 id="pendingApplications">0</h2>
-            <p>Applications being reviewed</p>
-          </div>
+  <div class="panel-heading">
+    <h2 data-i18n="profile_completion_title">Profile Completion</h2>
+    <span id="profileCompletionPercent">0%</span>
+  </div>
 
-          <div class="dashboard-stat-card">
-            <span>Interview Invitations</span>
-            <h2 id="totalInterviews">0</h2>
-            <p>Invitations received</p>
-          </div>
+  <div class="completion-progress">
+    <div
+      id="profileCompletionBar"
+      class="completion-progress-bar"
+    ></div>
+  </div>
 
-          <div class="dashboard-stat-card">
-            <span>Saved Jobs</span>
-            <h2 id="totalSavedJobs">0</h2>
-            <p>Jobs saved for later</p>
-          </div>
+  <p data-i18n="profile_completion_description">
+    Complete your profile to help companies learn more about you.
+  </p>
 
-        </div>
+  <a
+    href="#jobseekerProfile"
+    class="view-all-link"
+    data-i18n="profile_completion_button"
+  >
+    Complete My Profile
+  </a>
 
+</div>
 
-        <!-- PROFILE COMPLETION -->
-        <div class="dashboard-panel profile-completion">
+     
+   
+<!-- RECENT APPLICATIONS -->
+<div class="dashboard-panel">
 
-          <div class="panel-heading">
-            <h2>Profile Completion</h2>
-            <span id="profileCompletionPercent">0%</span>
-          </div>
+  <div class="panel-heading">
+    <h2 data-i18n="recent_applications_title">Recent Applications</h2>
 
-          <div class="completion-progress">
-            <div
-              id="profileCompletionBar"
-              class="completion-progress-bar"
-            ></div>
-          </div>
+    <a
+      href="#jobseekerApplications"
+      class="view-all-link"
+      data-i18n="recent_applications_view_all"
+    >
+      View All
+    </a>
+  </div>
 
-          <p>
-            Complete your profile to help companies learn more about you.
-          </p>
+  <div id="dashboardRecentApplications">
 
-          <a href="#jobseekerProfile" class="view-all-link">
-            Complete My Profile
-          </a>
+    <div class="dashboard-empty-state">
+      <h3 data-i18n="recent_applications_empty_title">No Applications Yet</h3>
 
-        </div>
+      <p data-i18n="recent_applications_empty_description">
+        Your submitted job applications will appear here.
+      </p>
 
+      <a
+        href="#jobs"
+        class="primary-btn"
+        id="dashboardExploreJobsBtn"
+        data-i18n="recent_applications_explore"
+      >
+        Explore Jobs
+      </a>
+    </div>
 
-        <!-- RECENT APPLICATIONS -->
-        <div class="dashboard-panel">
+  </div>
 
-          <div class="panel-heading">
-            <h2>Recent Applications</h2>
-
-            <a href="#jobseekerApplications" class="view-all-link">
-              View All
-            </a>
-          </div>
-
-          <div id="dashboardRecentApplications">
-
-            <div class="dashboard-empty-state">
-              <h3>No Applications Yet</h3>
-              <p>
-                Your submitted job applications will appear here.
-              </p>
-
-             <a href="#jobs" class="primary-btn" id="dashboardExploreJobsBtn">
-              Explore Jobs
-             </a>
-            </div>
-
-          </div>
-
-        </div>
+</div>
 
 
-        <!-- UPCOMING INTERVIEWS -->
-        <div class="dashboard-panel">
+<!-- UPCOMING INTERVIEWS -->
+<div class="dashboard-panel">
 
-          <div class="panel-heading">
-            <h2>Upcoming Interviews</h2>
+  <div class="panel-heading">
+    <h2 data-i18n="upcoming_interviews_title">Upcoming Interviews</h2>
 
-            <a href="#jobseekerInterviews" class="view-all-link">
-              View All
-            </a>
-          </div>
+    <a
+      href="#jobseekerInterviews"
+      class="view-all-link"
+      data-i18n="upcoming_interviews_view_all"
+    >
+      View All
+    </a>
+  </div>
 
-          <div id="dashboardUpcomingInterviews">
+  <div id="dashboardUpcomingInterviews">
 
-            <div class="dashboard-empty-state">
-              <h3>No Upcoming Interviews</h3>
-              <p>
-                Your interview invitations will appear here.
-              </p>
-            </div>
+    <div class="dashboard-empty-state">
+      <h3 data-i18n="upcoming_interviews_empty_title">
+        No Upcoming Interviews
+      </h3>
 
-          </div>
+      <p data-i18n="upcoming_interviews_empty_description">
+        Your interview invitations will appear here.
+      </p>
+    </div>
 
-        </div>
+  </div>
 
-      </section>
+</div>
 
+</section>
 
+     
     
 
 <!-- MY PROFILE -->
@@ -704,226 +826,275 @@
 
   <div class="dashboard-page-heading">
     <div>
-      <h1>My Profile</h1>
-      <p>Manage your personal and professional information in one place.</p>
+      <h1 data-i18n="my_profile_title">My Profile</h1>
+
+      <p data-i18n="my_profile_description">
+        Manage your personal and professional information in one place.
+      </p>
     </div>
   </div>
-  
-  <!-- PROFILE PHOTO -->
-  <div class="dashboard-panel jobseeker-photo-panel">
 
-    <div class="jobseeker-photo-content">
 
-      <div class="jobseeker-photo-preview" id="jobseekerPhotoPreview">
+<!-- PROFILE PHOTO -->
+<div class="dashboard-panel jobseeker-photo-panel">
 
-        <span id="jobseekerPhotoInitials">JS</span>
+  <div class="jobseeker-photo-content">
 
-        <img
-          id="jobseekerPhotoImage"
-          src=""
-          alt="Jobseeker Profile Photo"
+    <div class="jobseeker-photo-preview" id="jobseekerPhotoPreview">
+
+      <span id="jobseekerPhotoInitials">JS</span>
+
+      <img
+        id="jobseekerPhotoImage"
+        src=""
+        alt="Jobseeker Profile Photo"
+        data-i18n-alt="profile_photo_alt"
+        hidden
+      >
+
+    </div>
+
+    <div class="jobseeker-photo-details">
+
+      <h2 data-i18n="profile_photo_title">Profile Photo</h2>
+
+      <p data-i18n="profile_photo_description">
+        Upload a profile photo to help companies recognise you.
+      </p>
+
+      <p
+        class="jobseeker-photo-requirements"
+        data-i18n="profile_photo_requirements"
+      >
+        JPG, PNG, or WebP. Maximum file size: 2 MB.
+      </p>
+
+      <div class="jobseeker-photo-actions">
+
+        <input
+          type="file"
+          id="jobseekerAvatarFile"
+          accept="image/jpeg,image/png,image/webp"
           hidden
         >
 
-      </div>
+        <button
+          type="button"
+          id="chooseJobseekerAvatarBtn"
+          data-i18n="profile_photo_choose"
+        >
+          Choose Photo
+        </button>
 
-      <div class="jobseeker-photo-details">
+        <button
+          type="button"
+          id="uploadJobseekerAvatarBtn"
+          disabled
+          data-i18n="profile_photo_upload"
+        >
+          Upload Photo
+        </button>
 
-        <h2>Profile Photo</h2>
-
-        <p>
-          Upload a profile photo to help companies recognise you.
-        </p>
-
-        <p class="jobseeker-photo-requirements">
-          JPG, PNG, or WebP. Maximum file size: 2 MB.
-        </p>
-
-        <div class="jobseeker-photo-actions">
-
-          <input
-            type="file"
-            id="jobseekerAvatarFile"
-            accept="image/jpeg,image/png,image/webp"
-            hidden
-          >
-
-          <button
-            type="button"
-            id="chooseJobseekerAvatarBtn"
-          >
-            Choose Photo
-          </button>
-
-          <button
-            type="button"
-            id="uploadJobseekerAvatarBtn"
-            disabled
-          >
-            Upload Photo
-          </button>
-
-          <button
-            type="button"
-            id="removeJobseekerAvatarBtn"
-            hidden
-          >
-            Remove Photo
-          </button>
-
-        </div>
-
-        <p id="jobseekerAvatarStatus" role="status"></p>
+        <button
+          type="button"
+          id="removeJobseekerAvatarBtn"
+          hidden
+          data-i18n="profile_photo_remove"
+        >
+          Remove Photo
+        </button>
 
       </div>
+
+      <p id="jobseekerAvatarStatus" role="status"></p>
 
     </div>
 
   </div>
-  <!-- END PROFILE PHOTO -->
 
+</div>
 
-  <form id="jobseekerProfileForm" class="jobseeker-profile-form">
+ 
+<!-- END PROFILE PHOTO -->
 
-    <div class="dashboard-panel jobseeker-profile-panel">
+<form id="jobseekerProfileForm" class="jobseeker-profile-form">
 
-      <div class="jobseeker-profile-top">
-        <div>
-          <h2>Profile Information</h2>
-          <p>Keep your information updated to improve your career opportunities.</p>
-        </div>
+  <div class="dashboard-panel jobseeker-profile-panel">
 
-        <button
-          type="button"
-          id="editJobseekerProfileBtn"
-          class="profile-edit-btn"
-        >
-          Edit Profile
-        </button>
+    <div class="jobseeker-profile-top">
+      <div>
+        <h2 data-i18n="profile_information_title">Profile Information</h2>
+        <p data-i18n="profile_information_description">
+          Keep your information updated to improve your career opportunities.
+        </p>
       </div>
 
-      <fieldset id="jobseekerProfileFields" disabled>
+      <button
+        type="button"
+        id="editJobseekerProfileBtn"
+        class="profile-edit-btn"
+        data-i18n="profile_edit_button"
+      >
+        Edit Profile
+      </button>
+    </div>
 
-        <div class="jobseeker-profile-grid">
+    <fieldset id="jobseekerProfileFields" disabled>
 
-          <div class="form-group">
-            <label for="profileFullNameInput">Full Name</label>
-            <input type="text" id="profileFullNameInput" name="full_name" required>
-          </div>
+      <div class="jobseeker-profile-grid">
 
-          <div class="form-group">
-            <label for="profileEmailInput">Email Address</label>
-            <input type="email" id="profileEmailInput" name="email" readonly>
-          </div>
-
-          <div class="form-group">
-            <label for="profilePhoneInput">Phone Number</label>
-            <input type="tel" id="profilePhoneInput" name="phone">
-          </div>
-
-          <div class="form-group">
-            <label for="profileStateInput">State</label>
-            <input type="text" id="profileStateInput" name="state">
-          </div>
-
-          <div class="form-group">
-            <label for="profileCityInput">City</label>
-            <input type="text" id="profileCityInput" name="city">
-          </div>
-
-          <div class="form-group full-width">
-            <label for="profileAddressInput">Address</label>
-            <textarea id="profileAddressInput" name="address" rows="3"></textarea>
-          </div>
-
-          <div class="form-group full-width">
-            <label for="profileHeadlineInput">Professional Headline</label>
-            <input type="text" id="profileHeadlineInput" name="headline" placeholder="Example: Marketing Executive">
-          </div>
-
-          <div class="form-group full-width">
-            <label for="profileAboutInput">About Me</label>
-            <textarea id="profileAboutInput" name="about_me" rows="4"></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="profileEducationInput">Education Level</label>
-            <input type="text" id="profileEducationInput" name="education_level">
-          </div>
-
-          <div class="form-group">
-            <label for="profileFieldOfStudyInput">Field of Study</label>
-            <input type="text" id="profileFieldOfStudyInput" name="field_of_study">
-          </div>
-
-          <div class="form-group">
-            <label for="profileInstitutionInput">Institution</label>
-            <input type="text" id="profileInstitutionInput" name="institution">
-          </div>
-
-          <div class="form-group">
-            <label for="profileGraduationYearInput">Graduation Year</label>
-            <input type="number" id="profileGraduationYearInput" name="graduation_year" min="1950" max="2100">
-          </div>
-
-          <div class="form-group">
-            <label for="profileExperienceInput">Years of Experience</label>
-            <input type="number" id="profileExperienceInput" name="experience_years" min="0" step="0.5">
-          </div>
-
-          <div class="form-group">
-            <label for="profileEmploymentTypeInput">Preferred Employment Type</label>
-            <select id="profileEmploymentTypeInput" name="employment_type">
-              <option value="">Select Employment Type</option>
-              <option value="Full-time">Full-time</option>
-              <option value="Part-time">Part-time</option>
-              <option value="Contract">Contract</option>
-              <option value="Temporary">Temporary</option>
-              <option value="Internship">Internship</option>
-              <option value="Freelance">Freelance</option>
-            </select>
-          </div>
-
-          <div class="form-group full-width">
-            <label for="profileSkillsInput">Skills</label>
-            <textarea id="profileSkillsInput" name="skills" rows="3" placeholder="Example: Communication, Microsoft Excel, Leadership"></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="profileSalaryMinInput">Expected Minimum Salary (MYR)</label>
-            <input type="number" id="profileSalaryMinInput" name="expected_salary_min" min="0" step="0.01">
-          </div>
-
-          <div class="form-group">
-            <label for="profileSalaryMaxInput">Expected Maximum Salary (MYR)</label>
-            <input type="number" id="profileSalaryMaxInput" name="expected_salary_max" min="0" step="0.01">
-          </div>
-
-          <input type="hidden" id="profileSalaryCurrencyInput" name="salary_currency" value="MYR">
-
-          <div class="form-group">
-            <label for="profileLinkedinInput">LinkedIn Profile</label>
-            <input type="url" id="profileLinkedinInput" name="linkedin_url" placeholder="https://www.linkedin.com/in/...">
-          </div>
-
-          <div class="form-group">
-            <label for="profilePortfolioInput">Portfolio Website</label>
-            <input type="url" id="profilePortfolioInput" name="portfolio_url" placeholder="https://...">
-          </div>
-
+        <div class="form-group">
+          <label for="profileFullNameInput" data-i18n="profile_full_name">Full Name</label>
+          <input type="text" id="profileFullNameInput" name="full_name" required>
         </div>
 
-      </fieldset>
+        <div class="form-group">
+          <label for="profileEmailInput" data-i18n="profile_email">Email Address</label>
+          <input type="email" id="profileEmailInput" name="email" readonly>
+        </div>
 
+        <div class="form-group">
+          <label for="profilePhoneInput" data-i18n="profile_phone">Phone Number</label>
+          <input type="tel" id="profilePhoneInput" name="phone">
+        </div>
+
+        <div class="form-group">
+          <label for="profileStateInput" data-i18n="profile_state">State</label>
+          <input type="text" id="profileStateInput" name="state">
+        </div>
+
+        <div class="form-group">
+          <label for="profileCityInput" data-i18n="profile_city">City</label>
+          <input type="text" id="profileCityInput" name="city">
+        </div>
+
+        <div class="form-group full-width">
+          <label for="profileAddressInput" data-i18n="profile_address">Address</label>
+          <textarea id="profileAddressInput" name="address" rows="3"></textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="profileHeadlineInput" data-i18n="profile_headline">Professional Headline</label>
+          <input
+            type="text"
+            id="profileHeadlineInput"
+            name="headline"
+            placeholder="Example: Marketing Executive"
+            data-i18n-placeholder="profile_headline_placeholder"
+          >
+        </div>
+
+        <div class="form-group full-width">
+          <label for="profileAboutInput" data-i18n="profile_about">About Me</label>
+          <textarea id="profileAboutInput" name="about_me" rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="profileEducationInput" data-i18n="profile_education">Education Level</label>
+          <input type="text" id="profileEducationInput" name="education_level">
+        </div>
+
+        <div class="form-group">
+          <label for="profileFieldOfStudyInput" data-i18n="profile_field_of_study">Field of Study</label>
+          <input type="text" id="profileFieldOfStudyInput" name="field_of_study">
+        </div>
+
+        <div class="form-group">
+          <label for="profileInstitutionInput" data-i18n="profile_institution">Institution</label>
+          <input type="text" id="profileInstitutionInput" name="institution">
+        </div>
+
+        <div class="form-group">
+          <label for="profileGraduationYearInput" data-i18n="profile_graduation_year">Graduation Year</label>
+          <input type="number" id="profileGraduationYearInput" name="graduation_year" min="1950" max="2100">
+        </div>
+
+        <div class="form-group">
+          <label for="profileExperienceInput" data-i18n="profile_experience">Years of Experience</label>
+          <input type="number" id="profileExperienceInput" name="experience_years" min="0" step="0.5">
+        </div>
+
+        <div class="form-group">
+          <label for="profileEmploymentTypeInput" data-i18n="profile_employment_type">Preferred Employment Type</label>
+          <select id="profileEmploymentTypeInput" name="employment_type">
+            <option value="" data-i18n="profile_select_employment_type">Select Employment Type</option>
+            <option value="Full-time" data-i18n="jobtype_fulltime">Full-time</option>
+            <option value="Part-time" data-i18n="jobtype_parttime">Part-time</option>
+            <option value="Contract" data-i18n="jobtype_contract">Contract</option>
+            <option value="Temporary" data-i18n="jobtype_temporary">Temporary</option>
+            <option value="Internship" data-i18n="jobtype_internship">Internship</option>
+            <option value="Freelance" data-i18n="jobtype_freelance">Freelance</option>
+          </select>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="profileSkillsInput" data-i18n="profile_skills">Skills</label>
+          <textarea
+            id="profileSkillsInput"
+            name="skills"
+            rows="3"
+            placeholder="Example: Communication, Microsoft Excel, Leadership"
+            data-i18n-placeholder="profile_skills_placeholder"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="profileSalaryMinInput" data-i18n="profile_salary_min">Expected Minimum Salary (MYR)</label>
+          <input type="number" id="profileSalaryMinInput" name="expected_salary_min" min="0" step="0.01">
+        </div>
+
+        <div class="form-group">
+          <label for="profileSalaryMaxInput" data-i18n="profile_salary_max">Expected Maximum Salary (MYR)</label>
+          <input type="number" id="profileSalaryMaxInput" name="expected_salary_max" min="0" step="0.01">
+        </div>
+
+        <input type="hidden" id="profileSalaryCurrencyInput" name="salary_currency" value="MYR">
+
+        <div class="form-group">
+          <label for="profileLinkedinInput" data-i18n="profile_linkedin">LinkedIn Profile</label>
+          <input
+            type="url"
+            id="profileLinkedinInput"
+            name="linkedin_url"
+            placeholder="https://www.linkedin.com/in/..."
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="profilePortfolioInput" data-i18n="profile_portfolio">Portfolio Website</label>
+          <input
+            type="url"
+            id="profilePortfolioInput"
+            name="portfolio_url"
+            placeholder="https://..."
+          >
+        </div>
+
+      </div>
+
+    </fieldset>
+
+
+  
       <div class="jobseeker-profile-actions">
         <p id="jobseekerProfileStatus" role="status"></p>
 
         <div class="jobseeker-profile-buttons">
-          <button type="submit" id="saveJobseekerProfileBtn" hidden>
+          <button
+            type="submit"
+            id="saveJobseekerProfileBtn"
+            hidden
+            data-i18n="profile_save_button"
+          >
             Save Profile
           </button>
 
-          <button type="button" id="cancelJobseekerProfileBtn" hidden>
+          <button
+            type="button"
+            id="cancelJobseekerProfileBtn"
+            hidden
+            data-i18n="profile_cancel_button"
+          >
             Cancel
           </button>
         </div>
@@ -935,118 +1106,134 @@
 
 </section>
 
-      <!-- MY DOCUMENTS -->
-      <section
-        id="jobseekerDocuments"
-        class="dashboard-content-section"
-      >
+   
+<!-- MY DOCUMENTS -->
+<section
+  id="jobseekerDocuments"
+  class="dashboard-content-section"
+>
 
-        <div class="dashboard-page-heading">
-          <div>
-            <h1>My Documents</h1>
-            <p>Upload and manage your personal and career documents.</p>
-          </div>
-        </div>
+  <div class="dashboard-page-heading">
+    <div>
+      <h1 data-i18n="my_documents_title">My Documents</h1>
+      <p data-i18n="my_documents_description">
+        Upload and manage your personal and career documents.
+      </p>
+    </div>
+  </div>
 
-        <div class="dashboard-panel">
+  <div class="dashboard-panel">
 
-          <div class="panel-heading">
-            <h2>My Document Collection</h2>
-          </div>
+    <div class="panel-heading">
+      <h2 data-i18n="my_documents_collection">My Document Collection</h2>
+    </div>
 
-          <p>
-            Keep your documents updated so you can use them when applying
-            for jobs.
-          </p>
+    <p data-i18n="my_documents_instruction">
+      Keep your documents updated so you can use them when applying
+      for jobs.
+    </p>
 
-          <div id="jobseekerDocumentList">
+    <div id="jobseekerDocumentList">
 
-            <div class="dashboard-empty-state">
-              <h3>No Documents Uploaded</h3>
-              <p>
-                Your uploaded documents will appear here.
-              </p>
-            </div>
+      <div class="dashboard-empty-state">
+        <h3 data-i18n="my_documents_empty_title">No Documents Uploaded</h3>
+        <p data-i18n="my_documents_empty_description">
+          Your uploaded documents will appear here.
+        </p>
+      </div>
 
-          </div>
+    </div>
 
-        </div>
-
-
-        <div class="dashboard-panel">
-
-          <h2>Upload New Document</h2>
-
-          <div class="document-upload-form">
-
-            <div class="search-field">
-              <label for="jobseekerDocumentType">
-                Document Type
-              </label>
-
-            <select id="jobseekerDocumentType">
-              <option value="">Select Document Type</option>
-              <option value="cv">CV / Resume</option>
-              <option value="certificate">Certificate</option>
-              <option value="education_certificate">Education Certificate</option>
-              <option value="employment_certificate">Work Experience Letter</option>
-              <option value="identity_card">MyKad</option>
-              <option value="driving_licence">Driving Licence</option>
-              <option value="other">Other Documents</option>
-            </select>
-            </div>
-
-            <div class="search-field">
-              <label for="jobseekerDocumentFile">
-                Select File
-              </label>
-
-            <input
-              type="file"
-              id="jobseekerDocumentFile"
-              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-              >
-            </div>
-
-            <button
-              type="button"
-              id="uploadJobseekerDocumentBtn"
-              class="primary-btn"
-            >
-              Upload Document
-            </button>
-
-            <p id="jobseekerDocumentStatus"></p>
-
-          </div>
-
-        </div>
-
-      </section>
+  </div>
+</section>
 
 
-      <!-- FIND JOBS -->
-      <section
-        id="jobseekerFindJobs"
-        class="dashboard-content-section"
-      >
+    
+<div class="dashboard-panel">
 
-        <div class="dashboard-page-heading">
-          <div>
-            <h1>Find Jobs</h1>
-            <p>Discover job opportunities across Malaysia.</p>
-          </div>
-        </div>
+  <h2 data-i18n="document_upload_title">Upload New Document</h2>
 
-        <div class="dashboard-panel">
+  <div class="document-upload-form">
 
-       
-<div class="search-box">
+    <div class="search-field">
+      <label for="jobseekerDocumentType" data-i18n="document_type_label">
+        Document Type
+      </label>
+
+
+          
+<select id="jobseekerDocumentType">
+  <option value="" data-i18n="document_type_select">Select Document Type</option>
+  <option value="cv" data-i18n="document_type_cv">CV / Resume</option>
+  <option value="certificate" data-i18n="document_type_certificate">Certificate</option>
+  <option value="education_certificate" data-i18n="document_type_education">Education Certificate</option>
+  <option value="employment_certificate" data-i18n="document_type_employment">Work Experience Letter</option>
+  <option value="identity_card" data-i18n="document_type_identity">MyKad</option>
+  <option value="driving_licence" data-i18n="document_type_driving">Driving Licence</option>
+  <option value="other" data-i18n="document_type_other">Other Documents</option>
+</select>
+
+         
+</div>
+
+<div class="search-field">
+  <label for="jobseekerDocumentFile" data-i18n="document_select_file">
+    Select File
+  </label>
+
+  <input
+    type="file"
+    id="jobseekerDocumentFile"
+    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+  >
+</div>
+
+<button
+  type="button"
+  id="uploadJobseekerDocumentBtn"
+  class="primary-btn"
+  data-i18n="document_upload_button"
+>
+  Upload Document
+</button>
+
+<p id="jobseekerDocumentStatus"></p>
+
+</div>
+
+</div>
+
+</section>
+
+
+    
+<!-- FIND JOBS -->
+<section
+  id="jobseekerFindJobs"
+  class="dashboard-content-section"
+>
+
+  <div class="dashboard-page-heading">
+    <div>
+      <h1 data-i18n="find_jobs_title">Find Jobs</h1>
+      <p data-i18n="find_jobs_description">
+        Discover job opportunities across Malaysia.
+      </p>
+    </div>
+  </div>
+
+  <div class="dashboard-panel">
+
+    <div class="search-box">
+
 
 
 <!-- CATEGORY / JOB TYPE -->
 <div class="search-field">
-  <label for="dashboardJobCategoryTypeToggle">
+  <label
+    for="dashboardJobCategoryTypeToggle"
+    data-i18n="dashboard_category_job_type"
+  >
     Category / Job Type
   </label>
 
@@ -1061,7 +1248,10 @@
       aria-expanded="false"
       aria-controls="dashboardJobCategoryTypeOptions"
     >
-      <span id="dashboardJobCategoryTypeLabel">
+      <span
+        id="dashboardJobCategoryTypeLabel"
+        data-i18n="dashboard_all_categories_job_types"
+      >
         All Categories & Job Types
       </span>
       <span aria-hidden="true">▼</span>
@@ -1085,171 +1275,192 @@
 </div>
 
 
-  <!-- KEYWORD -->
-  <div class="search-field">
-    <label for="dashboardJobKeyword">
-      Job Title or Keyword
-    </label>
 
-    <input
-      type="text"
-      id="dashboardJobKeyword"
-      placeholder="e.g. Marketing Executive"
-    >
-  </div>
 
-  <!-- LOCATION -->
-  <div class="search-field">
-    <label for="dashboardJobLocation">
-      State / City
-    </label>
+<!-- KEYWORD -->
+<div class="search-field">
+  <label for="dashboardJobKeyword" data-i18n="dashboard_job_keyword">
+    Job Title or Keyword
+  </label>
 
-    <input
-      type="text"
-      id="dashboardJobLocation"
-      placeholder="e.g. Kuala Lumpur"
-    >
-  </div>
-
-  <!-- SEARCH BUTTON -->
-  <button
-    type="button"
-    id="dashboardJobSearchBtn"
-    class="search-btn"
+  <input
+    type="text"
+    id="dashboardJobKeyword"
+    placeholder="e.g. Marketing Executive"
+    data-i18n-placeholder="dashboard_job_keyword_placeholder"
   >
-    Search Jobs
-  </button>
+</div>
+
+<!-- LOCATION -->
+<div class="search-field">
+  <label for="dashboardJobLocation" data-i18n="dashboard_job_location">
+    State / City
+  </label>
+
+  <input
+    type="text"
+    id="dashboardJobLocation"
+    placeholder="e.g. Kuala Lumpur"
+    data-i18n-placeholder="dashboard_job_location_placeholder"
+  >
+</div>
+
+
+
+<!-- SEARCH BUTTON -->
+<button
+  type="button"
+  id="dashboardJobSearchBtn"
+  class="search-btn"
+  data-i18n="dashboard_search_jobs"
+>
+  Search Jobs
+</button>
 
 </div>
 
         </div>
 
-        <div id="jobseekerJobResults" class="jobs-grid">
+     
+<div id="jobseekerJobResults" class="jobs-grid">
 
-          <div class="empty-jobs">
-            <h3>No Jobs Available</h3>
-            <p>
-              Available job opportunities will appear here.
-            </p>
-          </div>
+  <div class="empty-jobs">
+    <h3 data-i18n="dashboard_no_jobs">No Jobs Available</h3>
+    <p data-i18n="dashboard_no_jobs_description">
+      Available job opportunities will appear here.
+    </p>
+  </div>
 
-        </div>
+</div>
 
-      </section>
-
-
-      <!-- MY APPLICATIONS -->
-      <section
-        id="jobseekerApplications"
-        class="dashboard-content-section"
-      >
-
-        <div class="dashboard-page-heading">
-          <div>
-            <h1>My Applications</h1>
-            <p>Track the status of your job applications.</p>
-          </div>
-        </div>
-
-        <div class="dashboard-panel">
-
-          <div class="panel-heading">
-            <h2>Application History</h2>
-          </div>
-
-          <div id="jobseekerApplicationsList">
-
-            <div class="dashboard-empty-state">
-              <h3>No Applications Yet</h3>
-              <p>
-                You have not submitted any job applications.
-              </p>
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
+</section>
 
 
-      <!-- INTERVIEW INVITATIONS -->
-      <section
-        id="jobseekerInterviews"
-        class="dashboard-content-section"
-      >
+    
+<!-- MY APPLICATIONS -->
+<section
+  id="jobseekerApplications"
+  class="dashboard-content-section"
+>
 
-        <div class="dashboard-page-heading">
-          <div>
-            <h1>Interview Invitations</h1>
-            <p>View interview invitations from companies.</p>
-          </div>
-        </div>
+  <div class="dashboard-page-heading">
+    <div>
+      <h1 data-i18n="my_applications_title">My Applications</h1>
+      <p data-i18n="my_applications_description">
+        Track the status of your job applications.
+      </p>
+    </div>
+  </div>
 
-        <div class="dashboard-panel">
+  <div class="dashboard-panel">
 
-          <div id="jobseekerInterviewList">
+    <div class="panel-heading">
+      <h2 data-i18n="application_history_title">Application History</h2>
+    </div>
 
-            <div class="dashboard-empty-state">
-              <h3>No Interview Invitations</h3>
-              <p>
-                Interview invitations from companies will appear here.
-              </p>
-            </div>
+    <div id="jobseekerApplicationsList">
 
-          </div>
+      <div class="dashboard-empty-state">
+        <h3 data-i18n="applications_empty_title">No Applications Yet</h3>
+        <p data-i18n="applications_empty_description">
+          You have not submitted any job applications.
+        </p>
+      </div>
 
-        </div>
+    </div>
 
-      </section>
+  </div>
+
+</section>
+
+   
+<!-- INTERVIEW INVITATIONS -->
+<section
+  id="jobseekerInterviews"
+  class="dashboard-content-section"
+>
+
+  <div class="dashboard-page-heading">
+    <div>
+      <h1 data-i18n="interview_invitations_title">Interview Invitations</h1>
+      <p data-i18n="interview_invitations_description">
+        View interview invitations from companies.
+      </p>
+    </div>
+  </div>
 
 
-      <!-- ACCOUNT SETTINGS -->
-      <section
-        id="jobseekerSettings"
-        class="dashboard-content-section"
-      >
+      
+<div class="dashboard-panel">
 
-        <div class="dashboard-page-heading">
-          <div>
-            <h1>Account Settings</h1>
-            <p>Manage your account preferences and security.</p>
-          </div>
-        </div>
+  <div id="jobseekerInterviewList">
 
-        <div class="dashboard-panel">
+    <div class="dashboard-empty-state">
+      <h3 data-i18n="interviews_empty_title">No Interview Invitations</h3>
+      <p data-i18n="interviews_empty_description">
+        Interview invitations from companies will appear here.
+      </p>
+    </div>
 
-          <h2>Account Information</h2>
+  </div>
 
-          <p>
-            <strong>Email:</strong>
-            <span id="settingsJobseekerEmail">Not provided</span>
-          </p>
+</div>
 
-          <p>
-            <strong>Account Type:</strong> Job Seeker
-          </p>
+</section>
 
-          <p>
-            <strong>Country:</strong> Malaysia
-          </p>
 
-        </div>
+   
+<!-- ACCOUNT SETTINGS -->
+<section
+  id="jobseekerSettings"
+  class="dashboard-content-section"
+>
 
-        <div class="dashboard-panel">
+  <div class="dashboard-page-heading">
+    <div>
+      <h1 data-i18n="account_settings_title">Account Settings</h1>
+      <p data-i18n="account_settings_description">
+        Manage your account preferences and security.
+      </p>
+    </div>
+  </div>
 
-          <h2>Security</h2>
+  <div class="dashboard-panel">
 
-          <button
-            type="button"
-            id="jobseekerChangePasswordBtn"
-          >
-            Change Password
-          </button>
+    <h2 data-i18n="account_information_title">Account Information</h2>
 
-        </div>
+    <p>
+      <strong data-i18n="account_email_label">Email:</strong>
+      <span id="settingsJobseekerEmail">Not provided</span>
+    </p>
 
-      </section>
+    <p>
+      <strong data-i18n="account_type_label">Account Type:</strong>
+      <span data-i18n="account_jobseeker">Job Seeker</span>
+    </p>
+
+    <p>
+      <strong data-i18n="account_country_label">Country:</strong>
+      <span data-i18n="account_country_malaysia">Malaysia</span>
+    </p>
+
+  </div>
+
+  <div class="dashboard-panel">
+
+    <h2 data-i18n="account_security_title">Security</h2>
+
+    <button
+      type="button"
+      id="jobseekerChangePasswordBtn"
+      data-i18n="account_change_password"
+    >
+      Change Password
+    </button>
+
+  </div>
+
+</section>
 
     </main>
 
@@ -1264,72 +1475,81 @@
 
 <section id="companyDashboard" class="dashboard-page" hidden>
 
-  <!-- DASHBOARD HEADER -->
-  <header class="dashboard-header">
-    <div class="dashboard-header-content">
-      <div class="logo">
-        <a href="#" id="companyDashboardHome">Kerjiva Malaysia</a>
-      </div>
 
-      <div class="dashboard-header-actions">
-        <span id="companyWelcome">Welcome, Company</span>
-
-        <button type="button" id="companyNotificationBtn">
-          Notifications
-        </button>
-
-        <button type="button" id="companyLogoutBtn">
-          Logout
-        </button>
-      </div>
+<!-- DASHBOARD HEADER -->
+<header class="dashboard-header">
+  <div class="dashboard-header-content">
+    <div class="logo">
+      <a href="#" id="companyDashboardHome">Kerjiva Malaysia</a>
     </div>
-  </header>
+
+    <div class="dashboard-header-actions">
+      <span id="companyWelcome">Welcome, Company</span>
+
+      <button
+        type="button"
+        id="companyNotificationBtn"
+        data-i18n="company_notifications"
+      >
+        Notifications
+      </button>
+
+      <button
+        type="button"
+        id="companyLogoutBtn"
+        data-i18n="company_logout"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+</header>
 
 
-  <div class="dashboard-layout">
+<div class="dashboard-layout">
 
-    <!-- SIDEBAR -->
-    <aside class="dashboard-sidebar">
+  <!-- SIDEBAR -->
+  <aside class="dashboard-sidebar">
 
-      <div class="sidebar-profile">
-        <div class="sidebar-avatar" id="companyAvatar">C</div>
-        <h3 id="companySidebarName">Company Name</h3>
-        <p>Company Account</p>
-      </div>
+    <div class="sidebar-profile">
+      <div class="sidebar-avatar" id="companyAvatar">C</div>
+      <h3 id="companySidebarName">Company Name</h3>
+      <p data-i18n="company_account">Company Account</p>
+    </div>
 
-      <nav class="dashboard-nav">
+    <nav class="dashboard-nav">
 
-        <a href="#companyOverview" class="active">
-          Dashboard
-        </a>
+      <a href="#companyOverview" class="active" data-i18n="company_menu_dashboard">
+        Dashboard
+      </a>
 
-        <a href="#companyProfile">
-          Company Profile
-        </a>
+      <a href="#companyProfile" data-i18n="company_menu_profile">
+        Company Profile
+      </a>
 
-        <a href="#companyPostJob">
-          Post a Job
-        </a>
+      <a href="#companyPostJob" data-i18n="company_menu_post_job">
+        Post a Job
+      </a>
 
-        <a href="#companyMyJobs">
-          My Jobs
-        </a>
+      <a href="#companyMyJobs" data-i18n="company_menu_my_jobs">
+        My Jobs
+      </a>
 
-        <a href="#companyApplicants">
-          Incoming Applicants
-        </a>
+      <a href="#companyApplicants" data-i18n="company_menu_applicants">
+        Incoming Applicants
+      </a>
 
-        <a href="#companyInterviews">
-          Interview Invitations
-        </a>
+      <a href="#companyInterviews" data-i18n="company_menu_interviews">
+        Interview Invitations
+      </a>
 
-        <a href="#companySettings">
-          Account Settings
-        </a>
+      <a href="#companySettings" data-i18n="company_menu_settings">
+        Account Settings
+      </a>
 
-      </nav>
+    </nav>
 
-    </aside>
+  </aside>
 
 
     <!-- MAIN CONTENT -->
@@ -1341,83 +1561,92 @@
 
   <div class="dashboard-section-header">
 
-  <div class="company-dashboard-title-row">
-    <h2>Company Dashboard</h2>
+    <div class="company-dashboard-title-row">
+      <h2 data-i18n="company_overview_title">Company Dashboard</h2>
 
-    <button
-      type="button"
-      id="companyBackHomeBtn"
-      class="company-back-home-btn"
-    >
-      <span aria-hidden="true">←</span>
-      Back to Homepage
-    </button>
+      <button
+        type="button"
+        id="companyBackHomeBtn"
+        class="company-back-home-btn"
+        data-i18n="company_back_home"
+      >
+        <span aria-hidden="true">←</span>
+        Back to Homepage
+      </button>
+    </div>
+
+    <p data-i18n="company_overview_description">
+      Manage your company, job postings, and applicants.
+    </p>
+
   </div>
-
-  <p>Manage your company, job postings, and applicants.</p>
-
-</div>
-
-        <div class="dashboard-stats">
+             <div class="dashboard-stats">
 
           <div class="stat-card">
-            <h3>Total Jobs</h3>
+            <h3 data-i18n="company_stats_total_jobs">Total Jobs</h3>
             <p id="companyTotalJobs">0</p>
           </div>
 
           <div class="stat-card">
-            <h3>Published Jobs</h3>
+            <h3 data-i18n="company_stats_published_jobs">Published Jobs</h3>
             <p id="companyPublishedJobs">0</p>
           </div>
 
           <div class="stat-card">
-            <h3>Draft Jobs</h3>
+            <h3 data-i18n="company_stats_draft_jobs">Draft Jobs</h3>
             <p id="companyDraftJobs">0</p>
           </div>
 
           <div class="stat-card">
-            <h3>Total Applicants</h3>
+            <h3 data-i18n="company_stats_total_applicants">Total Applicants</h3>
             <p id="companyTotalApplicants">0</p>
           </div>
 
         </div>
 
         <div class="dashboard-panel">
-          <h3>Recent Job Applications</h3>
+          <h3 data-i18n="company_recent_applications">
+            Recent Job Applications
+          </h3>
+
           <div id="companyRecentApplicants">
-            <p>No applications yet.</p>
+            <p data-i18n="company_no_applications">
+              No applications yet.
+            </p>
           </div>
         </div>
 
       </section>
 
-
-      <!-- COMPANY PROFILE -->
+<!-- COMPANY PROFILE -->
     <section id="companyProfile" class="dashboard-content-section">
 
         <div class="dashboard-section-header">
-          <h2>Company Profile</h2>
-          <p>Manage your company information.</p>
+          <h2 data-i18n="company_profile_title">Company Profile</h2>
+          <p data-i18n="company_profile_description">
+            Manage your company information.
+          </p>
         </div>
 
         <div class="dashboard-panel">
 
           <form id="companyProfileForm">
-            
+  
 <!-- COMPANY LOGO -->
 <div class="form-group company-logo-group">
-  <label>Company Logo</label>
+  <label data-i18n="company_logo">Company Logo</label>
 
   <div class="company-logo-preview-wrapper">
     <img
       id="companyLogoPreview"
       src=""
       alt="Company Logo"
+      data-i18n-alt="company_logo_alt"
       hidden
     >
 
     <div id="companyLogoPlaceholder" class="company-logo-placeholder">
-      <span>Company Logo</span>
+      <span data-i18n="company_logo_placeholder">Company Logo</span>
     </div>
   </div>
 
@@ -1428,96 +1657,133 @@
     hidden
   >
 
-  <label for="companyLogoInput" id="companyLogoUploadLabel">
+  <label
+    for="companyLogoInput"
+    id="companyLogoUploadLabel"
+    data-i18n="company_logo_upload"
+  >
     Upload or Change Logo
   </label>
 
-  <small>JPG, PNG, or WebP. Maximum file size: 2 MB.</small>
+  <small data-i18n="company_logo_requirements">
+    JPG, PNG, or WebP. Maximum file size: 2 MB.
+  </small>
 </div>
 <!-- END COMPANY LOGO -->
+            
+         <div class="form-group">
+  <label for="companyName" data-i18n="company_name">
+    Company Name
+  </label>
+  <input type="text" id="companyName">
+</div>
 
+<div class="form-group">
+  <label
+    for="companyRegistrationNumber"
+    data-i18n="company_registration_number"
+  >
+    Company Registration Number (SSM)
+  </label>
+  <input type="text" id="companyRegistrationNumber">
+</div>
+           <div class="form-group">
+  <label for="companyIndustry" data-i18n="company_industry">
+    Industry
+  </label>
+  <input type="text" id="companyIndustry">
+</div>
 
-            <div class="form-group">
-              <label for="companyName">Company Name</label>
-              <input type="text" id="companyName">
-            </div>
+<div class="form-group">
+  <label for="companyEmail" data-i18n="company_email">
+    Company Email
+  </label>
+  <input type="email" id="companyEmail" disabled>
+</div>
+           <div class="form-group">
+  <label for="companyPhone" data-i18n="company_phone">
+    Phone Number
+  </label>
+  <input type="tel" id="companyPhone">
+</div>
 
-            <div class="form-group">
-              <label for="companyRegistrationNumber">
-                Company Registration Number (SSM)
-              </label>
-              <input type="text" id="companyRegistrationNumber">
-            </div>
+<div class="form-group">
+  <label for="companyWebsite" data-i18n="company_website">
+    Website
+  </label>
+  <input type="url" id="companyWebsite">
+</div>
 
-            <div class="form-group">
-              <label for="companyIndustry">Industry</label>
-              <input type="text" id="companyIndustry">
-            </div>
+<div class="form-group">
+  <label for="companyState" data-i18n="company_state">
+    State
+  </label>
 
-            <div class="form-group">
-              <label for="companyEmail">Company Email</label>
-              <input type="email" id="companyEmail" disabled>
-            </div>
+  <select id="companyState">
+    <option value="" data-i18n="company_select_state">Select State</option>
+    <option>Johor</option>
+    <option>Kedah</option>
+    <option>Kelantan</option>
+    <option>Melaka</option>
+    <option>Negeri Sembilan</option>
+    <option>Pahang</option>
+    <option>Penang</option>
+    <option>Perak</option>
+    <option>Perlis</option>
+    <option>Sabah</option>
+    <option>Sarawak</option>
+    <option>Selangor</option>
+    <option>Terengganu</option>
+    <option>Kuala Lumpur</option>
+    <option>Putrajaya</option>
+    <option>Labuan</option>
+  </select>
+</div>
+           <div class="form-group">
+  <label for="companyCity" data-i18n="company_city">
+    City
+  </label>
+  <input type="text" id="companyCity">
+</div>
 
-            <div class="form-group">
-              <label for="companyPhone">Phone Number</label>
-              <input type="tel" id="companyPhone">
-            </div>
+<div class="form-group">
+  <label for="companyAddress" data-i18n="company_address">
+    Company Address
+  </label>
+  <textarea id="companyAddress"></textarea>
+</div>
 
-            <div class="form-group">
-              <label for="companyWebsite">Website</label>
-              <input type="url" id="companyWebsite">
-            </div>
+<div class="form-group">
+  <label for="companyDescription" data-i18n="company_about">
+    About Company
+  </label>
+  <textarea id="companyDescription"></textarea>
+</div>
+         <div class="profile-actions">
 
-            <div class="form-group">
-              <label for="companyState">State</label>
-              <select id="companyState">
-                <option value="">Select State</option>
-                <option>Johor</option>
-                <option>Kedah</option>
-                <option>Kelantan</option>
-                <option>Melaka</option>
-                <option>Negeri Sembilan</option>
-                <option>Pahang</option>
-                <option>Penang</option>
-                <option>Perak</option>
-                <option>Perlis</option>
-                <option>Sabah</option>
-                <option>Sarawak</option>
-                <option>Selangor</option>
-                <option>Terengganu</option>
-                <option>Kuala Lumpur</option>
-                <option>Putrajaya</option>
-                <option>Labuan</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="companyCity">City</label>
-              <input type="text" id="companyCity">
-            </div>
-
-            <div class="form-group">
-              <label for="companyAddress">Company Address</label>
-              <textarea id="companyAddress"></textarea>
-            </div>
-
-            <div class="form-group">
-              <label for="companyDescription">About Company</label>
-              <textarea id="companyDescription"></textarea>
-            </div>
-
-           <div class="profile-actions">
-
-  <button type="button" id="editCompanyProfileBtn">
+  <button
+    type="button"
+    id="editCompanyProfileBtn"
+    data-i18n="company_edit_profile"
+  >
     Edit Profile
   </button>
 
-  <button type="submit" id="saveCompanyProfileBtn" hidden>
+  <button
+    type="submit"
+    id="saveCompanyProfileBtn"
+    data-i18n="company_save_profile"
+    hidden
+  >
     Save Profile
   </button>
 
-  <button type="button" id="cancelCompanyProfileBtn" hidden>
+  <button
+    type="button"
+    id="cancelCompanyProfileBtn"
+    data-i18n="company_cancel"
+    hidden
+  >
     Cancel
   </button>
 
@@ -1529,14 +1795,15 @@
         </div>
 
       </section>
-
-
-      <!-- POST A JOB -->
+      
+   <!-- POST A JOB -->
       <section id="companyPostJob" class="dashboard-content-section" hidden>
 
         <div class="dashboard-section-header">
-          <h2>Post a Job</h2>
-          <p>Create a new job posting for your company.</p>
+          <h2 data-i18n="post_job_title">Post a Job</h2>
+          <p data-i18n="post_job_description">
+            Create a new job posting for your company.
+          </p>
         </div>
 
         <div class="dashboard-panel">
@@ -1546,260 +1813,308 @@
             <input type="hidden" id="companyEditingJobId">
 
             <div class="form-group">
-              <label for="companyJobTitle">Job Title</label>
+              <label for="companyJobTitle" data-i18n="job_title_label">
+                Job Title
+              </label>
               <input type="text" id="companyJobTitle" required>
             </div>
 
-          
-<div class="form-group">
-  <label for="companyJobCategory">Job Category</label>
-  <select id="companyJobCategory" required>
-    <option value="">Select Job Category</option>
-    <option value="Accounting & Finance">Accounting & Finance</option>
-    <option value="Administration & Office Support">Administration & Office Support</option>
-    <option value="Architecture & Interior Design">Architecture & Interior Design</option>
-    <option value="Banking & Financial Services">Banking & Financial Services</option>
-    <option value="Beauty, Wellness & Personal Care">Beauty, Wellness & Personal Care</option>
-    <option value="Construction & Building">Construction & Building</option>
-    <option value="Customer Service">Customer Service</option>
-    <option value="Design & Creative">Design & Creative</option>
-    <option value="Education & Training">Education & Training</option>
-    <option value="Engineering">Engineering</option>
-    <option value="Food & Beverage">Food & Beverage</option>
-    <option value="Government & Public Services">Government & Public Services</option>
-    <option value="Healthcare & Medical">Healthcare & Medical</option>
-    <option value="Hospitality & Tourism">Hospitality & Tourism</option>
-    <option value="Human Resources">Human Resources</option>
-    <option value="Information Technology">Information Technology</option>
-    <option value="Insurance">Insurance</option>
-    <option value="Legal">Legal</option>
-    <option value="Logistics, Transport & Supply Chain">Logistics, Transport & Supply Chain</option>
-    <option value="Manufacturing & Production">Manufacturing & Production</option>
-    <option value="Marketing & Communications">Marketing & Communications</option>
-    <option value="Media & Entertainment">Media & Entertainment</option>
-    <option value="Oil, Gas & Energy">Oil, Gas & Energy</option>
-    <option value="Property & Real Estate">Property & Real Estate</option>
-    <option value="Retail & Merchandising">Retail & Merchandising</option>
-    <option value="Sales & Business Development">Sales & Business Development</option>
-    <option value="Science & Research">Science & Research</option>
-    <option value="Security & Safety">Security & Safety</option>
-    <option value="Telecommunications">Telecommunications</option>
-    <option value="Agriculture & Plantation">Agriculture & Plantation</option>
-    <option value="Automotive">Automotive</option>
-    <option value="Aviation">Aviation</option>
-    <option value="Environmental & Sustainability">Environmental & Sustainability</option>
-    <option value="NGO & Social Services">NGO & Social Services</option>
-    <option value="Others">Others</option>
-  </select>
-</div>
-
-            
-<div class="form-group">
-  <label for="companyJobType">Employment Type</label>
-  <select id="companyJobType" required>
-    <option value="">Select Employment Type</option>
-    <option value="Full-time">Full-time</option>
-    <option value="Part-time">Part-time</option>
-    <option value="Contract">Contract</option>
-    <option value="Temporary">Temporary</option>
-    <option value="Internship">Internship</option>
-    <option value="Freelance">Freelance</option>
-    <option value="Casual">Casual</option>
-    <option value="Apprenticeship">Apprenticeship</option>
-    <option value="Graduate Programme">Graduate Programme</option>
-  </select>
-</div>
-
-
-           
-
             <div class="form-group">
-              <label for="companyJobState">State</label>
-              <select id="companyJobState" required>
-                <option value="">Select State</option>
-                <option>Johor</option>
-                <option>Kedah</option>
-                <option>Kelantan</option>
-                <option>Melaka</option>
-                <option>Negeri Sembilan</option>
-                <option>Pahang</option>
-                <option>Penang</option>
-                <option>Perak</option>
-                <option>Perlis</option>
-                <option>Sabah</option>
-                <option>Sarawak</option>
-                <option>Selangor</option>
-                <option>Terengganu</option>
-                <option>Kuala Lumpur</option>
-                <option>Putrajaya</option>
-                <option>Labuan</option>
+              <label for="companyJobCategory" data-i18n="job_category_label">
+                Job Category
+              </label>
+
+              <select id="companyJobCategory" required>
+                <option value="" data-i18n="job_category_select">Select Job Category</option>
+                <option value="Accounting & Finance" data-i18n="category_accounting">Accounting & Finance</option>
+                <option value="Administration & Office Support" data-i18n="category_administration">Administration & Office Support</option>
+                <option value="Architecture & Interior Design" data-i18n="category_architecture">Architecture & Interior Design</option>
+                <option value="Banking & Financial Services" data-i18n="category_banking">Banking & Financial Services</option>
+                <option value="Beauty, Wellness & Personal Care" data-i18n="category_beauty">Beauty, Wellness & Personal Care</option>
+                <option value="Construction & Building" data-i18n="category_construction">Construction & Building</option>
+                <option value="Customer Service" data-i18n="category_customer_service">Customer Service</option>
+                <option value="Design & Creative" data-i18n="category_design">Design & Creative</option>
+                <option value="Education & Training" data-i18n="category_education">Education & Training</option>
+                <option value="Engineering" data-i18n="category_engineering">Engineering</option>
+                <option value="Food & Beverage" data-i18n="category_food_beverage">Food & Beverage</option>
+                <option value="Government & Public Services" data-i18n="category_government">Government & Public Services</option>
+                <option value="Healthcare & Medical" data-i18n="category_healthcare">Healthcare & Medical</option>
+                <option value="Hospitality & Tourism" data-i18n="category_hospitality">Hospitality & Tourism</option>
+                <option value="Human Resources" data-i18n="category_hr">Human Resources</option>
+                <option value="Information Technology" data-i18n="category_it">Information Technology</option>
+                <option value="Insurance" data-i18n="category_insurance">Insurance</option>
+                <option value="Legal" data-i18n="category_legal">Legal</option>
+                <option value="Logistics, Transport & Supply Chain" data-i18n="category_logistics">Logistics, Transport & Supply Chain</option>
+                <option value="Manufacturing & Production" data-i18n="category_manufacturing">Manufacturing & Production</option>
+                <option value="Marketing & Communications" data-i18n="category_marketing">Marketing & Communications</option>
+                <option value="Media & Entertainment" data-i18n="category_media">Media & Entertainment</option>
+                <option value="Oil, Gas & Energy" data-i18n="category_energy">Oil, Gas & Energy</option>
+                <option value="Property & Real Estate" data-i18n="category_property">Property & Real Estate</option>
+                <option value="Retail & Merchandising" data-i18n="category_retail">Retail & Merchandising</option>
+                <option value="Sales & Business Development" data-i18n="category_sales">Sales & Business Development</option>
+                <option value="Science & Research" data-i18n="category_science">Science & Research</option>
+                <option value="Security & Safety" data-i18n="category_security">Security & Safety</option>
+                <option value="Telecommunications" data-i18n="category_telecommunications">Telecommunications</option>
+                <option value="Agriculture & Plantation" data-i18n="category_agriculture">Agriculture & Plantation</option>
+                <option value="Automotive" data-i18n="category_automotive">Automotive</option>
+                <option value="Aviation" data-i18n="category_aviation">Aviation</option>
+                <option value="Environmental & Sustainability" data-i18n="category_environmental">Environmental & Sustainability</option>
+                <option value="NGO & Social Services" data-i18n="category_ngo">NGO & Social Services</option>
+                <option value="Others" data-i18n="category_others">Others</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label for="companyJobCity">City</label>
-              <input type="text" id="companyJobCity" required>
+              <label for="companyJobType" data-i18n="employment_type_label">
+                Employment Type
+              </label>
+
+              <select id="companyJobType" required>
+                <option value="" data-i18n="employment_type_select">Select Employment Type</option>
+                <option value="Full-time" data-i18n="jobtype_fulltime">Full-time</option>
+                <option value="Part-time" data-i18n="jobtype_parttime">Part-time</option>
+                <option value="Contract" data-i18n="jobtype_contract">Contract</option>
+                <option value="Temporary" data-i18n="jobtype_temporary">Temporary</option>
+                <option value="Internship" data-i18n="jobtype_internship">Internship</option>
+                <option value="Freelance" data-i18n="jobtype_freelance">Freelance</option>
+                <option value="Casual" data-i18n="jobtype_casual">Casual</option>
+                <option value="Apprenticeship" data-i18n="jobtype_apprenticeship">Apprenticeship</option>
+                <option value="Graduate Programme" data-i18n="jobtype_graduate">Graduate Programme</option>
+              </select>
             </div>
+           
 
-            <div class="form-group">
-              <label for="companyJobSalaryMin">Minimum Salary (RM)</label>
-              <input type="number" id="companyJobSalaryMin" min="0">
-            </div>
+           <div class="form-group">
+  <label for="companyJobState" data-i18n="company_state">State</label>
+  <select id="companyJobState" required>
+    <option value="" data-i18n="company_state_select">Select State</option>
+    <option>Johor</option>
+    <option>Kedah</option>
+    <option>Kelantan</option>
+    <option>Melaka</option>
+    <option>Negeri Sembilan</option>
+    <option>Pahang</option>
+    <option>Penang</option>
+    <option>Perak</option>
+    <option>Perlis</option>
+    <option>Sabah</option>
+    <option>Sarawak</option>
+    <option>Selangor</option>
+    <option>Terengganu</option>
+    <option>Kuala Lumpur</option>
+    <option>Putrajaya</option>
+    <option>Labuan</option>
+  </select>
+</div>
 
-            <div class="form-group">
-              <label for="companyJobSalaryMax">Maximum Salary (RM)</label>
-              <input type="number" id="companyJobSalaryMax" min="0">
-            </div>
+<div class="form-group">
+  <label for="companyJobCity" data-i18n="company_job_city">City</label>
+  <input type="text" id="companyJobCity" required>
+</div>
 
-            <div class="form-group">
-              <label for="companyJobEducation">Education</label>
-              <input type="text" id="companyJobEducation">
-            </div>
+<div class="form-group">
+  <label for="companyJobSalaryMin" data-i18n="company_job_salary_min">
+    Minimum Salary (RM)
+  </label>
+  <input type="number" id="companyJobSalaryMin" min="0">
+</div>
 
-            <div class="form-group">
-              <label for="companyJobExperience">Experience</label>
-              <input type="text" id="companyJobExperience">
-            </div>
+<div class="form-group">
+  <label for="companyJobSalaryMax" data-i18n="company_job_salary_max">
+    Maximum Salary (RM)
+  </label>
+  <input type="number" id="companyJobSalaryMax" min="0">
+</div>
 
-            <div class="form-group">
-              <label for="companyJobDescription">Job Description</label>
-              <textarea id="companyJobDescription" required></textarea>
-            </div>
+<div class="form-group">
+  <label for="companyJobEducation" data-i18n="company_job_education">
+    Education
+  </label>
+  <input type="text" id="companyJobEducation">
+</div>
 
-            <div class="form-group">
-              <label for="companyJobRequirements">Job Requirements</label>
-              <textarea id="companyJobRequirements"></textarea>
-            </div>
+<div class="form-group">
+  <label for="companyJobExperience" data-i18n="company_job_experience">
+    Experience
+  </label>
+  <input type="text" id="companyJobExperience">
+</div>
 
-            <div class="form-group">
-               <label for="companyJobDeadline">Application Deadline</label>
-               <input type="date" id="companyJobDeadline">
-           </div>
+<div class="form-group">
+  <label for="companyJobDescription" data-i18n="company_job_description_label">
+    Job Description
+  </label>
+  <textarea id="companyJobDescription" required></textarea>
+</div>
 
-            <button type="button" id="saveCompanyJobDraftBtn">
-              Save as Draft
-            </button>
+<div class="form-group">
+  <label for="companyJobRequirements" data-i18n="company_job_requirements">
+    Job Requirements
+  </label>
+  <textarea id="companyJobRequirements"></textarea>
+</div>
 
-            <button type="button" id="submitCompanyJobBtn">
-              Send Job
-            </button>
+<div class="form-group">
+  <label for="companyJobDeadline" data-i18n="company_job_deadline">
+    Application Deadline
+  </label>
+  <input type="date" id="companyJobDeadline">
+</div>
 
-            <p id="companyJobStatus"></p>
+<button
+  type="button"
+  id="saveCompanyJobDraftBtn"
+  data-i18n="company_job_save_draft"
+>
+  Save as Draft
+</button>
 
-          </form>
+<button
+  type="button"
+  id="submitCompanyJobBtn"
+  data-i18n="company_job_send"
+>
+  Send Job
+</button>
 
-        </div>
+<p id="companyJobStatus"></p>
 
-      </section>
+</form>
 
+</div>
 
-      <!-- MY JOBS -->
+</section>
+    <!-- MY JOBS -->
       <section id="companyMyJobs" class="dashboard-content-section" hidden>
 
         <div class="dashboard-section-header">
-          <h2>My Jobs</h2>
-          <p>Manage your job postings.</p>
+          <h2 data-i18n="company_my_jobs_title">My Jobs</h2>
+          <p data-i18n="company_my_jobs_description">
+            Manage your job postings.
+          </p>
         </div>
 
         <div class="dashboard-panel">
           <div id="companyJobsList">
-            <p>No job postings yet.</p>
+            <p data-i18n="company_no_jobs">No job postings yet.</p>
           </div>
         </div>
 
       </section>
 
 
-      <!-- INCOMING APPLICANTS -->
+   <!-- INCOMING APPLICANTS -->
       <section id="companyApplicants" class="dashboard-content-section" hidden>
 
         <div class="dashboard-section-header">
-          <h2>Incoming Applicants</h2>
-          <p>Review applications submitted to your jobs.</p>
+          <h2 data-i18n="company_incoming_applicants">Incoming Applicants</h2>
+          <p data-i18n="company_applicants_description">
+            Review applications submitted to your jobs.
+          </p>
         </div>
 
         <div class="dashboard-panel">
 
           <div id="companyApplicantsList">
-            <p>No applicants yet.</p>
+            <p data-i18n="company_no_applicants">No applicants yet.</p>
           </div>
 
         </div>
 
         <div class="dashboard-panel" id="companyApplicantDetails" hidden>
-          <h3>Applicant Details</h3>
+          <h3 data-i18n="company_applicant_details">Applicant Details</h3>
           <div id="companyApplicantProfile"></div>
 
-          <h3>Application Documents</h3>
+          <h3 data-i18n="company_application_documents">Application Documents</h3>
           <div id="companyApplicantDocuments"></div>
         </div>
 
       </section>
 
-
-      <!-- INTERVIEWS -->
+    <!-- INTERVIEWS -->
       <section id="companyInterviews" class="dashboard-content-section" hidden>
 
         <div class="dashboard-section-header">
-          <h2>Interview Invitations</h2>
-          <p>Manage interview invitations for applicants.</p>
+          <h2 data-i18n="company_interviews_title">Interview Invitations</h2>
+          <p data-i18n="company_interviews_description">
+            Manage interview invitations for applicants.
+          </p>
         </div>
 
         <div class="dashboard-panel">
 
           <div id="companyInterviewList">
-            <p>No interview invitations yet.</p>
+            <p data-i18n="company_no_interviews">
+              No interview invitations yet.
+            </p>
           </div>
 
         </div>
 
         <div class="dashboard-panel">
 
-          <h3>Create Interview Invitation</h3>
+          <h3 data-i18n="company_create_interview">
+            Create Interview Invitation
+          </h3>
 
           <form id="companyInterviewForm">
 
             <input type="hidden" id="companyInterviewApplicationId">
 
             <div class="form-group">
-              <label for="companyInterviewType">Interview Type</label>
+              <label for="companyInterviewType" data-i18n="company_interview_type">
+                Interview Type
+              </label>
+
               <select id="companyInterviewType">
-                <option value="">Select Interview Type</option>
-                <option value="Online">Online</option>
-                <option value="In-person">In-person</option>
+                <option value="" data-i18n="company_interview_type_select">
+                  Select Interview Type
+                </option>
+                <option value="Online" data-i18n="company_interview_online">Online</option>
+                <option value="In-person" data-i18n="company_interview_in_person">In-person</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label for="companyInterviewDate">Interview Date</label>
+              <label for="companyInterviewDate" data-i18n="company_interview_date">
+                Interview Date
+              </label>
               <input type="date" id="companyInterviewDate">
             </div>
 
             <div class="form-group">
-              <label for="companyInterviewTime">Interview Time</label>
+              <label for="companyInterviewTime" data-i18n="company_interview_time">
+                Interview Time
+              </label>
               <input type="time" id="companyInterviewTime">
             </div>
 
             <div class="form-group">
-              <label for="companyInterviewLocation">
+              <label for="companyInterviewLocation" data-i18n="company_interview_location">
                 Interview Location
               </label>
               <input type="text" id="companyInterviewLocation">
             </div>
 
             <div class="form-group">
-              <label for="companyInterviewMeetingLink">
+              <label for="companyInterviewMeetingLink" data-i18n="company_online_meeting_link">
                 Online Meeting Link
               </label>
               <input type="url" id="companyInterviewMeetingLink">
             </div>
 
             <div class="form-group">
-              <label for="companyInterviewMessage">Message</label>
+              <label for="companyInterviewMessage" data-i18n="company_interview_message">
+                Message
+              </label>
               <textarea id="companyInterviewMessage"></textarea>
             </div>
 
-            <button type="submit" id="sendCompanyInterviewBtn">
+            <button
+              type="submit"
+              id="sendCompanyInterviewBtn"
+              data-i18n="company_send_invitation"
+            >
               Send Invitation
             </button>
 
@@ -1810,32 +2125,37 @@
         </div>
 
       </section>
-
-
-      <!-- ACCOUNT SETTINGS -->
+      
+    <!-- ACCOUNT SETTINGS -->
       <section id="companySettings" class="dashboard-content-section" hidden>
 
         <div class="dashboard-section-header">
-          <h2>Account Settings</h2>
-          <p>Manage your account settings.</p>
+          <h2 data-i18n="company_settings_title">Account Settings</h2>
+          <p data-i18n="company_settings_description">
+            Manage your account settings.
+          </p>
         </div>
 
         <div class="dashboard-panel">
 
           <div class="form-group">
-            <label for="settingsCompanyEmail">Account Email</label>
+            <label for="settingsCompanyEmail" data-i18n="company_account_email">
+              Account Email
+            </label>
             <input type="email" id="settingsCompanyEmail" disabled>
           </div>
 
-          <button type="button" id="companyChangePasswordBtn">
+          <button
+            type="button"
+            id="companyChangePasswordBtn"
+            data-i18n="company_change_password"
+          >
             Change Password
           </button>
 
         </div>
 
       </section>
-
-
     </main>
 
   </div>

@@ -19,6 +19,18 @@
 
     /* ================= HOMEPAGE ================= */
 
+     
+    /* ================= HAMBURGER MENU ================= */
+
+    menuHome: "Laman Utama",
+    menuFindJobs: "Cari Pekerjaan",
+    menuCompanies: "Syarikat",
+    menuAboutUs: "Mengenai Kami",
+    menuLanguage: "Bahasa",
+    menuJobseekerDashboard: "Papan Pemuka Pencari Kerja",
+    menuCompanyDashboard: "Papan Pemuka Syarikat",
+
+
     hero_label: "KERJAYA ANDA BERMULA DI SINI",
     hero_title: "Cari Pekerjaan yang Sesuai untuk Anda.",
     hero_description: "Temui peluang kerjaya baharu dan berhubung dengan syarikat di seluruh Malaysia.",

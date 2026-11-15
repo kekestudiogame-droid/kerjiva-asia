@@ -2820,12 +2820,13 @@ select {
   background: var(--border);
 }
 
+     
 /* LANGUAGE SWITCHER */
 
 .language-switcher {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 8px;
   padding: 10px 13px;
 }
 
@@ -2837,18 +2838,21 @@ select {
 
 .language-switcher-options {
   display: flex;
-  gap: 7px;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .language-btn {
-  flex: 1;
-  padding: 8px 6px;
+  display: block;
+  width: 100%;
+  padding: 9px 10px;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: var(--white);
   color: var(--text);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
+  text-align: left;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
@@ -2863,7 +2867,6 @@ select {
   border-color: var(--primary);
   color: #ffffff;
 }
-
 
 .hamburger-dropdown .dashboard-menu-item {
   color: var(--primary);

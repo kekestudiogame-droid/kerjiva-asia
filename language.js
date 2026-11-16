@@ -320,7 +320,7 @@
     register_create_account: "Cipta Akaun",
     register_existing_account: "Sudah mempunyai akaun?",
     auth_login: "Log Masuk",
-    auth_back_home: "← Kembali ke Laman Utama"
+    auth_back_home: "← Kembali ke Laman Utama",
 
 
 

@@ -5173,13 +5173,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     return;
   }
 
-  // =====================================================
-  // STATE
-  // =====================================================
 
-  let companyUserId = null;
-  let companyId = null;
-  let isSaving = false;
+// =====================================================
+// STATE
+// =====================================================
+
+let companyUserId = null;
+let companyId = null;
+let isSaving = false;
+
+// Store original English content when editing a job.
+let originalJobContent = null;
+let originalJobTranslations = null;
+
 
   // =====================================================
   // STATUS MESSAGE
@@ -5233,15 +5239,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   // RESET FORM
   // =====================================================
 
-  function resetJobForm() {
-
-    form.reset();
-
-    editingJobId.value = "";
-
-    showJobStatus("");
-
-  }
+ function resetJobForm() {
+  form.reset();
+  editingJobId.value = "";
+  originalJobContent = null;
+    originalJobTranslations = null;
+  showJobStatus("");
+}
 
   // =====================================================
   // GET FORM DATA
@@ -5307,119 +5311,275 @@ document.addEventListener("DOMContentLoaded", async function () {
     };
 
   }
+   
+   // ========================================
+// CHECK JOB CONTENT AND EXISTING TRANSLATION
+// ========================================
+
+function getTranslationSource(job) {
+  return {
+    title: job.title ?? "",
+    description: job.description ?? "",
+    requirements: job.requirements ?? "",
+    job_type: job.job_type ?? "",
+    category: job.category ?? "",
+    experience: job.experience ?? "",
+    education: job.education ?? ""
+  };
+}
+
+function hasJobContentChanged(jobData) {
+  if (!originalJobContent) return true;
+
+  return JSON.stringify(getTranslationSource(jobData)) !==
+    JSON.stringify(originalJobContent);
+}
+
+function hasReusableTranslation(jobData) {
+  if (!originalJobTranslations) return false;
+
+  const source = getTranslationSource(jobData);
+
+  const fields = [
+    ["title", "title_ms"],
+    ["description", "description_ms"],
+    ["requirements", "requirements_ms"],
+    ["job_type", "job_type_ms"],
+    ["category", "category_ms"],
+    ["experience", "experience_ms"],
+    ["education", "education_ms"]
+  ];
+
+  return fields.every(([sourceField, translationField]) => {
+    const originalText = source[sourceField].trim();
+    const translatedText = originalJobTranslations[translationField];
+
+    if (!originalText) {
+      return translatedText === null || translatedText === "";
+    }
+
+    return typeof translatedText === "string" &&
+      translatedText.trim() !== "";
+  });
+}
 
   // =====================================================
   // SAVE JOB
   // =====================================================
 
-  async function saveCompanyJob(status) {
+ 
+async function saveCompanyJob(status) {
 
-    if (isSaving) return;
+  if (isSaving) return;
 
-    if (!companyId) {
-      showJobStatus("Company profile is not ready.", true);
-      return;
-    }
+  if (!companyId) {
+    showJobStatus("Company profile is not ready.", true);
+    return;
+  }
 
-    // Validasi field required dari HTML.
-    if (!form.reportValidity()) return;
+  if (!form.reportValidity()) return;
 
-    let jobData;
+  let jobData;
 
-    try {
+  try {
+    jobData = getJobFormData(status);
+  } catch (error) {
+    showJobStatus(error.message, true);
+    return;
+  }
 
-      jobData = getJobFormData(status);
+  const jobId = editingJobId.value.trim();
 
-    } catch (error) {
+  const contentChanged = hasJobContentChanged(jobData);
+  const reusableTranslation = hasReusableTranslation(jobData);
 
-      showJobStatus(error.message, true);
-      return;
+  const shouldTranslate =
+    status === "published" &&
+    (!jobId || contentChanged || !reusableTranslation);
 
-    }
+  isSaving = true;
 
-    const jobId = editingJobId.value.trim();
+  saveDraftBtn.disabled = true;
+  submitJobBtn.disabled = true;
 
-    isSaving = true;
-
-    saveDraftBtn.disabled = true;
-    submitJobBtn.disabled = true;
-
-    showJobStatus(
-      status === "draft"
-        ? "Saving job draft..."
+  showJobStatus(
+    status === "draft"
+      ? "Saving job draft..."
+      : shouldTranslate
+        ? "Translating and publishing job..."
         : "Publishing job..."
-    );
+  );
 
-    try {
+  try {
 
-      let result;
+    // ===============================================
+    // SAVE DRAFT WITHOUT TRANSLATION
+    // ===============================================
 
-      if (jobId) {
+    if (status === "draft") {
 
-        // -----------------------------------------------
-        // UPDATE EXISTING JOB
-        // -----------------------------------------------
-
-        const { data, error } = await supabaseAuth
-          .from("jobs")
-          .update(jobData)
-          .eq("id", jobId)
-          .eq("company_id", companyId)
-          .select()
-          .single();
-
-        if (error) throw error;
-
-        result = data;
-
-      } else {
-
-        // -----------------------------------------------
-        // CREATE NEW JOB
-        // -----------------------------------------------
-
-        const { data, error } = await supabaseAuth
-          .from("jobs")
-          .insert(jobData)
-          .select()
-          .single();
-
-        if (error) throw error;
-
-        result = data;
-
+      if (jobId && contentChanged) {
+        jobData.title_ms = null;
+        jobData.description_ms = null;
+        jobData.requirements_ms = null;
+        jobData.job_type_ms = null;
+        jobData.category_ms = null;
+        jobData.experience_ms = null;
+        jobData.education_ms = null;
       }
 
-      const successMessage =
-        status === "draft"
-          ? "Job draft saved successfully."
-          : "Job published successfully.";
+    }
 
-      resetJobForm();
+    // ===============================================
+    // TRANSLATE ONLY WHEN NECESSARY
+    // ===============================================
 
-      showJobStatus(successMessage);
+    if (shouldTranslate) {
 
-      console.log("Company Job Saved Successfully:", result.id);
+      const { data: translationData, error: translationError } =
+        await supabaseAuth.functions.invoke(
+          "translate-job-ms",
+          {
+            body: {
+              job: {
+                title: jobData.title,
+                description: jobData.description,
+                requirements: jobData.requirements,
+                job_type: jobData.job_type,
+                category: jobData.category,
+                experience: jobData.experience,
+                education: jobData.education
+              }
+            }
+          }
+        );
 
-    } catch (error) {
+      if (translationError) {
+        throw new Error(
+          translationError.message ||
+          "Unable to translate job into Bahasa Melayu."
+        );
+      }
 
-      console.error("Save Company Job Error:", error);
+      if (
+        !translationData ||
+        translationData.success !== true ||
+        !translationData.job
+      ) {
+        throw new Error(
+          translationData?.error ||
+          "Gemini translation returned an invalid result."
+        );
+      }
 
-      showJobStatus(
-        error.message || "Unable to save job.",
-        true
-      );
+      const translatedJob = translationData.job;
 
-    } finally {
+      const translationFields = [
+        "title",
+        "description",
+        "requirements",
+        "job_type",
+        "category",
+        "experience",
+        "education"
+      ];
 
-      isSaving = false;
+      for (const field of translationFields) {
 
-      saveDraftBtn.disabled = false;
-      submitJobBtn.disabled = false;
+        const value = translatedJob[field];
+
+        if (
+          !Object.prototype.hasOwnProperty.call(translatedJob, field) ||
+          (value !== null && typeof value !== "string")
+        ) {
+          throw new Error(
+            `Invalid Malay translation field: ${field}`
+          );
+        }
+      }
+
+      // Store Malay translations in Supabase.
+      jobData.title_ms = translatedJob.title;
+      jobData.description_ms = translatedJob.description;
+      jobData.requirements_ms = translatedJob.requirements;
+      jobData.job_type_ms = translatedJob.job_type;
+      jobData.category_ms = translatedJob.category;
+      jobData.experience_ms = translatedJob.experience;
+      jobData.education_ms = translatedJob.education;
+
+      showJobStatus("Translation completed. Publishing job...");
 
     }
 
+    // ===============================================
+    // SAVE JOB TO SUPABASE
+    // ===============================================
+
+    let result;
+
+    if (jobId) {
+
+      const { data, error } = await supabaseAuth
+        .from("jobs")
+        .update(jobData)
+        .eq("id", jobId)
+        .eq("company_id", companyId)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      result = data;
+
+    } else {
+
+      const { data, error } = await supabaseAuth
+        .from("jobs")
+        .insert(jobData)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      result = data;
+    }
+
+    const successMessage =
+      status === "draft"
+        ? "Job draft saved successfully."
+        : "Job published successfully.";
+
+    resetJobForm();
+
+    showJobStatus(successMessage);
+
+    console.log(
+      "Company Job Saved Successfully:",
+      result.id
+    );
+
+  } catch (error) {
+
+    console.error("Save Company Job Error:", error);
+
+    showJobStatus(
+      error.message || "Unable to save job.",
+      true
+    );
+
+  } finally {
+
+    isSaving = false;
+
+    saveDraftBtn.disabled = false;
+    submitJobBtn.disabled = false;
+
   }
+
+}
+
+
+
 
   // =====================================================
   // SAVE AS DRAFT
@@ -5472,6 +5632,24 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       // Isi form dengan data lowongan.
       editingJobId.value = job.id;
+       originalJobContent = {
+  title: job.title ?? "",
+  description: job.description ?? "",
+  requirements: job.requirements ?? "",
+  job_type: job.job_type ?? "",
+  category: job.category ?? "",
+  experience: job.experience ?? "",
+  education: job.education ?? ""
+};
+       originalJobTranslations = {
+  title_ms: job.title_ms,
+  description_ms: job.description_ms,
+  requirements_ms: job.requirements_ms,
+  job_type_ms: job.job_type_ms,
+  category_ms: job.category_ms,
+  experience_ms: job.experience_ms,
+  education_ms: job.education_ms
+};
 
       titleInput.value = job.title || "";
       categoryInput.value = job.category || "";

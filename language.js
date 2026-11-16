@@ -535,6 +535,11 @@
       })
     );
   }
+   // EXPOSE LANGUAGE FUNCTIONS FOR APP.JS
+   
+      window.applyKerjivaTranslations = function (language) {
+      applyTranslations(language || getSavedLanguage());
+ };
 
 
  

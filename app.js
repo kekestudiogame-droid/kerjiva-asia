@@ -6714,15 +6714,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Close menu after selecting a navigation link
+   // Close menu after selecting a navigation link
   dropdownMenu.querySelectorAll("a").forEach(function (link) {
     link.addEventListener("click", function () {
       closeHamburgerMenu();
     });
   });
 
-});
+  // Close menu after selecting a language
+  const languageSelect = document.getElementById("languageSelect");
 
+  if (languageSelect) {
+    languageSelect.addEventListener("change", function () {
+      closeHamburgerMenu();
+    });
+  }
+
+});
 
 /* =========================================================
    KERJIVA MALAYSIA - COMPANY INCOMING APPLICANTS

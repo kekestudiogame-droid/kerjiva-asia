@@ -141,6 +141,7 @@
 
     dashboard_notifications: "Pemberitahuan",
     dashboard_logout: "Log Keluar",
+     jobseeker_welcome: "Selamat Datang",
 
     dashboard_jobseeker_account: "Akaun Pencari Kerja",
     dashboard_menu: "Papan Pemuka",

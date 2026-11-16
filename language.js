@@ -391,18 +391,19 @@
   }
 
 
+  
   /* =====================================================
-     ACTIVE LANGUAGE BUTTON
+     LANGUAGE DROPDOWN
      ===================================================== */
 
-  function setActiveLanguage(language) {
-    document.querySelectorAll(".language-btn").forEach(function (button) {
-      const isActive = button.dataset.language === language;
+  function setLanguageSelectValue(language) {
+    const languageSelect = document.getElementById("languageSelect");
 
-      button.classList.toggle("active", isActive);
-      button.setAttribute("aria-pressed", String(isActive));
-    });
+    if (languageSelect) {
+      languageSelect.value = language;
+    }
   }
+
 
 
   /* =====================================================
@@ -523,7 +524,7 @@
 
     applyTranslations(language);
 
-    setActiveLanguage(language);
+   setLanguageSelectValue(language);
 
     window.currentKerjivaLanguage = language;
 
@@ -535,6 +536,7 @@
   }
 
 
+ 
   /* =====================================================
      INITIALIZE
      ===================================================== */
@@ -545,14 +547,15 @@
 
     changeLanguage(initialLanguage);
 
-    document.querySelectorAll(".language-btn").forEach(function (button) {
+    const languageSelect = document.getElementById("languageSelect");
 
-      button.addEventListener("click", function () {
-        changeLanguage(button.dataset.language);
+    if (languageSelect) {
+      languageSelect.addEventListener("change", function () {
+        changeLanguage(languageSelect.value);
       });
-
-    });
+    }
 
   });
 
 })();
+

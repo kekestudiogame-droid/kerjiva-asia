@@ -323,6 +323,16 @@
      auth_register: "Daftar",
     auth_back_home: "← Kembali ke Laman Utama",
 
+     /* ================= LOGIN PAGE ================= */
+
+    login_heading: "Selamat Kembali",
+    login_subheading: "Log masuk untuk meneruskan ke akaun Kerjiva anda.",
+    login_select_account_type: "Pilih jenis akaun",
+    login_password_placeholder: "Masukkan kata laluan anda",
+    login_forgot_password: "Lupa Kata Laluan?",
+    login_no_account: "Belum mempunyai akaun?",
+    login_create_account: "Cipta Akaun",
+
 
 
     /* ================= COMPANY DASHBOARD ================= */

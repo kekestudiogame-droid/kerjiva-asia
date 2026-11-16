@@ -278,9 +278,10 @@
 
     /* ================= COMPANY DASHBOARD ================= */
 
-    company_notifications: "Pemberitahuan",
-    company_logout: "Log Keluar",
-    company_account: "Akaun Syarikat",
+   company_welcome: "Selamat Datang, Syarikat",
+   company_notifications: "Pemberitahuan",
+   company_logout: "Log Keluar",
+   company_account: "Akaun Syarikat",
 
     company_menu_dashboard: "Papan Pemuka",
     company_menu_profile: "Profil Syarikat",

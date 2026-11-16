@@ -356,6 +356,8 @@
     company_no_applicants: "Belum Ada Pemohon",
     company_applicant_details: "Maklumat Pemohon",
     company_application_documents: "Dokumen Permohonan",
+     company_view_details: "Lihat Butiran",
+    company_invite_interview: "Jemput ke Temu Duga",
 
     company_interviews_title: "Jemputan Temu Duga",
     company_interviews_description: "Urus jemputan temu duga untuk pemohon.",

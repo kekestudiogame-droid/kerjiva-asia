@@ -46,7 +46,8 @@
           <span></span>
         </button>
 
-      <nav class="hamburger-dropdown" id="hamburgerDropdown">
+     
+<nav class="hamburger-dropdown" id="hamburgerDropdown">
 
   <a href="#home" data-i18n="menuHome">Home</a>
   <a href="#jobs" data-i18n="menuFindJobs">Find Jobs</a>
@@ -56,28 +57,24 @@
   <div class="hamburger-divider"></div>
 
   <div class="language-switcher">
-    <span
+
+    <label
+      for="languageSelect"
       class="language-switcher-label"
       data-i18n="menuLanguage"
-    >Language</span>
+    >
+      Language
+    </label>
 
-    <div class="language-switcher-options">
-      <button
-        type="button"
-        class="language-btn active"
-        data-language="en"
-      >
-        English
-      </button>
+    <select
+      id="languageSelect"
+      class="language-select"
+      aria-label="Select language"
+    >
+      <option value="en">English</option>
+      <option value="ms">Bahasa Melayu</option>
+    </select>
 
-      <button
-        type="button"
-        class="language-btn"
-        data-language="ms"
-      >
-        Bahasa Melayu
-      </button>
-    </div>
   </div>
 
   <div class="hamburger-divider"></div>
@@ -99,6 +96,7 @@
   </a>
 
 </nav>
+
       </div>
 
     </div>

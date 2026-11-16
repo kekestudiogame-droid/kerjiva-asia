@@ -7058,11 +7058,9 @@ inviteButton.addEventListener("click", function () {
 
       });
        
-       if (typeof window.applyKerjivaTranslations === "function") {
-       window.applyKerjivaTranslations(
-       window.currentKerjivaLanguage || "en"
-      );
-      }
+     if (typeof window.applyKerjivaTranslations === "function") {
+      window.applyKerjivaTranslations();
+       }
 
       console.log(
         "Company Incoming Applicants Loaded:",

@@ -275,6 +275,54 @@
     account_security_title: "Keselamatan",
     account_change_password: "Tukar Kata Laluan",
 
+     
+    /* ================= REGISTER PAGE ================= */
+
+    auth_tagline: "Kerjaya Anda Bermula Di Sini.",
+    register_heading: "Cipta Akaun Anda",
+    register_subheading: "Daftar untuk memulakan perjalanan anda bersama Kerjiva Malaysia.",
+    register_account_type: "Jenis Akaun",
+    role_jobseeker: "Pencari Kerja",
+    role_company: "Syarikat",
+
+    register_jobseeker_info: "Maklumat Pencari Kerja",
+    register_full_name: "Nama Penuh",
+    register_full_name_placeholder: "Masukkan nama penuh anda",
+    register_email: "Alamat E-mel",
+    register_email_placeholder: "Masukkan alamat e-mel anda",
+    register_phone: "Nombor Telefon",
+    register_phone_placeholder: "Masukkan nombor telefon anda",
+    register_residential_address: "Alamat Kediaman",
+    register_residential_address_placeholder: "Masukkan alamat kediaman anda",
+
+    register_company_info: "Maklumat Syarikat",
+    register_company_name: "Nama Syarikat",
+    register_company_name_placeholder: "Masukkan nama syarikat yang berdaftar",
+    register_ssm_number: "Nombor Pendaftaran SSM",
+    register_ssm_number_placeholder: "Masukkan nombor pendaftaran SSM anda",
+    register_contact_person: "Nama Pegawai Perhubungan",
+    register_contact_person_placeholder: "Masukkan nama penuh pegawai perhubungan",
+    register_company_email: "Alamat E-mel Syarikat",
+    register_company_email_placeholder: "Masukkan alamat e-mel syarikat anda",
+    register_company_phone: "Nombor Telefon Syarikat",
+    register_company_phone_placeholder: "Masukkan nombor telefon syarikat anda",
+    register_company_address: "Alamat Syarikat",
+    register_company_address_placeholder: "Masukkan alamat pejabat syarikat anda",
+    register_company_website: "Laman Web Syarikat (Pilihan)",
+
+    register_account_security: "Keselamatan Akaun",
+    register_password: "Kata Laluan",
+    register_password_placeholder: "Cipta kata laluan anda",
+    register_confirm_password: "Sahkan Kata Laluan",
+    register_confirm_password_placeholder: "Masukkan semula kata laluan anda",
+    auth_show_password: "Tunjukkan kata laluan",
+
+    register_create_account: "Cipta Akaun",
+    register_existing_account: "Sudah mempunyai akaun?",
+    auth_login: "Log Masuk",
+    auth_back_home: "← Kembali ke Laman Utama"
+
+
 
     /* ================= COMPANY DASHBOARD ================= */
 

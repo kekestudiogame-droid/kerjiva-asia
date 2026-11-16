@@ -2164,11 +2164,11 @@ function showEmptyState() {
   emptyState.append(heading, description);
   documentList.appendChild(emptyState);
 
-  if (typeof applyTranslations === "function") {
-    applyTranslations(
-      localStorage.getItem("siteLanguage") || "en"
-    );
-  }
+if (typeof window.applyKerjivaTranslations === "function") {
+  window.applyKerjivaTranslations(
+    window.currentKerjivaLanguage || "en"
+  );
+}
 
 }
 

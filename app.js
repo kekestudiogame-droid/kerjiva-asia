@@ -6996,7 +6996,7 @@ document.addEventListener("DOMContentLoaded", function () {
 const viewButton = document.createElement("button");
 viewButton.type = "button";
 viewButton.textContent = "View Details";
-
+         
 viewButton.addEventListener("click", function () {
   showApplicantDetails(application.id);
 });
@@ -7057,6 +7057,12 @@ inviteButton.addEventListener("click", function () {
         applicantsList.appendChild(card);
 
       });
+       
+       if (typeof window.applyKerjivaTranslations === "function") {
+       window.applyKerjivaTranslations(
+       window.currentKerjivaLanguage || "en"
+      );
+      }
 
       console.log(
         "Company Incoming Applicants Loaded:",

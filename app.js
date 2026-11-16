@@ -2142,24 +2142,24 @@ document.addEventListener("DOMContentLoaded", async function () {
   // DISPLAY EMPTY STATE
   // =========================================
 
-  function showEmptyState() {
+ function showEmptyState() {
 
-    documentList.replaceChildren();
+  documentList.replaceChildren();
 
-    const emptyState = document.createElement("div");
-    emptyState.className = "dashboard-empty-state";
+  const emptyState = document.createElement("div");
+  emptyState.className = "dashboard-empty-state";
 
-    const heading = document.createElement("h3");
-    heading.textContent = "No Documents Uploaded";
+  const heading = document.createElement("h3");
+  heading.textContent = "No Documents Uploaded";
 
-    const description = document.createElement("p");
-    description.textContent =
-      "Your uploaded documents will appear here.";
+  const description = document.createElement("p");
+  description.textContent =
+    "Your uploaded documents will appear here.";
 
-    emptyState.append(heading, description);
-    documentList.appendChild(emptyState);
+  emptyState.append(heading, description);
+  documentList.appendChild(emptyState);
 
-  }
+}
 
   // =========================================
   // LOAD DOCUMENTS FROM SUPABASE

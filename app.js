@@ -8012,26 +8012,35 @@ document.addEventListener("DOMContentLoaded", async function () {
   // EMPTY STATE
   // =========================================
 
-  function showInterviewEmptyState() {
+ function showInterviewEmptyState() {
 
-    interviewList.replaceChildren();
+  interviewList.replaceChildren();
 
-    const emptyState = document.createElement("div");
-    emptyState.className = "dashboard-empty-state";
+  const emptyState = document.createElement("div");
+  emptyState.className = "dashboard-empty-state";
 
-    const heading = document.createElement("h3");
-    heading.textContent = "No Interview Invitations";
+  const heading = document.createElement("h3");
+  heading.setAttribute("data-i18n", "interviews_empty_title");
+  heading.textContent = "No Interview Invitations";
 
-    const description = document.createElement("p");
-    description.textContent =
-      "Interview invitations from companies will appear here.";
+  const description = document.createElement("p");
+  description.setAttribute(
+    "data-i18n",
+    "interviews_empty_description"
+  );
+  description.textContent =
+    "Interview invitations from companies will appear here.";
 
-    emptyState.append(heading, description);
+  emptyState.append(heading, description);
+  interviewList.appendChild(emptyState);
 
-    interviewList.appendChild(emptyState);
-
+  if (typeof window.applyKerjivaTranslations === "function") {
+    window.applyKerjivaTranslations(
+      window.currentKerjivaLanguage || "en"
+    );
   }
 
+}
   // =========================================
   // FORMAT INTERVIEW DATE AND TIME
   // MALAYSIA TIMEZONE (GMT+8)

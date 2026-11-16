@@ -20,36 +20,35 @@
 
     <div class="auth-card">
 
-      <!-- BRAND -->
-      <div class="auth-brand">
-        <a href="index.html" class="logo">
-          Kerjiva
-          <small>Malaysia</small>
-        </a>
+    <!-- BRAND -->
+<div class="auth-brand">
+  <a href="index.html" class="logo">
+    Kerjiva
+    <small>Malaysia</small>
+  </a>
 
-        <p>Your Career Starts Here.</p>
-      </div>
-
-
-      <!-- REGISTER HEADING -->
-      <div class="auth-heading">
-        <h1>Create Your Account</h1>
-        <p>Register to start your journey with Kerjiva Malaysia.</p>
-      </div>
+  <p data-i18n="auth_tagline">Your Career Starts Here.</p>
+</div>
 
 
-      <!-- ACCOUNT ROLE -->
-      <div class="auth-form-group">
+<!-- REGISTER HEADING -->
+<div class="auth-heading">
+  <h1 data-i18n="register_heading">Create Your Account</h1>
+  <p data-i18n="register_subheading">Register to start your journey with Kerjiva Malaysia.</p>
+</div>
 
-        <label for="registerRole">Account Type</label>
 
-        <select id="registerRole" name="role" required>
-          <option value="jobseeker" selected>Jobseeker</option>
-          <option value="company">Company</option>
-        </select>
+<!-- ACCOUNT ROLE -->
+<div class="auth-form-group">
 
-      </div>
+  <label for="registerRole" data-i18n="register_account_type">Account Type</label>
 
+  <select id="registerRole" name="role" required>
+    <option value="jobseeker" selected data-i18n="role_jobseeker">Jobseeker</option>
+    <option value="company" data-i18n="role_company">Company</option>
+  </select>
+
+</div>
 
       <!-- REGISTER FORM -->
       <form id="registerForm">
@@ -58,50 +57,54 @@
 <!-- JOBSEEKER INFORMATION -->
 <div id="jobseekerRegisterFields">
 
-  <h2>Jobseeker Information</h2>
+  <h2 data-i18n="register_jobseeker_info">Jobseeker Information</h2>
 
   <div class="auth-form-group">
-    <label for="registerFullName">Full Name</label>
+    <label for="registerFullName" data-i18n="register_full_name">Full Name</label>
     <input
       type="text"
       id="registerFullName"
       name="full_name"
       placeholder="Enter your full name"
+      data-i18n-placeholder="register_full_name_placeholder"
       autocomplete="name"
       required
     >
   </div>
 
   <div class="auth-form-group">
-    <label for="jobseekerRegisterEmail">Email Address</label>
+    <label for="jobseekerRegisterEmail" data-i18n="register_email">Email Address</label>
     <input
       type="email"
       id="jobseekerRegisterEmail"
       name="jobseeker_email"
       placeholder="Enter your email address"
+      data-i18n-placeholder="register_email_placeholder"
       autocomplete="email"
       required
     >
   </div>
 
   <div class="auth-form-group">
-    <label for="jobseekerRegisterPhone">Phone Number</label>
+    <label for="jobseekerRegisterPhone" data-i18n="register_phone">Phone Number</label>
     <input
       type="tel"
       id="jobseekerRegisterPhone"
       name="jobseeker_phone"
       placeholder="Enter your phone number"
+      data-i18n-placeholder="register_phone_placeholder"
       autocomplete="tel"
       required
     >
   </div>
 
   <div class="auth-form-group">
-    <label for="jobseekerAddress">Residential Address</label>
+    <label for="jobseekerAddress" data-i18n="register_residential_address">Residential Address</label>
     <textarea
       id="jobseekerAddress"
       name="jobseeker_address"
       placeholder="Enter your residential address"
+      data-i18n-placeholder="register_residential_address_placeholder"
       rows="3"
       required
     ></textarea>
@@ -109,120 +112,124 @@
 
 </div>
 
-        <!-- COMPANY INFORMATION -->
-        <div id="companyRegisterFields" hidden>
 
-          <h2>Company Information</h2>
+<!-- COMPANY INFORMATION -->
+<div id="companyRegisterFields" hidden>
 
-          <div class="auth-form-group">
-            <label for="registerCompanyName">Company Name</label>
+  <h2 data-i18n="register_company_info">Company Information</h2>
 
-            <input
-              type="text"
-              id="registerCompanyName"
-              name="company_name"
-              placeholder="Enter your registered company name"
-              required
-              disabled
-            >
-          </div>
+  <div class="auth-form-group">
+    <label for="registerCompanyName" data-i18n="register_company_name">Company Name</label>
 
-          <div class="auth-form-group">
-            <label for="companyRegistrationNumber">
-              SSM Registration Number
-            </label>
+    <input
+      type="text"
+      id="registerCompanyName"
+      name="company_name"
+      placeholder="Enter your registered company name"
+      data-i18n-placeholder="register_company_name_placeholder"
+      required
+      disabled
+    >
+  </div>
 
-            <input
-              type="text"
-              id="companyRegistrationNumber"
-              name="registration_number"
-              placeholder="Enter your SSM registration number"
-              required
-              disabled
-            >
-          </div>
+  <div class="auth-form-group">
+    <label for="companyRegistrationNumber" data-i18n="register_ssm_number">
+      SSM Registration Number
+    </label>
 
-          <div class="auth-form-group">
-            <label for="companyContactPerson">Contact Person Name</label>
+    <input
+      type="text"
+      id="companyRegistrationNumber"
+      name="registration_number"
+      placeholder="Enter your SSM registration number"
+      data-i18n-placeholder="register_ssm_number_placeholder"
+      required
+      disabled
+    >
+  </div>
 
-            <input
-              type="text"
-              id="companyContactPerson"
-              name="contact_person"
-              placeholder="Enter the contact person's full name"
-              autocomplete="name"
-              required
-              disabled
-            >
-          </div>
+  <div class="auth-form-group">
+    <label for="companyContactPerson" data-i18n="register_contact_person">Contact Person Name</label>
 
-          <div class="auth-form-group">
-            <label for="companyRegisterEmail">Company Email Address</label>
+    <input
+      type="text"
+      id="companyContactPerson"
+      name="contact_person"
+      placeholder="Enter the contact person's full name"
+      data-i18n-placeholder="register_contact_person_placeholder"
+      autocomplete="name"
+      required
+      disabled
+    >
+  </div>
 
-            <input
-              type="email"
-              id="companyRegisterEmail"
-              name="company_email"
-              placeholder="Enter your company email address"
-              autocomplete="email"
-              required
-              disabled
-            >
-          </div>
+  <div class="auth-form-group">
+    <label for="companyRegisterEmail" data-i18n="register_company_email">Company Email Address</label>
 
-          <div class="auth-form-group">
-            <label for="companyRegisterPhone">Company Phone Number</label>
+    <input
+      type="email"
+      id="companyRegisterEmail"
+      name="company_email"
+      placeholder="Enter your company email address"
+      data-i18n-placeholder="register_company_email_placeholder"
+      autocomplete="email"
+      required
+      disabled
+    >
+  </div>
 
-            <input
-              type="tel"
-              id="companyRegisterPhone"
-              name="company_phone"
-              placeholder="Enter your company phone number"
-              autocomplete="tel"
-              required
-              disabled
-            >
-          </div>
-          
-          <div class="auth-form-group">
-          <label for="companyAddress">Company Address</label>
+  <div class="auth-form-group">
+    <label for="companyRegisterPhone" data-i18n="register_company_phone">Company Phone Number</label>
 
-          <textarea
-         id="companyAddress"
-         name="company_address"
-         placeholder="Enter your company office address"
-         rows="3"
-         required
-        disabled
-       ></textarea>
-      </div>
+    <input
+      type="tel"
+      id="companyRegisterPhone"
+      name="company_phone"
+      placeholder="Enter your company phone number"
+      data-i18n-placeholder="register_company_phone_placeholder"
+      autocomplete="tel"
+      required
+      disabled
+    >
+  </div>
 
+  <div class="auth-form-group">
+    <label for="companyAddress" data-i18n="register_company_address">Company Address</label>
 
-          <div class="auth-form-group">
-            <label for="companyWebsite">
-              Company Website (Optional)
-            </label>
+    <textarea
+      id="companyAddress"
+      name="company_address"
+      placeholder="Enter your company office address"
+      data-i18n-placeholder="register_company_address_placeholder"
+      rows="3"
+      required
+      disabled
+    ></textarea>
+  </div>
 
-            <input
-              type="url"
-              id="companyWebsite"
-              name="website"
-              placeholder="https://www.example.com"
-              disabled
-            >
-          </div>
+  <div class="auth-form-group">
+    <label for="companyWebsite" data-i18n="register_company_website">
+      Company Website (Optional)
+    </label>
 
-        </div>
+    <input
+      type="url"
+      id="companyWebsite"
+      name="website"
+      placeholder="https://www.example.com"
+      disabled
+    >
+  </div>
 
-
-      
+</div>
+        
 <!-- ACCOUNT PASSWORD -->
 <div class="auth-register-password">
 
-  <h2>Account Security</h2>
+  <h2 data-i18n="register_account_security">Account Security</h2>
 
   <div class="auth-form-group">
-    <label for="registerPassword">Password</label>
+    <label for="registerPassword" data-i18n="register_password">Password</label>
 
     <div class="password-input-wrapper">
       <input
@@ -230,6 +237,7 @@
         id="registerPassword"
         name="password"
         placeholder="Create your password"
+        data-i18n-placeholder="register_password_placeholder"
         autocomplete="new-password"
         minlength="8"
         required
@@ -240,6 +248,7 @@
         class="toggle-password-btn"
         data-target="registerPassword"
         aria-label="Show password"
+        data-i18n-aria-label="auth_show_password"
         aria-pressed="false"
       >
         <svg class="eye-icon" viewBox="0 0 24 24" fill="none"
@@ -253,7 +262,7 @@
   </div>
 
   <div class="auth-form-group">
-    <label for="confirmRegisterPassword">Confirm Password</label>
+    <label for="confirmRegisterPassword" data-i18n="register_confirm_password">Confirm Password</label>
 
     <div class="password-input-wrapper">
       <input
@@ -261,6 +270,7 @@
         id="confirmRegisterPassword"
         name="confirm_password"
         placeholder="Re-enter your password"
+        data-i18n-placeholder="register_confirm_password_placeholder"
         autocomplete="new-password"
         minlength="8"
         required
@@ -271,6 +281,7 @@
         class="toggle-password-btn"
         data-target="confirmRegisterPassword"
         aria-label="Show password"
+        data-i18n-aria-label="auth_show_password"
         aria-pressed="false"
       >
         <svg class="eye-icon" viewBox="0 0 24 24" fill="none"
@@ -285,48 +296,50 @@
 
 </div>
 
-        <!-- SUBMIT -->
-        <button
-          type="submit"
-          id="registerSubmitBtn"
-          class="auth-submit-btn"
-        >
-          Create Account
-        </button>
 
-        <p
-          id="registerStatus"
-          class="auth-status"
-          aria-live="polite"
-        ></p>
+<!-- SUBMIT -->
+<button
+  type="submit"
+  id="registerSubmitBtn"
+  class="auth-submit-btn"
+  data-i18n="register_create_account"
+>
+  Create Account
+</button>
 
-      </form>
+<p
+  id="registerStatus"
+  class="auth-status"
+  aria-live="polite"
+></p>
 
-
-      <!-- LOGIN LINK -->
-      <div class="auth-footer">
-
-        <p>
-          Already have an account?
-          <a href="login.html">Log In</a>
-        </p>
-
-      </div>
+</form>
 
 
-      <!-- BACK TO HOME -->
-      <div class="auth-back-home">
+<!-- LOGIN LINK -->
+<div class="auth-footer">
 
-        <a href="index.html">
-          ← Back to Home
-        </a>
+  <p>
+    <span data-i18n="register_existing_account">Already have an account?</span>
+    <a href="login.html" data-i18n="auth_login">Log In</a>
+  </p>
 
-      </div>
+</div>
 
-    </div>
 
-   </main>
+<!-- BACK TO HOME -->
+<div class="auth-back-home">
 
+  <a href="index.html" data-i18n="auth_back_home">
+    ← Back to Home
+  </a>
+
+</div>
+
+</div>
+
+</main>
+  
   <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 

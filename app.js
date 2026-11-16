@@ -2791,25 +2791,35 @@ document.addEventListener("DOMContentLoaded", async function () {
   // EMPTY STATE
   // =========================================
 
-  function showEmptyState() {
+function showEmptyState() {
 
-    applicationList.replaceChildren();
+  applicationList.replaceChildren();
 
-    const emptyState = document.createElement("div");
-    emptyState.className = "dashboard-empty-state";
+  const emptyState = document.createElement("div");
+  emptyState.className = "dashboard-empty-state";
 
-    const heading = document.createElement("h3");
-    heading.textContent = "No Applications Yet";
+  const heading = document.createElement("h3");
+  heading.setAttribute("data-i18n", "applications_empty_title");
+  heading.textContent = "No Applications Yet";
 
-    const description = document.createElement("p");
-    description.textContent =
-      "You have not submitted any job applications.";
+  const description = document.createElement("p");
+  description.setAttribute(
+    "data-i18n",
+    "applications_empty_description"
+  );
+  description.textContent =
+    "You have not submitted any job applications.";
 
-    emptyState.append(heading, description);
-    applicationList.appendChild(emptyState);
+  emptyState.append(heading, description);
+  applicationList.appendChild(emptyState);
 
+  if (typeof applyTranslations === "function") {
+    applyTranslations(
+      localStorage.getItem("siteLanguage") || "en"
+    );
   }
 
+}
   // =========================================
   // FORMAT APPLICATION STATUS
   // =========================================

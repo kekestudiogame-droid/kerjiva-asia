@@ -2142,7 +2142,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   // DISPLAY EMPTY STATE
   // =========================================
 
- function showEmptyState() {
+function showEmptyState() {
 
   documentList.replaceChildren();
 
@@ -2150,14 +2150,25 @@ document.addEventListener("DOMContentLoaded", async function () {
   emptyState.className = "dashboard-empty-state";
 
   const heading = document.createElement("h3");
+  heading.setAttribute("data-i18n", "my_documents_empty_title");
   heading.textContent = "No Documents Uploaded";
 
   const description = document.createElement("p");
+  description.setAttribute(
+    "data-i18n",
+    "my_documents_empty_description"
+  );
   description.textContent =
     "Your uploaded documents will appear here.";
 
   emptyState.append(heading, description);
   documentList.appendChild(emptyState);
+
+  if (typeof applyTranslations === "function") {
+    applyTranslations(
+      localStorage.getItem("siteLanguage") || "en"
+    );
+  }
 
 }
 

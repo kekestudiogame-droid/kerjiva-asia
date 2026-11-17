@@ -6533,11 +6533,41 @@ if (shouldScroll) {
 
 } // END filterHomepageJobs
    
+   
+// ========================================
+// HOMEPAGE PUBLISHED JOB COUNT
+// ========================================
+ 
+   
+function updateHomepagePublishedJobCount(count) {
+  const countElement = document.getElementById(
+    "homepagePublishedJobCount"
+  );
+
+  if (!countElement) return;
+
+  countElement.dataset.count = count;
+
+  const isMalay = window.currentKerjivaLanguage === "ms";
+
+  countElement.textContent = isMalay
+    ? `${count} Jawatan Disiarkan`
+    : `${count} Published Jobs`;
+}
+
 // ========================================
 // REFRESH HOMEPAGE JOBS WHEN LANGUAGE CHANGES
 // ========================================
 document.addEventListener("kerjivaLanguageChanged", function () {
   filterHomepageJobs();
+
+  const countElement = document.getElementById(
+    "homepagePublishedJobCount"
+  );
+
+  updateHomepagePublishedJobCount(
+    Number(countElement?.dataset.count || 0)
+  );
 });
 
 
@@ -6587,6 +6617,9 @@ document.addEventListener("kerjivaLanguageChanged", function () {
           job.application_deadline >= today
         );
       });
+       
+       // UPDATE HOMEPAGE PUBLISHED JOB COUNT
+         updateHomepagePublishedJobCount(activeJobs.length);
 
       const companyIds = [
         ...new Set(

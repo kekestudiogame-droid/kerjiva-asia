@@ -7005,10 +7005,11 @@ if (job.status === "published" && job.published_at) {
 
         // Show Publish button only for Draft jobs.
         if (job.status === "draft") {
-          const publishBtn = document.createElement("button");
+        const publishBtn = document.createElement("button");
 
-          publishBtn.type = "button";
-          publishBtn.textContent = "Publish";
+        publishBtn.type = "button";
+        publishBtn.className = "company-job-publish-btn";
+        publishBtn.textContent = "Publish";
 
           publishBtn.addEventListener("click", async function () {
             publishBtn.disabled = true;

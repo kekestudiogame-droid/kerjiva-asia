@@ -5511,9 +5511,45 @@ async function saveCompanyJob(status) {
 
     }
 
+     
     // ===============================================
     // SAVE JOB TO SUPABASE
     // ===============================================
+
+    // Record the first publication date only.
+    if (status === "published") {
+
+      const publicationTime = new Date().toISOString();
+
+      if (jobId) {
+
+        // Check the existing publication date.
+        const { data: existingJob, error: existingJobError } =
+          await supabaseAuth
+            .from("jobs")
+            .select("published_at")
+            .eq("id", jobId)
+            .eq("company_id", companyId)
+            .maybeSingle();
+
+        if (existingJobError) throw existingJobError;
+
+        if (!existingJob) {
+          throw new Error("Job posting not found.");
+        }
+
+        // Preserve the original publication date.
+        if (!existingJob.published_at) {
+          jobData.published_at = publicationTime;
+        }
+
+      } else {
+
+        // First publication of a new job.
+        jobData.published_at = publicationTime;
+
+      }
+    }
 
     let result;
 
@@ -5543,6 +5579,7 @@ async function saveCompanyJob(status) {
 
       result = data;
     }
+
 
   const successMessage =
   status === "draft"

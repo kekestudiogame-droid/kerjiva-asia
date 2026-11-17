@@ -978,6 +978,87 @@ document.addEventListener("DOMContentLoaded", function () {
    ===================================================== */
 
 document.addEventListener("DOMContentLoaded", async function () {
+
+     // =====================================================
+  // JOBSEEKER LOGOUT
+  // =====================================================
+
+  const jobseekerLogoutBtn = document.getElementById("jobseekerLogoutBtn");
+
+  if (jobseekerLogoutBtn) {
+    jobseekerLogoutBtn.addEventListener("click", async function () {
+
+      jobseekerLogoutBtn.disabled = true;
+
+      try {
+
+        const { error } = await supabaseAuth.auth.signOut();
+
+        if (error) throw error;
+
+        saveKerjivaNotification(
+          "You have successfully logged out.",
+          "success"
+        );
+
+        window.location.href = "login.html";
+
+      } catch (error) {
+
+        console.error("Jobseeker Logout Error:", error);
+
+        showKerjivaNotification(
+          "Unable to sign out. Please try again.",
+          "error"
+        );
+
+        jobseekerLogoutBtn.disabled = false;
+
+      }
+    });
+  }
+
+
+    // =====================================================
+  // COMPANY LOGOUT
+  // =====================================================
+
+  const companyLogoutBtn = document.getElementById("companyLogoutBtn");
+
+  if (companyLogoutBtn) {
+    companyLogoutBtn.addEventListener("click", async function () {
+
+      companyLogoutBtn.disabled = true;
+
+      try {
+
+        const { error } = await supabaseAuth.auth.signOut();
+
+        if (error) throw error;
+
+        saveKerjivaNotification(
+          "You have successfully logged out.",
+          "success"
+        );
+
+        window.location.href = "login.html";
+
+      } catch (error) {
+
+        console.error("Company Logout Error:", error);
+
+        showKerjivaNotification(
+          "Unable to sign out. Please try again.",
+          "error"
+        );
+
+        companyLogoutBtn.disabled = false;
+
+      }
+    });
+  }
+   
+
   const params = new URLSearchParams(window.location.search);
 
   // Jangan mengganggu fitur Dashboard Preview sementara.
@@ -1081,89 +1162,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       return;
     }
   }
-
-                
-  // =====================================================
-  // JOBSEEKER LOGOUT
-  // =====================================================
-
-  const jobseekerLogoutBtn = document.getElementById("jobseekerLogoutBtn");
-
-  if (jobseekerLogoutBtn) {
-    jobseekerLogoutBtn.addEventListener("click", async function () {
-
-      jobseekerLogoutBtn.disabled = true;
-
-      try {
-
-        const { error } = await supabaseAuth.auth.signOut();
-
-        if (error) throw error;
-
-        saveKerjivaNotification(
-          "You have successfully logged out.",
-          "success"
-        );
-
-        window.location.href = "login.html";
-
-      } catch (error) {
-
-        console.error("Jobseeker Logout Error:", error);
-
-        showKerjivaNotification(
-          "Unable to sign out. Please try again.",
-          "error"
-        );
-
-        jobseekerLogoutBtn.disabled = false;
-
-      }
-    });
-  }
-
-
-  // =====================================================
-  // COMPANY LOGOUT
-  // =====================================================
-
-  const companyLogoutBtn = document.getElementById("companyLogoutBtn");
-
-  if (companyLogoutBtn) {
-    companyLogoutBtn.addEventListener("click", async function () {
-
-      companyLogoutBtn.disabled = true;
-
-      try {
-
-        const { error } = await supabaseAuth.auth.signOut();
-
-        if (error) throw error;
-
-        saveKerjivaNotification(
-          "You have successfully logged out.",
-          "success"
-        );
-
-        window.location.href = "login.html";
-
-      } catch (error) {
-
-        console.error("Company Logout Error:", error);
-
-        showKerjivaNotification(
-          "Unable to sign out. Please try again.",
-          "error"
-        );
-
-        companyLogoutBtn.disabled = false;
-
-      }
-    });
-  }
    
-    });
-
+});
+      
 
 /* =====================================================
    KERJIVA MALAYSIA

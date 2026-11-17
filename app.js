@@ -6867,6 +6867,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         return;
       }
 
+    
       // 5. Render job list
       jobsList.replaceChildren();
 
@@ -6887,8 +6888,55 @@ document.addEventListener("DOMContentLoaded", async function () {
           "Status: " + (job.status || "Unknown").toUpperCase();
 
         jobCard.append(title, location, status);
+
+        // Show Publish button only for Draft jobs.
+        if (job.status === "draft") {
+          const publishBtn = document.createElement("button");
+
+          publishBtn.type = "button";
+          publishBtn.textContent = "Publish";
+
+          publishBtn.addEventListener("click", async function () {
+            publishBtn.disabled = true;
+
+            try {
+              if (typeof window.openCompanyJobForEdit !== "function") {
+                throw new Error("Job editing function is not available.");
+              }
+
+              await window.openCompanyJobForEdit(job.id);
+
+              const editingJobId = document.getElementById(
+                "companyEditingJobId"
+              );
+
+              const submitJobBtn = document.getElementById(
+                "submitCompanyJobBtn"
+              );
+
+              if (
+                !editingJobId ||
+                editingJobId.value !== job.id ||
+                !submitJobBtn
+              ) {
+                throw new Error("Unable to prepare this draft for publishing.");
+              }
+
+              submitJobBtn.click();
+
+            } catch (error) {
+              console.error("Publish Draft Error:", error);
+              alert(error.message || "Unable to publish this draft.");
+              publishBtn.disabled = false;
+            }
+          });
+
+          jobCard.appendChild(publishBtn);
+        }
+
         jobsList.appendChild(jobCard);
       });
+
 
       console.log("Company My Jobs Loaded:", jobs.length);
 

@@ -6372,11 +6372,32 @@ function renderHomepageJobs(jobs) {
 
     header.append(logo, companyName);
 
-    const title = createTextElement(
+      const title = createTextElement(
       "h3",
       "job-card-title",
       (isMalay && job.title_ms) || job.title
     );
+
+    // PUBLISHED DATE
+    let postedDate = null;
+
+    if (job.published_at) {
+      const formattedDate = new Intl.DateTimeFormat(
+        isMalay ? "ms-MY" : "en-MY",
+        {
+          timeZone: "Asia/Kuala_Lumpur",
+          day: "2-digit",
+          month: "short",
+          year: "numeric"
+        }
+      ).format(new Date(job.published_at));
+
+      postedDate = createTextElement(
+        "p",
+        "job-card-posted-date",
+        `${isMalay ? "Disiarkan pada" : "Posted on"} ${formattedDate}`
+      );
+    }
 
     const category = createTextElement(
       "span",
@@ -6422,9 +6443,16 @@ function renderHomepageJobs(jobs) {
       openJobDetails(job);
     });
 
+       card.append(
+       header,
+       title
+     );
+
+    if (postedDate) {
+      card.appendChild(postedDate);
+    }
+
     card.append(
-      header,
-      title,
       category,
       details,
       salary,
@@ -6541,8 +6569,9 @@ document.addEventListener("kerjivaLanguageChanged", function () {
        education_ms,
        experience,
        experience_ms,
-      application_deadline,
+           application_deadline,
       created_at,
+      published_at,
       company_id
       `)
         .eq("status", "published")

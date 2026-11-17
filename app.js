@@ -6467,6 +6467,14 @@ if (shouldScroll) {
 }
 
 } // END filterHomepageJobs
+   
+// ========================================
+// REFRESH HOMEPAGE JOBS WHEN LANGUAGE CHANGES
+// ========================================
+document.addEventListener("kerjivaLanguageChanged", function () {
+  filterHomepageJobs();
+});
+
 
   async function loadHomepageJobs() {
     jobsGrid.innerHTML =

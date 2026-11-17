@@ -5544,14 +5544,16 @@ async function saveCompanyJob(status) {
       result = data;
     }
 
-    const successMessage =
-      status === "draft"
-        ? "Job draft saved successfully."
-        : "Job published successfully.";
+  const successMessage =
+  status === "draft"
+    ? "Job draft saved successfully."
+    : "Job published successfully.";
 
-    resetJobForm();
+resetJobForm();
 
-    showJobStatus(successMessage);
+showJobStatus(successMessage);
+
+showKerjivaNotification(successMessage, "success");
 
     console.log(
       "Company Job Saved Successfully:",

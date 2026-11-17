@@ -6920,11 +6920,26 @@ document.addEventListener("DOMContentLoaded", async function () {
           .filter(Boolean)
           .join(", ");
 
-        const status = document.createElement("p");
-        status.textContent =
-          "Status: " + (job.status || "Unknown").toUpperCase();
+     const status = document.createElement("p");
+status.textContent =
+  "Status: " + (job.status || "Unknown").toUpperCase();
 
-        jobCard.append(title, location, status);
+jobCard.append(title, location, status);
+
+// Display publication date for published jobs.
+if (job.status === "published" && job.published_at) {
+  const postedDate = document.createElement("p");
+
+  postedDate.textContent =
+    "Posted on " +
+    new Date(job.published_at).toLocaleDateString("en-MY", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
+
+  jobCard.appendChild(postedDate);
+}
 
         // Show Publish button only for Draft jobs.
         if (job.status === "draft") {

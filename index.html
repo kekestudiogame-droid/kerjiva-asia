@@ -50,31 +50,74 @@
 
 <nav class="hamburger-dropdown" id="hamburgerDropdown">
 
-  <a href="#home" data-i18n="menuHome">Home</a>
-  <a href="#jobs" data-i18n="menuFindJobs">Find Jobs</a>
-  <a href="#companies" data-i18n="menuCompanies">Companies</a>
-  <a href="#about" data-i18n="menuAboutUs">About Us</a>
-
-  <!-- KERJIVA INFORMATION CENTER -->
-  <a
-    href="#information-center"
-    data-i18n="menuInformationCenter"
-  >
-    Kerjiva Information Center
+  <!-- HOME -->
+  <a href="#home" class="hamburger-menu-link">
+    <span class="hamburger-icon" aria-hidden="true">🏠</span>
+    <span data-i18n="menuHome">Home</span>
   </a>
 
-  <!-- CONTACT US -->
+  <!-- JOBSEEKER DASHBOARD -->
   <a
-    href="#contact"
-    data-i18n="menuContactUs"
+    href="index.html?dashboard=jobseeker"
+    class="hamburger-menu-link dashboard-menu-item"
   >
-    Contact Us
+    <span class="hamburger-icon" aria-hidden="true">👤</span>
+    <span data-i18n="menuJobseekerDashboard">Jobseeker Dashboard</span>
+  </a>
+
+  <!-- COMPANY DASHBOARD -->
+  <a
+    href="index.html?dashboard=company"
+    class="hamburger-menu-link dashboard-menu-item"
+  >
+    <span class="hamburger-icon" aria-hidden="true">🏢</span>
+    <span data-i18n="menuCompanyDashboard">Company Dashboard</span>
   </a>
 
   <div class="hamburger-divider"></div>
 
-  <div class="language-switcher">
+  <!-- INFORMATION CENTER -->
+  <a href="#information-center" class="hamburger-menu-link">
+    <span class="hamburger-icon" aria-hidden="true">ℹ️</span>
+    <span data-i18n="menuInformationCenter">Kerjiva Information Center</span>
+  </a>
 
+  <!-- COMMUNITY -->
+  <a href="#community" class="hamburger-menu-link">
+    <span class="hamburger-icon" aria-hidden="true">👥</span>
+    <span data-i18n="menuCommunity">Kerjiva Malaysia Community</span>
+  </a>
+
+  <div class="hamburger-divider"></div>
+
+  <!-- JOBS -->
+  <a href="#jobs" class="hamburger-menu-link">
+    <span class="hamburger-icon" aria-hidden="true">📋</span>
+    <span data-i18n="menuJobs">Jobs</span>
+  </a>
+
+  <!-- FIND JOBS -->
+  <a href="#find-jobs" class="hamburger-menu-link">
+    <span class="hamburger-icon" aria-hidden="true">🔍</span>
+    <span data-i18n="menuFindJobs">Find Jobs</span>
+  </a>
+
+  <!-- ABOUT -->
+  <a href="#about" class="hamburger-menu-link">
+    <span class="hamburger-icon" aria-hidden="true">📖</span>
+    <span data-i18n="menuAboutUs">About Kerjiva Malaysia</span>
+  </a>
+
+  <!-- CONTACT -->
+  <a href="#contact" class="hamburger-menu-link">
+    <span class="hamburger-icon" aria-hidden="true">✉️</span>
+    <span data-i18n="menuContactUs">Contact Us</span>
+  </a>
+
+  <div class="hamburger-divider"></div>
+
+  <!-- LANGUAGE -->
+  <div class="language-switcher">
     <label
       for="languageSelect"
       class="language-switcher-label"
@@ -91,25 +134,32 @@
       <option value="en">English</option>
       <option value="ms">Bahasa Melayu</option>
     </select>
-
   </div>
+
+  <!-- HELP -->
+  <a href="#help" class="hamburger-menu-link">
+    <span class="hamburger-icon" aria-hidden="true">❓</span>
+    <span data-i18n="menuHelp">Help</span>
+  </a>
+
+  <!-- COMPANIES -->
+  <a href="#companies" class="hamburger-menu-link">
+    <span class="hamburger-icon" aria-hidden="true">🏬</span>
+    <span data-i18n="menuCompanies">Companies</span>
+  </a>
 
   <div class="hamburger-divider"></div>
 
-  <a
-    href="index.html?dashboard=jobseeker"
-    class="dashboard-menu-item"
-    data-i18n="menuJobseekerDashboard"
-  >
-    Jobseeker Dashboard
+  <!-- SETTINGS -->
+  <a href="#settings" class="hamburger-menu-link">
+    <span class="hamburger-icon" aria-hidden="true">⚙️</span>
+    <span data-i18n="menuSettings">Settings</span>
   </a>
 
-  <a
-    href="index.html?dashboard=company"
-    class="dashboard-menu-item"
-    data-i18n="menuCompanyDashboard"
-  >
-    Company Dashboard
+  <!-- LOGOUT -->
+  <a href="#logout" class="hamburger-menu-link">
+    <span class="hamburger-icon" aria-hidden="true">🚪</span>
+    <span data-i18n="menuLogout">Logout</span>
   </a>
 
 </nav>

@@ -2775,23 +2775,29 @@ select {
   background: var(--primary);
 }
 
-/* DROPDOWN MENU */
+
+/* =====================================================
+   HAMBURGER DROPDOWN MENU
+   ===================================================== */
 
 .hamburger-dropdown {
   display: none;
   position: absolute;
   top: calc(100% + 12px);
   right: 0;
-  width: 245px;
+  width: 280px;
+  max-height: 75vh;
+  overflow-y: auto;
   padding: 10px;
   background: var(--white);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow: 0 12px 30px rgba(18, 59, 109, 0.15);
   z-index: 1001;
+  box-sizing: border-box;
 }
 
-/* Class for opening the menu later with JavaScript */
+/* OPEN MENU */
 
 .hamburger-dropdown.is-open {
   display: flex;
@@ -2799,28 +2805,59 @@ select {
   animation: hamburgerFadeIn 0.2s ease;
 }
 
+/* MENU LINKS */
+
 .hamburger-dropdown a {
-  display: block;
-  padding: 11px 13px;
-  border-radius: 7px;
+  text-decoration: none;
+}
+
+.hamburger-dropdown .hamburger-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 8px;
+  box-sizing: border-box;
   color: var(--text);
   font-size: 14px;
   font-weight: 600;
-  transition: background 0.2s, color 0.2s;
+  line-height: 1.45;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.hamburger-dropdown a:hover {
+.hamburger-dropdown .hamburger-menu-link:hover {
   background: #edf3fa;
   color: var(--primary);
 }
 
+/* MENU ICONS */
+
+.hamburger-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 24px;
+  width: 24px;
+  font-size: 17px;
+  line-height: 1;
+}
+
+/* DASHBOARD LINKS */
+
+.hamburger-dropdown .dashboard-menu-item {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* DIVIDER */
+
 .hamburger-divider {
+  flex: 0 0 1px;
   height: 1px;
   margin: 7px 5px;
   background: var(--border);
 }
-
-     
 
 /* LANGUAGE SWITCHER */
 
@@ -2828,7 +2865,7 @@ select {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 10px 13px;
+  padding: 10px 12px;
 }
 
 .language-switcher-label {
@@ -2842,7 +2879,7 @@ select {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid var(--border);
-  border-radius: 7px;
+  border-radius: 8px;
   background: var(--white);
   color: var(--text);
   font-size: 13px;
@@ -2866,10 +2903,14 @@ select {
   color: var(--text);
 }
 
-.hamburger-dropdown .dashboard-menu-item {
-  color: var(--primary);
-  font-weight: 700;
+/* KEYBOARD ACCESSIBILITY */
+
+.hamburger-dropdown .hamburger-menu-link:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
+
+/* DROPDOWN ANIMATION */
 
 @keyframes hamburgerFadeIn {
   from {
@@ -2914,9 +2955,10 @@ select {
     height: 40px;
   }
 
-  .hamburger-dropdown {
-    width: 225px;
-  }
+ .hamburger-dropdown {
+  width: 270px;
+  max-width: calc(100vw - 24px);
+}
 }
 
 /* SMALL MOBILE */

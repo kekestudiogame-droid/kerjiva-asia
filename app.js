@@ -5816,84 +5816,113 @@ document.addEventListener("DOMContentLoaded", async function () {
     content.appendChild(wrapper);
   }
 
-  function openJobDetails(job) {
-    if (!detailsModal || !detailsContent) {
-      console.error("Homepage job details modal not found.");
-      return;
-    }
 
-    selectedHomepageJob = job;
-    detailsContent.replaceChildren();
-
-    const title = createTextElement("h2", "", job.title);
-    const company = createTextElement(
-      "p",
-      "",
-      job.company_name || "Company"
-    );
-
-    const category = createTextElement(
-      "p",
-      "",
-      `Category: ${job.category || "Other"}`
-    );
-
-    const location = [job.city, job.state]
-      .filter(Boolean)
-      .join(", ");
-
-    const jobLocation = createTextElement(
-      "p",
-      "",
-      `Location: ${location || "Not specified"}`
-    );
-
-    const jobType = createTextElement(
-      "p",
-      "",
-      `Job Type: ${job.job_type || "Not specified"}`
-    );
-
-    const salary = createTextElement(
-      "p",
-      "",
-      `Salary: ${formatSalary(job)}`
-    );
-
-    detailsContent.append(
-      title,
-      company,
-      category,
-      jobLocation,
-      jobType,
-      salary
-    );
-
-    addDetail(detailsContent, "Education", job.education);
-    addDetail(detailsContent, "Experience", job.experience);
-    addDetail(detailsContent, "Job Description", job.description);
-    addDetail(detailsContent, "Requirements", job.requirements);
-
-    addDetail(
-      detailsContent,
-      "Application Deadline",
-      job.application_deadline || "Not specified"
-    );
-
-    if (applyNowButton) {
-      applyNowButton.disabled = false;
-      applyNowButton.textContent = "Apply Now";
-    }
-
-    const applyStatus = document.getElementById("homepageApplyStatus");
-
-     if (applyStatus) {
-     applyStatus.textContent = "";
-     applyStatus.hidden = true;
+function openJobDetails(job) {
+  if (!detailsModal || !detailsContent) {
+    console.error("Homepage job details modal not found.");
+    return;
   }
-    detailsModal.hidden = false;
-    document.body.style.overflow = "hidden";
+
+  selectedHomepageJob = job;
+  detailsContent.replaceChildren();
+
+  const isMalay = window.currentKerjivaLanguage === "ms";
+
+  const title = createTextElement(
+    "h2",
+    "",
+    (isMalay && job.title_ms) || job.title
+  );
+
+  const company = createTextElement(
+    "p",
+    "",
+    job.company_name || "Company"
+  );
+
+  const category = createTextElement(
+    "p",
+    "",
+    `Category: ${(isMalay && job.category_ms) || job.category || "Other"}`
+  );
+
+  const location = [job.city, job.state]
+    .filter(Boolean)
+    .join(", ");
+
+  const jobLocation = createTextElement(
+    "p",
+    "",
+    `Location: ${location || "Not specified"}`
+  );
+
+  const jobType = createTextElement(
+    "p",
+    "",
+    `Job Type: ${(isMalay && job.job_type_ms) || job.job_type || "Not specified"}`
+  );
+
+  const salary = createTextElement(
+    "p",
+    "",
+    `Salary: ${formatSalary(job)}`
+  );
+
+  detailsContent.append(
+    title,
+    company,
+    category,
+    jobLocation,
+    jobType,
+    salary
+  );
+
+  addDetail(
+    detailsContent,
+    "Education",
+    (isMalay && job.education_ms) || job.education
+  );
+
+  addDetail(
+    detailsContent,
+    "Experience",
+    (isMalay && job.experience_ms) || job.experience
+  );
+
+  addDetail(
+    detailsContent,
+    "Job Description",
+    (isMalay && job.description_ms) || job.description
+  );
+
+  addDetail(
+    detailsContent,
+    "Requirements",
+    (isMalay && job.requirements_ms) || job.requirements
+  );
+
+  addDetail(
+    detailsContent,
+    "Application Deadline",
+    job.application_deadline || "Not specified"
+  );
+
+  if (applyNowButton) {
+    applyNowButton.disabled = false;
+    applyNowButton.textContent = "Apply Now";
   }
+
+  const applyStatus = document.getElementById("homepageApplyStatus");
+
+  if (applyStatus) {
+    applyStatus.textContent = "";
+    applyStatus.hidden = true;
+  }
+
+  detailsModal.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+
 
   function closeJobDetails() {
     if (detailsModal) detailsModal.hidden = true;
@@ -6253,118 +6282,121 @@ if (homepageSubmitButton) {
   });
 }
 
-  function renderHomepageJobs(jobs) {
-    jobsGrid.replaceChildren();
+  
+function renderHomepageJobs(jobs) {
+  jobsGrid.replaceChildren();
 
-    if (!jobs.length) {
-      const empty = document.createElement("div");
-      empty.className = "empty-jobs";
+  const isMalay = window.currentKerjivaLanguage === "ms";
 
-      empty.appendChild(
-        createTextElement("h3", "", "No Jobs Available Yet")
-      );
+  if (!jobs.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty-jobs";
 
-      empty.appendChild(
-        createTextElement(
-          "p",
-          "",
-          "New job opportunities will appear here soon."
-        )
-      );
+    empty.appendChild(
+      createTextElement("h3", "", "No Jobs Available Yet")
+    );
 
-      jobsGrid.appendChild(empty);
-      return;
-    }
-
-      jobs.forEach(job => {
-      const card = document.createElement("article");
-      card.className = "job-card";
-
-      const header = document.createElement("div");
-      header.className = "job-card-header";
-
-      const logo = document.createElement("img");
-      logo.className = "job-card-company-logo";
-      logo.alt = job.company_name
-        ? `${job.company_name} logo`
-        : "Company logo";
-
-      logo.src = job.logo_url || "/kerjiva-favicon.png";
-
-      logo.addEventListener("error", function () {
-        logo.src = "/kerjiva-favicon.png";
-      }, { once: true });
-
-      const companyName = createTextElement(
-        "span",
-        "job-card-company-name",
-        job.company_name || "Company"
-      );
-
-      header.append(logo, companyName);
-
-      const title = createTextElement(
-        "h3",
-        "job-card-title",
-        job.title
-      );
-
-      const category = createTextElement(
-        "span",
-        "job-card-category",
-        job.category || "Other"
-      );
-
-      const details = document.createElement("div");
-      details.className = "job-card-details";
-
-      const location = [job.city, job.state]
-        .filter(Boolean)
-        .join(", ");
-
-      details.appendChild(
-        createTextElement(
-          "p",
-          "",
-          `Location: ${location || "Not specified"}`
-        )
-      );
-
-      details.appendChild(
-        createTextElement(
-          "p",
-          "",
-          `Job Type: ${job.job_type || "Not specified"}`
-        )
-      );
-
-      const salary = createTextElement(
+    empty.appendChild(
+      createTextElement(
         "p",
-        "job-card-salary",
-        formatSalary(job)
-      );
+        "",
+        "New job opportunities will appear here soon."
+      )
+    );
 
-      const viewDetailsButton = document.createElement("button");
-      viewDetailsButton.type = "button";
-      viewDetailsButton.className = "primary-btn";
-      viewDetailsButton.textContent = "View Details";
-
-      viewDetailsButton.addEventListener("click", function () {
-        openJobDetails(job);
-      });
-
-      card.append(
-        header,
-        title,
-        category,
-        details,
-        salary,
-        viewDetailsButton
-      );
-
-      jobsGrid.appendChild(card);
-    });
+    jobsGrid.appendChild(empty);
+    return;
   }
+
+  jobs.forEach(job => {
+    const card = document.createElement("article");
+    card.className = "job-card";
+
+    const header = document.createElement("div");
+    header.className = "job-card-header";
+
+    const logo = document.createElement("img");
+    logo.className = "job-card-company-logo";
+    logo.alt = job.company_name
+      ? `${job.company_name} logo`
+      : "Company logo";
+
+    logo.src = job.logo_url || "/kerjiva-favicon.png";
+
+    logo.addEventListener("error", function () {
+      logo.src = "/kerjiva-favicon.png";
+    }, { once: true });
+
+    const companyName = createTextElement(
+      "span",
+      "job-card-company-name",
+      job.company_name || "Company"
+    );
+
+    header.append(logo, companyName);
+
+    const title = createTextElement(
+      "h3",
+      "job-card-title",
+      (isMalay && job.title_ms) || job.title
+    );
+
+    const category = createTextElement(
+      "span",
+      "job-card-category",
+      (isMalay && job.category_ms) || job.category || "Other"
+    );
+
+    const details = document.createElement("div");
+    details.className = "job-card-details";
+
+    const location = [job.city, job.state]
+      .filter(Boolean)
+      .join(", ");
+
+    details.appendChild(
+      createTextElement(
+        "p",
+        "",
+        `Location: ${location || "Not specified"}`
+      )
+    );
+
+    details.appendChild(
+      createTextElement(
+        "p",
+        "",
+        `Job Type: ${(isMalay && job.job_type_ms) || job.job_type || "Not specified"}`
+      )
+    );
+
+    const salary = createTextElement(
+      "p",
+      "job-card-salary",
+      formatSalary(job)
+    );
+
+    const viewDetailsButton = document.createElement("button");
+    viewDetailsButton.type = "button";
+    viewDetailsButton.className = "primary-btn";
+    viewDetailsButton.textContent = "View Details";
+
+    viewDetailsButton.addEventListener("click", function () {
+      openJobDetails(job);
+    });
+
+    card.append(
+      header,
+      title,
+      category,
+      details,
+      salary,
+      viewDetailsButton
+    );
+
+    jobsGrid.appendChild(card);
+  });
+}
 
         
 function filterHomepageJobs(shouldScroll = false) {
@@ -6443,24 +6475,31 @@ if (shouldScroll) {
     try {
       const { data: jobs, error: jobsError } = await supabase
         .from("jobs")
-        .select(`
-          id,
-          title,
-          description,
-          requirements,
-          job_type,
-          category,
-          city,
-          state,
-          salary_min,
-          salary_max,
-          salary_currency,
-          education,
-          experience,
-          application_deadline,
-          created_at,
-          company_id
-        `)
+       .select(`
+        id,
+        title,
+        title_ms,
+        description,
+        description_ms,
+        requirements,
+        requirements_ms,
+       job_type,
+       job_type_ms,
+       category,
+       category_ms,
+       city,
+       state,
+       salary_min,
+       salary_max,
+       salary_currency,
+       education,
+       education_ms,
+       experience,
+       experience_ms,
+      application_deadline,
+      created_at,
+      company_id
+      `)
         .eq("status", "published")
         .order("created_at", { ascending: false });
 

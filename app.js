@@ -6619,7 +6619,7 @@ document.addEventListener("kerjivaLanguageChanged", function () {
       });
        
        // UPDATE HOMEPAGE PUBLISHED JOB COUNT
-         updateHomepagePublishedJobCount(activeJobs.length);
+       updateHomepagePublishedJobCount((jobs || []).length);
 
       const companyIds = [
         ...new Set(

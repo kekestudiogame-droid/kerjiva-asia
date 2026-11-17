@@ -1164,6 +1164,57 @@ document.addEventListener("DOMContentLoaded", async function () {
    
     });
 
+
+/* =====================================================
+   KERJIVA MALAYSIA
+   HAMBURGER MENU LOGOUT
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const hamburgerLogoutBtn = document.getElementById(
+    "hamburgerLogoutBtn"
+  );
+
+  if (!hamburgerLogoutBtn) return;
+
+  hamburgerLogoutBtn.addEventListener("click", async function (event) {
+
+    event.preventDefault();
+
+    hamburgerLogoutBtn.style.pointerEvents = "none";
+
+    try {
+
+      const { error } = await supabaseAuth.auth.signOut();
+
+      if (error) throw error;
+
+      saveKerjivaNotification(
+        "You have successfully logged out.",
+        "success"
+      );
+
+      window.location.href = "login.html";
+
+    } catch (error) {
+
+      console.error("Hamburger Logout Error:", error);
+
+      showKerjivaNotification(
+        "Unable to sign out. Please try again.",
+        "error"
+      );
+
+      hamburgerLogoutBtn.style.pointerEvents = "";
+
+    }
+
+  });
+
+});
+
+
 /* =====================================================
    KERJIVA MALAYSIA
    COMPANY BACK TO HOMEPAGE

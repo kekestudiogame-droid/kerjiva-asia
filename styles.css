@@ -3242,6 +3242,61 @@ select {
   margin-left: 10px;
 }
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   COMPANY MY JOBS - PUBLISH BUTTON
+   ===================================================== */
+
+#companyDashboard .company-job-publish-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  min-height: 40px;
+  margin-top: 12px;
+  padding: 10px 20px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  background: var(--primary);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(18, 59, 109, 0.15);
+  transition: background 0.2s ease,
+              border-color 0.2s ease,
+              box-shadow 0.2s ease,
+              transform 0.2s ease;
+}
+
+#companyDashboard .company-job-publish-btn:hover:not(:disabled) {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  box-shadow: 0 5px 12px rgba(18, 59, 109, 0.22);
+  transform: translateY(-2px);
+}
+
+#companyDashboard .company-job-publish-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(18, 59, 109, 0.15);
+}
+
+#companyDashboard .company-job-publish-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 600px) {
+  #companyDashboard .company-job-publish-btn {
+    width: 100%;
+    min-height: 42px;
+  }
+}
+
+
 
 
 

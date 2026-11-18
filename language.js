@@ -411,6 +411,82 @@ terms_website: "Laman Web:",
 terms_thank_you: "Terima kasih kerana menggunakan Kerjiva Malaysia.",
 terms_back_home: "← Kembali ke Laman Utama",
 
+     
+/* ================= ABOUT KERJIVA MALAYSIA PAGE ================= */
+
+about_title: "Mengenai Kerjiva Malaysia",
+about_tagline: "Kerjaya Anda, Masa Depan Anda.",
+
+about_what_title: "Apakah itu Kerjiva Malaysia?",
+about_what_p1: "Kerjiva Malaysia ialah platform kerjaya yang menghubungkan pencari kerja dengan syarikat dalam satu platform yang ringkas, moden dan mudah digunakan.",
+about_what_p2: "Bagi pencari kerja, Kerjiva membantu pengguna mencari peluang pekerjaan, melihat maklumat kekosongan jawatan, menghantar permohonan dan mengikuti perkembangan permohonan mereka.",
+about_what_p3: "Bagi syarikat, Kerjiva menyediakan platform untuk memperkenalkan perniagaan, menerbitkan iklan jawatan kosong, menyemak pemohon dan mengurus aktiviti pengambilan pekerja dengan lebih mudah.",
+
+about_services_title: "Perkhidmatan Kerjiva",
+about_services_intro: "Kerjiva menyediakan perkhidmatan yang direka untuk memenuhi keperluan pencari kerja dan syarikat dalam satu platform.",
+
+about_jobseeker_title: "Untuk Pencari Kerja",
+about_jobseeker_1: "Mencari jawatan kosong mengikut posisi dan lokasi.",
+about_jobseeker_2: "Melihat maklumat kekosongan jawatan dengan lengkap.",
+about_jobseeker_3: "Menghantar permohonan pekerjaan.",
+about_jobseeker_4: "Mengurus profil dan dokumen yang telah dimuat naik.",
+about_jobseeker_5: "Memantau perkembangan permohonan.",
+about_jobseeker_6: "Melihat maklumat jadual temu duga.",
+
+about_company_title: "Untuk Syarikat",
+about_company_1: "Membuat profil syarikat.",
+about_company_2: "Menerbitkan iklan jawatan kosong.",
+about_company_3: "Mengurus iklan jawatan yang telah diterbitkan dan disimpan sebagai draf.",
+about_company_4: "Menyemak dan mengurus permohonan yang diterima.",
+about_company_5: "Menghubungi calon yang berpotensi.",
+about_company_6: "Menjemput calon untuk temu duga.",
+
+about_benefits_title: "Manfaat Kerjiva untuk Pencari Kerja dan Syarikat",
+about_benefits_intro: "Kerjiva direka untuk membantu pencari kerja mencari peluang pekerjaan serta membantu syarikat mengurus keperluan pengambilan pekerja melalui satu platform. Setiap ciri bertujuan menjadikan proses pencarian kerja dan pengurusan permohonan lebih praktikal dan teratur.",
+
+about_benefits_jobseeker_title: "Manfaat untuk Pencari Kerja",
+about_benefits_jobseeker_intro: "Pencari kerja boleh menggunakan Kerjiva untuk mengurus langkah-langkah penting dalam perjalanan mencari kerjaya.",
+about_benefits_jobseeker_1: "Mencari jawatan kosong mengikut posisi dan lokasi.",
+about_benefits_jobseeker_2: "Menyemak syarat dan maklumat pekerjaan sebelum memohon.",
+about_benefits_jobseeker_3: "Menghantar permohonan melalui ciri yang tersedia pada platform.",
+about_benefits_jobseeker_4: "Melengkapkan dan mengemas kini maklumat profil serta dokumen.",
+about_benefits_jobseeker_5: "Memantau maklumat perkembangan permohonan yang tersedia.",
+about_benefits_jobseeker_6: "Menyemak maklumat jadual temu duga apabila tersedia.",
+
+about_benefits_company_title: "Manfaat untuk Syarikat",
+about_benefits_company_intro: "Kerjiva menyediakan kemudahan kepada syarikat untuk memaparkan maklumat perniagaan dan mengurus aktiviti pengambilan pekerja dengan lebih cekap.",
+about_benefits_company_1: "Memperkenalkan profil dan maklumat syarikat kepada pencari kerja.",
+about_benefits_company_2: "Membuat dan mengurus iklan jawatan kosong.",
+about_benefits_company_3: "Menyemak permohonan yang dihantar melalui platform.",
+about_benefits_company_4: "Mengurus maklumat calon dan proses permohonan.",
+about_benefits_company_5: "Menggunakan ciri komunikasi yang tersedia untuk menghubungi calon.",
+about_benefits_company_6: "Mengurus maklumat temu duga apabila ciri berkaitan digunakan.",
+
+about_connecting_title: "Menghubungkan Bakat dengan Peluang",
+about_connecting_description: "Kerjiva berusaha membantu pencari kerja dan syarikat mencari peluang serta maklumat yang bersesuaian dengan keperluan masing-masing. Melalui maklumat yang jelas dan ciri yang mudah difahami, Kerjiva terus membangunkan platformnya untuk menyokong perjalanan kerjaya dan keperluan pengambilan pekerja di Malaysia.",
+
+about_different_title: "Pengalaman yang Berbeza",
+about_different_p1: "Kerjiva bukan sekadar menumpukan kepada penyediaan jawatan kosong. Kami berhasrat menawarkan pengalaman yang berbeza melalui platform yang ringkas, moden dan mudah difahami.",
+about_different_p2: "Kami mahu pencari kerja mencari maklumat yang diperlukan dengan lebih mudah, manakala syarikat dapat mengurus keperluan pengambilan pekerja tanpa proses yang rumit.",
+about_different_highlight: "Mudah digunakan. Profesional untuk bekerja. Selesa untuk mencari peluang.",
+
+about_vision_title: "Visi Kami",
+about_vision_description: "Menjadi platform kerjaya dan pengambilan pekerja yang dipercayai, mudah diakses dan mesra pengguna, serta membantu menghubungkan bakat dengan peluang pekerjaan yang tepat.",
+
+about_mission_title: "Misi Kami",
+about_mission_1: "Memudahkan pencari kerja mencari peluang pekerjaan yang bersesuaian.",
+about_mission_2: "Membantu syarikat mendapatkan calon yang berpotensi.",
+about_mission_3: "Menyediakan pengalaman pencarian kerja yang ringkas dan moden.",
+about_mission_4: "Terus membangunkan perkhidmatan mengikut perubahan keperluan dunia pekerjaan.",
+about_mission_5: "Membangunkan platform yang memberikan manfaat kepada pencari kerja dan syarikat.",
+
+about_future_title: "Kerjiva untuk Masa Depan Kerjaya Anda",
+about_future_description: "Setiap orang mempunyai perjalanan kerjaya masing-masing. Kerjiva hadir untuk membantu menghubungkan kemahiran, peluang dan masa depan melalui satu platform.",
+about_final_tagline: "Kerjiva — Kerjaya Anda, Masa Depan Anda.",
+
+about_back_home: "← Kembali ke Laman Utama",
+
+
 
 
 

@@ -76,11 +76,32 @@
 
   <div class="hamburger-divider"></div>
 
-  <!-- INFORMATION CENTER -->
-  <a href="#information-center" class="hamburger-menu-link">
-    <span class="hamburger-icon" aria-hidden="true">ℹ️</span>
-    <span data-i18n="menuInformationCenter">Kerjiva Information Center</span>
-  </a>
+
+  <!-- INFORMATION CENTER DROPDOWN -->
+  <div class="language-switcher information-center-dropdown">
+
+    <label
+      for="informationCenterSelect"
+      class="language-switcher-label"
+      data-i18n="menuInformationCenter"
+    >
+      Kerjiva Information Center
+    </label>
+
+    <select
+      id="informationCenterSelect"
+      class="language-select"
+      aria-label="Select information article"
+      onchange="if (this.value) window.location.href = this.value;"
+    >
+      <option value="">Select an article</option>
+      <option value="safe-job-search.html">
+        Safe Job Search Guide
+      </option>
+    </select>
+
+  </div>
+
 
   <!-- COMMUNITY -->
   <a href="#community" class="hamburger-menu-link">

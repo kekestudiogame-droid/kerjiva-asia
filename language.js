@@ -485,9 +485,48 @@ about_future_description: "Setiap orang mempunyai perjalanan kerjaya masing-masi
 about_final_tagline: "Kerjiva — Kerjaya Anda, Masa Depan Anda.",
 
 about_back_home: "← Kembali ke Laman Utama",
+     
+// ================= INFORMATION CENTER - ARTICLE 1 =================
 
+safe_job_category: "TIPS KERJAYA",
 
+safe_job_title: "Panduan Mencari Pekerjaan dengan Selamat",
 
+safe_job_subtitle: "Cari pekerjaan dengan bijak, selamat dan yakin bersama Kerjiva.",
+
+safe_job_intro_1: "Mencari pekerjaan merupakan langkah penting untuk membina masa depan anda. Namun begitu, pencari kerja perlu berhati-hati kerana iklan jawatan kosong palsu dan pelbagai penipuan pekerjaan masih boleh menyebabkan kerugian kewangan serta masalah peribadi.",
+
+safe_job_intro_2: "Untuk menjadikan pencarian kerja anda lebih selamat, berikut ialah beberapa panduan berguna yang boleh anda ikuti.",
+
+safe_job_section_1: "1. Gunakan Platform Carian Kerja yang Dipercayai",
+
+safe_job_text_1: "Cari peluang pekerjaan melalui platform yang menyediakan maklumat jelas tentang jawatan kosong dan syarikat. Baca keseluruhan penerangan kerja sebelum menghantar permohonan.",
+
+safe_job_section_2: "2. Sahkan Maklumat Syarikat",
+
+safe_job_text_2: "Pastikan nama syarikat, alamat, laman web dan maklumat perhubungannya boleh ditemui serta disahkan. Jika anda mempunyai keraguan, hubungi syarikat melalui saluran komunikasi rasmi yang disenaraikan di laman webnya.",
+
+safe_job_section_3: "3. Berhati-hati dengan Permintaan Bayaran",
+
+safe_job_text_3: "Berhati-hati jika ada pihak yang meminta bayaran pendaftaran, temu duga, latihan atau pentadbiran, atau menjanjikan pekerjaan sebagai balasan kepada bayaran. Jangan terburu-buru membuat sebarang pemindahan wang.",
+
+safe_job_section_4: "4. Lindungi Maklumat Peribadi Anda",
+
+safe_job_text_4: "Jangan sekali-kali berkongsi kata laluan, PIN, kod OTP atau maklumat perbankan dengan pihak yang tidak dibenarkan. Serahkan dokumen peribadi hanya apabila benar-benar diperlukan melalui proses pengambilan pekerja yang boleh dipercayai.",
+
+safe_job_section_5: "5. Sahkan Maklumat Sebelum Menghadiri Temu Duga",
+
+safe_job_text_5: "Pastikan lokasi dan jadual temu duga adalah betul. Maklumkan kepada keluarga atau seseorang yang anda percayai jika perlu menghadiri temu duga secara bersemuka, terutamanya di lokasi yang tidak dikenali.",
+
+safe_job_section_6: "6. Jangan Mudah Terpengaruh dengan Tawaran yang Tidak Munasabah",
+
+safe_job_text_6: "Berhati-hati dengan tawaran gaji yang luar biasa tinggi tetapi syaratnya tidak jelas, proses pengambilan pekerja yang kelihatan terlalu mudah atau tekanan untuk membuat keputusan dengan segera.",
+
+safe_job_reminder_title: "Ingat!",
+
+safe_job_reminder_text: "Peluang pekerjaan yang tulen tidak sepatutnya meminta pencari kerja menyerahkan wang atau berkongsi maklumat sulit secara sembarangan. Sentiasa sahkan maklumat sebelum membuat keputusan.",
+
+safe_job_closing: "Kerjiva — Temui peluang kerjaya dengan lebih mudah dan bijak.",
 
 
     /* ================= JOBSEEKER DASHBOARD ================= */

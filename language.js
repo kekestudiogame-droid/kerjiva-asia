@@ -630,6 +630,84 @@ interview_closing: "Kerjiva — Rakan Kerjaya Anda untuk Masa Depan yang Lebih C
 
 interview_footer: "© Kerjiva - Platform Kerjaya Malaysia",
 
+     
+// ================= INFORMATION CENTER - ARTICLE 4 =================
+
+company_guide_menu_title: "Panduan Syarikat: Cara Mengiklankan Jawatan di Kerjiva",
+
+company_guide_back_home: "← Kembali ke Laman Utama",
+
+company_guide_banner_alt: "Panduan Syarikat: Cara Mengiklankan Jawatan di Kerjiva",
+
+company_guide_category: "PANDUAN SYARIKAT",
+
+company_guide_title: "Panduan Syarikat: Cara Mengiklankan Jawatan di Kerjiva",
+
+company_guide_subtitle: "Mudah, percuma dan menjangkau lebih ramai calon berbakat bersama Kerjiva.",
+
+company_guide_intro: "Kerjiva membantu syarikat mencari calon yang sesuai dengan keperluan pengambilan pekerja. Melalui platform Kerjiva, syarikat boleh mengiklankan kekosongan jawatan dan menguruskan permohonan calon dengan lebih mudah.",
+
+company_guide_section_1: "1. Daftar sebagai Syarikat",
+
+company_guide_section_1_text: "Layari laman web Kerjiva Malaysia di",
+
+company_guide_section_1_text_2: ", kemudian pilih menu Daftar. Pilih jenis akaun Syarikat dan lengkapkan maklumat pendaftaran yang diperlukan.",
+
+company_guide_section_1_text_3: "Pastikan anda menggunakan alamat e-mel yang aktif untuk proses pengesahan akaun.",
+
+company_guide_section_2: "2. Lengkapkan Profil Syarikat",
+
+company_guide_section_2_text: "Selepas berjaya log masuk, lengkapkan profil syarikat supaya pencari kerja dapat mengenali organisasi anda dengan lebih baik.",
+
+company_guide_section_2_text_2: "Gunakan maklumat syarikat yang tepat dan jelas, termasuk nama syarikat serta maklumat sokongan yang berkaitan.",
+
+company_guide_section_3: "3. Iklankan Kekosongan Jawatan",
+
+company_guide_section_3_text: "Buka papan pemuka syarikat, kemudian pilih ciri untuk membuat iklan kekosongan jawatan.",
+
+company_guide_section_3_text_2: "Lengkapkan maklumat jawatan seperti berikut:",
+
+company_guide_job_item_1: "Nama atau jawatan pekerjaan.",
+
+company_guide_job_item_2: "Lokasi pekerjaan.",
+
+company_guide_job_item_3: "Jenis pekerjaan.",
+
+company_guide_job_item_4: "Julat gaji, jika tersedia.",
+
+company_guide_job_item_5: "Penerangan dan syarat pekerjaan.",
+
+company_guide_section_3_text_3: "Pastikan semua maklumat yang dipaparkan jelas dan bersesuaian dengan keperluan syarikat.",
+
+company_guide_section_4: "4. Terbitkan Iklan Jawatan",
+
+company_guide_section_4_text: "Semak semula semua maklumat sebelum menerbitkan iklan jawatan. Jika semuanya betul, teruskan proses penerbitan supaya kekosongan tersebut dapat dipaparkan kepada pencari kerja di Kerjiva.",
+
+company_guide_section_5: "5. Urus Permohonan Calon",
+
+company_guide_section_5_text: "Syarikat boleh memantau permohonan yang diterima melalui papan pemuka syarikat. Semak profil dan dokumen calon untuk membantu proses pemilihan mengikut keperluan pengambilan pekerja.",
+
+company_guide_tips_title: "Tips Mengiklankan Jawatan dengan Baik",
+
+company_guide_tip_1: "Gunakan tajuk jawatan yang jelas.",
+
+company_guide_tip_2: "Tulis penerangan pekerjaan dengan lengkap.",
+
+company_guide_tip_3: "Nyatakan syarat pekerjaan yang berkaitan.",
+
+company_guide_tip_4: "Sertakan maklumat gaji dan lokasi jika tersedia.",
+
+company_guide_tip_5: "Pastikan maklumat kekosongan jawatan sentiasa tepat.",
+
+company_guide_start_title: "Mulakan Pengambilan Pekerja Bersama Kerjiva",
+
+company_guide_start_text: "Temui calon berpotensi dan permudahkan proses pengambilan pekerja syarikat anda melalui Kerjiva.",
+
+company_guide_closing: "Kerjiva — Penyelesaian Pengambilan Pekerja yang Dipercayai untuk Syarikat Anda.",
+
+company_guide_footer: "© Kerjiva - Platform Kerjaya Malaysia",
+
+
 
 
     /* ================= JOBSEEKER DASHBOARD ================= */

@@ -249,6 +249,21 @@
 
     privacy_thank_you: "Terima kasih kerana menggunakan Kerjiva Malaysia.",
 
+     
+/* ================= CONTACT US PAGE ================= */
+
+contact_title: "Hubungi Kami",
+contact_brand: "Kerjiva Malaysia",
+contact_intro: "Kami sedia membantu anda. Jika anda mempunyai sebarang pertanyaan, maklum balas atau memerlukan bantuan, sila hubungi kami melalui maklumat di bawah.",
+
+contact_phone_title: "Nombor Telefon Rasmi",
+contact_support_title: "Khidmat Sokongan Pelanggan",
+contact_official_title: "E-mel Rasmi Kerjiva",
+
+contact_thank_you: "Terima kasih kerana menjadi sebahagian daripada Kerjiva Malaysia.",
+contact_back_home: "← Kembali ke Laman Utama",
+
+
 
 
     /* ================= JOBSEEKER DASHBOARD ================= */

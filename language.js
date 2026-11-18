@@ -528,6 +528,53 @@ safe_job_reminder_text: "Peluang pekerjaan yang tulen tidak sepatutnya meminta p
 
 safe_job_closing: "Kerjiva — Temui peluang kerjaya dengan lebih mudah dan bijak.",
 
+   
+// ================= INFORMATION CENTER - ARTICLE 2 =================
+
+cv_back_home: "Kembali ke Kerjiva",
+
+cv_category: "TIPS KERJAYA",
+
+cv_title: "Cara Membuat CV yang Menarik",
+
+cv_subtitle: "Tonjolkan kelebihan diri anda dengan CV yang tersusun rapi dan profesional.",
+
+cv_intro_1: "CV (Curriculum Vitae) ialah salah satu dokumen terpenting semasa memohon pekerjaan. CV membolehkan majikan mengetahui latar belakang, pengalaman kerja, pendidikan dan kemahiran anda.",
+
+cv_intro_2: "CV yang disediakan dengan baik dapat membantu anda memberikan tanggapan pertama yang positif. Berikut ialah beberapa panduan mudah untuk membantu anda menghasilkan CV yang menarik.",
+
+cv_section_1: "1. Masukkan Maklumat Peribadi yang Tepat",
+
+cv_section_1_text: "Sertakan nama penuh, nombor telefon yang aktif dan alamat e-mel profesional anda. Pastikan maklumat perhubungan mudah dibaca supaya majikan boleh menghubungi anda apabila diperlukan.",
+
+cv_section_2: "2. Tulis Profil Peribadi yang Ringkas",
+
+cv_section_2_text: "Tulis pengenalan ringkas tentang diri, latar belakang dan kemahiran utama anda yang berkaitan dengan jawatan yang dipohon. Gunakan ayat yang jelas dan padat.",
+
+cv_section_3: "3. Sertakan Pengalaman Kerja dan Pendidikan",
+
+cv_section_3_text: "Senaraikan pengalaman kerja, pendidikan, aktiviti sukarelawan, projek atau aktiviti lain yang berkaitan. Jika anda belum mempunyai pengalaman kerja, anda masih boleh menyertakan latihan industri, projek universiti, kerja sukarelawan atau aktiviti persatuan pelajar.",
+
+cv_section_4: "4. Tonjolkan Kemahiran yang Berkaitan",
+
+cv_section_4_text: "Sertakan kemahiran yang sepadan dengan keperluan pekerjaan, seperti kemahiran teknikal, komunikasi dan kerja berpasukan. Pilih kemahiran yang benar-benar anda miliki dan boleh dibuktikan.",
+
+cv_section_5: "5. Gunakan Format yang Kemas dan Profesional",
+
+cv_section_5_text: "Pilih reka bentuk yang ringkas, fon yang mudah dibaca dan susun atur yang jelas. Elakkan penggunaan terlalu banyak warna atau elemen hiasan yang menjadikan CV kelihatan sesak. Susun maklumat dengan teratur dan mudah difahami.",
+
+cv_section_6: "6. Semak CV Sebelum Menghantarnya",
+
+cv_section_6_text: "Semak ejaan, nombor telefon, alamat e-mel dan semua maklumat yang dimasukkan dalam CV anda. Pastikan CV tersebut sesuai dengan jawatan yang dipohon dan tidak mengandungi maklumat yang tidak tepat.",
+
+cv_reminder_title: "Ingat!",
+
+cv_reminder_text: "Sediakan CV anda dengan jujur dan tonjolkan kemahiran yang benar-benar anda miliki. CV yang jelas, tersusun dan relevan dapat membantu majikan memahami potensi anda dengan lebih baik.",
+
+cv_closing: "Kerjiva — Temui peluang kerjaya dan tonjolkan potensi terbaik anda.",
+
+cv_footer: "© Kerjiva - Platform Kerjaya Malaysia",
+
 
     /* ================= JOBSEEKER DASHBOARD ================= */
 

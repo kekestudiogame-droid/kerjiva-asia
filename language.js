@@ -28,7 +28,15 @@
     menuAboutUs: "Mengenai Kami",
     menuLanguage: "Bahasa",
     menuJobseekerDashboard: "Papan Pemuka Pencari Kerja",
-    menuCompanyDashboard: "Papan Pemuka Syarikat",
+    menuCompanyDashboard: "Papan Pemuka Syarikat",  
+    menuInformationCenter: "Pusat Maklumat Kerjiva",
+    menuCommunity: "Komuniti Kerjiva Malaysia",
+    menuJobs: "Pekerjaan",
+    menuContactUs: "Hubungi Kami",
+    menuHelp: "Bantuan",
+    menuSettings: "Tetapan",
+    menuLogout: "Log Keluar",
+
 
 
     hero_label: "KERJAYA ANDA BERMULA DI SINI",

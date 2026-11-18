@@ -136,6 +136,120 @@
     footer_terms: "Terma & Syarat",
     footer_copyright: "© 2026 Kerjiva Malaysia. Hak cipta terpelihara.",
 
+     
+    /* ================= PRIVACY POLICY ================= */
+
+    privacy_back_home: "← Kembali ke Laman Utama",
+    privacy_title: "Dasar Privasi",
+    privacy_brand: "Kerjiva Malaysia",
+    privacy_last_updated: "Kemas Kini Terakhir:",
+
+    privacy_intro_1: "Kerjiva Malaysia (\"Kerjiva\", \"kami\" atau \"milik kami\") menghormati privasi anda dan komited untuk mengendalikan maklumat peribadi anda secara bertanggungjawab.",
+    privacy_intro_2: "Kerjiva Malaysia kini dikendalikan secara persendirian dan bukan merupakan sebuah syarikat berdaftar.",
+    privacy_intro_3: "Dasar Privasi ini menerangkan maklumat yang mungkin kami kumpulkan, cara kami menggunakannya, keadaan maklumat tersebut mungkin dikongsi, serta pilihan yang tersedia kepada anda apabila menggunakan laman web dan perkhidmatan Kerjiva Malaysia.",
+    privacy_intro_4: "Dengan mengakses atau menggunakan Kerjiva Malaysia, anda mengakui bahawa anda telah membaca Dasar Privasi ini.",
+
+    privacy_section_1: "1. Maklumat yang Kami Kumpulkan",
+    privacy_section_1_intro: "Bergantung pada cara anda menggunakan platform kami, kami mungkin mengumpulkan maklumat berikut:",
+
+    privacy_account_info: "Maklumat Akaun",
+    privacy_account_1: "Nama dan alamat e-mel.",
+    privacy_account_2: "Kelayakan akaun dan maklumat berkaitan pengesahan identiti.",
+    privacy_account_3: "Jenis akaun, seperti Pencari Kerja atau Syarikat.",
+
+    privacy_jobseeker_info: "Maklumat Pencari Kerja",
+    privacy_jobseeker_1: "Maklumat peribadi dan butiran hubungan yang diberikan dalam profil anda.",
+    privacy_jobseeker_2: "Pendidikan, sejarah pekerjaan, kemahiran dan maklumat profesional lain.",
+    privacy_jobseeker_3: "Dokumen yang dimuat naik ke akaun anda, seperti CV, resume, sijil dan dokumen sokongan lain.",
+
+    privacy_company_info: "Maklumat Syarikat",
+    privacy_company_1: "Nama syarikat dan maklumat hubungan.",
+    privacy_company_2: "Maklumat profil syarikat.",
+    privacy_company_3: "Butiran kekosongan jawatan dan maklumat yang dihantar semasa mengurus iklan pekerjaan.",
+
+    privacy_application_info: "Maklumat Permohonan",
+    privacy_application_1: "Jawatan yang anda pohon.",
+    privacy_application_2: "Maklumat dan dokumen yang dihantar sebagai sebahagian daripada permohonan pekerjaan anda.",
+    privacy_application_3: "Rekod permohonan dan pengambilan pekerja yang berkaitan.",
+
+    privacy_technical_info: "Maklumat Teknikal dan Penggunaan",
+    privacy_technical_desc: "Kami mungkin memproses maklumat teknikal tertentu apabila anda menggunakan laman web ini, termasuk maklumat pelayar, peranti, data pengesahan dan maklumat penggunaan laman web.",
+
+    privacy_section_2: "2. Cara Kami Menggunakan Maklumat Anda",
+    privacy_section_2_intro: "Kami mungkin menggunakan maklumat yang dikumpulkan untuk:",
+
+    privacy_use_1: "Mencipta dan mengurus akaun pengguna.",
+    privacy_use_2: "Menyediakan perkhidmatan untuk Pencari Kerja dan Syarikat.",
+    privacy_use_3: "Memaparkan dan mengurus kekosongan jawatan.",
+    privacy_use_4: "Memproses permohonan pekerjaan.",
+    privacy_use_5: "Membolehkan syarikat berkaitan menyemak permohonan dan dokumen yang dihantar untuk kekosongan jawatan mereka.",
+    privacy_use_6: "Menyediakan sokongan pelanggan dan menjawab pertanyaan.",
+    privacy_use_7: "Menyelenggara, mengendalikan dan menambah baik platform kami.",
+    privacy_use_8: "Melindungi platform daripada penyalahgunaan, akses tanpa kebenaran dan isu keselamatan.",
+    privacy_use_9: "Mematuhi keperluan undang-undang yang berkenaan.",
+
+    privacy_section_3: "3. Akaun Pencari Kerja dan Syarikat",
+    privacy_section_3_p1: "Kerjiva Malaysia menyediakan perkhidmatan akaun untuk Pencari Kerja dan Syarikat.",
+    privacy_section_3_p2: "Pengguna bertanggungjawab untuk memberikan maklumat yang tepat dan menjaga kerahsiaan kelayakan akaun masing-masing.",
+    privacy_section_3_p3: "Pencari Kerja hendaklah memastikan maklumat dalam profil, permohonan dan dokumen yang dimuat naik adalah tepat serta sesuai untuk tujuan pengambilan pekerja.",
+    privacy_section_3_p4: "Syarikat hendaklah memastikan maklumat yang dihantar melalui akaun dan iklan pekerjaan mereka adalah tepat serta tidak mendedahkan maklumat peribadi orang lain secara tidak wajar.",
+
+    privacy_section_4: "4. Permohonan Pekerjaan dan Dokumen yang Dimuat Naik",
+    privacy_section_4_p1: "Apabila Pencari Kerja memohon sesuatu jawatan, maklumat dan dokumen yang dihantar bersama permohonan tersebut mungkin boleh diakses oleh Syarikat berkaitan untuk tujuan pengambilan pekerja dan semakan permohonan.",
+    privacy_section_4_p2: "Sila semak maklumat dan dokumen yang anda hantar sebelum melengkapkan sesuatu permohonan.",
+    privacy_section_4_p3: "Pengguna tidak seharusnya memuat naik dokumen yang mengandungi maklumat yang tidak diperlukan untuk proses pengambilan pekerja yang dimaksudkan.",
+
+    privacy_section_5: "5. Kuki dan Storan Pelayar",
+    privacy_section_5_p1: "Kerjiva Malaysia mungkin menggunakan teknologi storan pelayar untuk menyokong fungsi laman web.",
+    privacy_section_5_p2: "Sebagai contoh, laman web ini menggunakan storan pelayar untuk mengingati pilihan bahasa anda dan mungkin menggunakannya untuk mengekalkan maklumat berkaitan sesi pengesahan akaun.",
+    privacy_section_5_p3: "Anda boleh mengurus atau memadam storan pelayar melalui tetapan pelayar anda. Walau bagaimanapun, pemadaman maklumat tertentu mungkin menjejaskan fungsi laman web atau memerlukan anda log masuk semula.",
+
+    privacy_section_6: "6. Perkhidmatan Pihak Ketiga",
+    privacy_section_6_intro: "Kerjiva Malaysia menggunakan perkhidmatan pihak ketiga untuk mengendalikan ciri tertentu dalam platform.",
+    privacy_section_6_services_intro: "Perkhidmatan ini mungkin termasuk:",
+    privacy_supabase_desc: "Digunakan untuk pangkalan data, pengesahan akaun dan perkhidmatan backend yang berkaitan.",
+    privacy_gemini_desc: "Digunakan untuk menyediakan respons chatbot berasaskan kecerdasan buatan (AI).",
+    privacy_section_6_p1: "Maklumat yang diproses oleh perkhidmatan ini mungkin tertakluk kepada dasar privasi, terma dan amalan pengendalian data penyedia masing-masing.",
+    privacy_section_6_p2: "Kami menggalakkan pengguna untuk menyemak maklumat privasi daripada penyedia perkhidmatan pihak ketiga tersebut.",
+
+    privacy_section_7: "7. Chatbot AI",
+    privacy_section_7_p1: "Kerjiva Malaysia menyediakan chatbot berasaskan kecerdasan buatan (AI) untuk membantu pengguna mendapatkan maklumat dan bantuan umum.",
+    privacy_section_7_p2: "Mesej yang dihantar kepada chatbot mungkin diproses oleh penyedia perkhidmatan AI luaran untuk menghasilkan respons.",
+    privacy_section_7_p3: "Jangan hantar kata laluan, maklumat pembayaran, maklumat perniagaan sulit, dokumen pengenalan diri atau maklumat peribadi sensitif lain melalui chatbot.",
+    privacy_section_7_p4: "Respons yang dijana oleh AI mungkin tidak sentiasa tepat atau lengkap. Pengguna hendaklah menyemak sendiri maklumat penting.",
+
+    privacy_section_8: "8. Keselamatan dan Penyimpanan Data",
+    privacy_section_8_p1: "Kami mengambil langkah yang munasabah untuk melindungi maklumat yang dikendalikan melalui Kerjiva Malaysia daripada akses tanpa kebenaran, kehilangan, penyalahgunaan, pengubahan atau pendedahan.",
+    privacy_section_8_p2: "Maklumat peribadi hanya bertujuan untuk disimpan selama yang diperlukan bagi tujuan pengumpulannya atau sebagaimana yang dikehendaki oleh undang-undang yang berkenaan.",
+    privacy_section_8_p3: "Tiada kaedah penyimpanan atau penghantaran elektronik yang boleh dijamin selamat sepenuhnya.",
+
+    privacy_section_9: "9. Hak Privasi Anda",
+    privacy_section_9_intro: "Tertakluk kepada undang-undang yang berkenaan, termasuk Akta Perlindungan Data Peribadi 2010 Malaysia (Akta 709), sebagaimana yang dipinda, anda mungkin mempunyai hak berkaitan maklumat peribadi anda, termasuk:",
+    privacy_right_1: "Memohon akses kepada maklumat peribadi anda yang disimpan oleh kami.",
+    privacy_right_2: "Memohon pembetulan terhadap maklumat yang tidak tepat atau tidak lengkap.",
+    privacy_right_3: "Mengemukakan pertanyaan tentang cara maklumat anda diproses.",
+    privacy_right_4: "Menarik balik persetujuan apabila berkenaan dan tertakluk kepada keperluan undang-undang.",
+    privacy_section_9_p1: "Untuk membuat pertanyaan atau permintaan berkaitan privasi, sila hubungi kami melalui maklumat yang disediakan dalam bahagian Hubungi Kami.",
+
+    privacy_section_10: "10. Privasi Kanak-kanak",
+    privacy_section_10_p1: "Kerjiva Malaysia ditujukan kepada individu yang layak di sisi undang-undang untuk menggunakan perkhidmatan pekerjaan dan pengambilan pekerja.",
+    privacy_section_10_p2: "Kami tidak dengan sengaja berusaha mengumpulkan maklumat peribadi daripada kanak-kanak dengan cara yang melanggar undang-undang yang berkenaan.",
+
+    privacy_section_11: "11. Perubahan kepada Dasar Privasi Ini",
+    privacy_section_11_p1: "Kami mungkin mengemas kini Dasar Privasi ini dari semasa ke semasa untuk mencerminkan perubahan kepada perkhidmatan, amalan atau keperluan undang-undang yang berkenaan.",
+    privacy_section_11_p2: "Versi yang dikemas kini akan diterbitkan pada halaman ini bersama tarikh \"Kemas Kini Terakhir\" yang baharu.",
+    privacy_section_11_p3: "Kami menggalakkan pengguna untuk menyemak halaman ini dari semasa ke semasa.",
+
+    privacy_section_12: "12. Hubungi Kami",
+    privacy_section_12_intro: "Jika anda mempunyai soalan, kebimbangan atau permintaan berkaitan Dasar Privasi ini atau pengendalian maklumat peribadi anda, sila hubungi kami:",
+
+    privacy_customer_support: "Sokongan Pelanggan",
+    privacy_official_email: "E-mel Rasmi Kerjiva",
+    privacy_website: "Laman Web",
+
+    privacy_thank_you: "Terima kasih kerana menggunakan Kerjiva Malaysia.",
+
+
 
     /* ================= JOBSEEKER DASHBOARD ================= */
 

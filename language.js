@@ -313,6 +313,104 @@ help_official_email_label: "E-mel Rasmi Kerjiva:",
 
 help_thank_you: "Terima kasih kerana menggunakan Kerjiva Malaysia.",
 help_back_home: "← Kembali ke Laman Utama",
+     
+/* ================= TERMS & CONDITIONS PAGE ================= */
+
+terms_title: "Terma & Syarat",
+terms_brand: "Kerjiva Malaysia",
+terms_last_updated: "Dikemas Kini Pada:",
+terms_intro_1: "Selamat datang ke Kerjiva Malaysia. Terma dan Syarat ini mengawal akses dan penggunaan anda terhadap laman web serta perkhidmatan Kerjiva Malaysia.",
+terms_intro_2: "Dengan mengakses atau menggunakan Kerjiva Malaysia, anda bersetuju untuk mematuhi Terma dan Syarat ini. Jika anda tidak bersetuju, sila hentikan penggunaan platform ini.",
+
+terms_section_1: "1. Mengenai Kerjiva Malaysia",
+terms_section_1_p1: "Kerjiva Malaysia ialah platform kerjaya yang dikendalikan secara persendirian untuk menghubungkan pencari kerja dengan syarikat serta menyediakan akses kepada peluang pekerjaan dan perkhidmatan berkaitan kerjaya.",
+terms_section_1_p2: "Kerjiva Malaysia pada masa ini dikendalikan secara persendirian dan bukan sebuah syarikat berdaftar.",
+
+terms_section_2: "2. Kelayakan dan Akaun Pengguna",
+terms_section_2_p1: "Anda mesti memberikan maklumat yang tepat dan lengkap semasa membuat akaun.",
+terms_section_2_p2: "Anda bertanggungjawab untuk menjaga kerahsiaan maklumat log masuk anda serta semua aktiviti yang dilakukan melalui akaun anda.",
+terms_section_2_p3: "Anda mesti memaklumkan kepada kami sekiranya mengetahui bahawa akaun anda telah diakses tanpa kebenaran.",
+terms_section_2_p4: "Pengesahan e-mel mungkin diperlukan untuk mengakses ciri akaun tertentu.",
+
+terms_section_3: "3. Tanggungjawab Pencari Kerja",
+terms_section_3_intro: "Jika anda menggunakan Kerjiva Malaysia sebagai pencari kerja, anda bersetuju untuk:",
+terms_jobseeker_1: "Memberikan maklumat peribadi dan profesional yang benar serta tepat.",
+terms_jobseeker_2: "Memastikan profil dan dokumen yang dimuat naik sentiasa dikemas kini.",
+terms_jobseeker_3: "Menghantar permohonan yang sah bagi peluang pekerjaan yang tersedia.",
+terms_jobseeker_4: "Memastikan dokumen yang dimuat naik adalah sesuai dan milik anda, atau anda mempunyai kebenaran untuk berkongsinya.",
+terms_jobseeker_5: "Mengelakkan aktiviti yang mengelirukan, penipuan atau penyalahgunaan.",
+
+terms_section_4: "4. Tanggungjawab Syarikat",
+terms_section_4_intro: "Jika anda menggunakan Kerjiva Malaysia sebagai syarikat atau majikan, anda bersetuju untuk:",
+terms_company_1: "Memberikan maklumat syarikat dan maklumat hubungan yang tepat.",
+terms_company_2: "Menerbitkan peluang pekerjaan yang sah dan benar.",
+terms_company_3: "Memastikan penerangan jawatan, syarat kelayakan dan butiran kekosongan kerja adalah tepat.",
+terms_company_4: "Menggunakan maklumat dan dokumen pemohon hanya untuk tujuan pengambilan pekerja yang sah.",
+terms_company_5: "Menghormati privasi dan hak pencari kerja.",
+terms_company_6: "Mengelakkan iklan yang mengelirukan, penipuan atau amalan diskriminasi yang melanggar undang-undang yang berkuat kuasa.",
+
+terms_section_5: "5. Iklan Jawatan dan Permohonan",
+terms_section_5_p1: "Kerjiva Malaysia menyediakan platform untuk syarikat menerbitkan iklan jawatan kosong dan untuk pencari kerja menghantar permohonan.",
+terms_section_5_p2: "Kerjiva Malaysia tidak menjamin bahawa mana-mana iklan jawatan akan menghasilkan temu duga, tawaran kerja atau pekerjaan.",
+terms_section_5_p3: "Syarikat bertanggungjawab terhadap keputusan pengambilan pekerja mereka, manakala pencari kerja bertanggungjawab menyemak peluang pekerjaan sebelum memohon.",
+terms_section_5_p4: "Kerjiva Malaysia berhak menyemak, mengehadkan atau membuang iklan jawatan yang didapati mengelirukan, tidak sesuai atau tidak mematuhi Terma dan Syarat ini.",
+
+terms_section_6: "6. Kandungan Pengguna dan Dokumen yang Dimuat Naik",
+terms_section_6_p1: "Anda bertanggungjawab terhadap kandungan, maklumat dan dokumen yang anda serahkan atau muat naik ke Kerjiva Malaysia.",
+terms_section_6_p2: "Anda mesti mempunyai hak atau kebenaran yang diperlukan untuk memuat naik dan berkongsi sebarang kandungan atau dokumen.",
+terms_section_6_p3: "Dengan menyerahkan kandungan, anda membenarkan Kerjiva Malaysia memproses dan memaparkan kandungan tersebut sebagaimana yang diperlukan untuk menyediakan perkhidmatan platform, tertakluk kepada Dasar Privasi.",
+terms_section_6_p4: "Anda tidak dibenarkan memuat naik bahan yang menyalahi undang-undang, berbahaya, mengelirukan atau tanpa kebenaran.",
+
+terms_section_7: "7. Aktiviti yang Dilarang",
+terms_section_7_intro: "Pengguna tidak dibenarkan:",
+terms_prohibited_1: "Menggunakan platform untuk tujuan penipuan, menyalahi undang-undang atau memperdaya pihak lain.",
+terms_prohibited_2: "Menyamar sebagai individu, syarikat atau organisasi lain.",
+terms_prohibited_3: "Memuat naik perisian berniat jahat atau cuba mengganggu operasi platform.",
+terms_prohibited_4: "Cuba mengakses akaun, data atau sistem tanpa kebenaran.",
+terms_prohibited_5: "Mengumpul atau menyalahgunakan maklumat peribadi pengguna lain.",
+terms_prohibited_6: "Menggunakan platform dengan cara yang melanggar undang-undang yang berkuat kuasa atau Terma dan Syarat ini.",
+
+terms_section_8: "8. Chatbot AI dan Maklumat",
+terms_section_8_p1: "Kerjiva Malaysia mungkin menyediakan chatbot berasaskan AI untuk membantu pengguna dengan soalan umum dan maklumat.",
+terms_section_8_p2: "Respons chatbot dijana secara automatik dan mungkin mengandungi maklumat yang tidak tepat, tidak lengkap atau sudah lapuk.",
+terms_section_8_p3: "Respons chatbot tidak boleh dianggap sebagai nasihat profesional, undang-undang atau pekerjaan. Pengguna hendaklah menyemak sendiri maklumat penting.",
+terms_section_8_p4: "Jangan masukkan kata laluan, maklumat pembayaran atau maklumat peribadi sensitif melalui chatbot.",
+
+terms_section_9: "9. Perkhidmatan Pihak Ketiga",
+terms_section_9_p1: "Kerjiva Malaysia mungkin menggunakan perkhidmatan pihak ketiga untuk menyokong operasi laman web, pengesahan akaun, penyimpanan data dan ciri platform yang lain.",
+terms_section_9_p2: "Perkhidmatan pihak ketiga ini beroperasi mengikut terma, dasar dan amalan masing-masing. Kerjiva Malaysia tidak bertanggungjawab terhadap perkhidmatan atau laman web bebas yang tidak berada di bawah kawalan kami.",
+
+terms_section_10: "10. Harta Intelek",
+terms_section_10_p1: "Nama Kerjiva Malaysia, logo, reka bentuk laman web dan bahan asal platform dilindungi oleh undang-undang harta intelek yang berkuat kuasa.",
+terms_section_10_p2: "Anda tidak dibenarkan menyalin, menghasilkan semula, mengedarkan atau menggunakan bahan Kerjiva Malaysia untuk tujuan komersial tanpa kebenaran terlebih dahulu, kecuali jika dibenarkan oleh undang-undang.",
+
+terms_section_11: "11. Penafian dan Had Liabiliti",
+terms_section_11_p1: "Kerjiva Malaysia disediakan atas dasar \"seadanya\" dan \"mengikut ketersediaan\". Kami tidak menjamin akses tanpa gangguan, operasi bebas ralat atau ketepatan semua maklumat yang dipaparkan pada platform.",
+terms_section_11_p2: "Kerjiva Malaysia bukan majikan, agensi pengambilan pekerja atau pihak dalam perjanjian pekerjaan antara pencari kerja dengan syarikat.",
+terms_section_11_p3: "Setakat yang dibenarkan oleh undang-undang yang berkuat kuasa, Kerjiva Malaysia tidak bertanggungjawab terhadap kerugian tidak langsung, keputusan pekerjaan, pertikaian antara pengguna atau tindakan yang diambil berdasarkan iklan jawatan atau maklumat pihak ketiga.",
+terms_section_11_p4: "Tiada apa-apa dalam Terma ini mengecualikan liabiliti yang tidak boleh dikecualikan secara sah di bawah undang-undang yang berkuat kuasa.",
+
+terms_section_12: "12. Penggantungan dan Penamatan",
+terms_section_12_p1: "Kerjiva Malaysia boleh mengehadkan, menggantung atau menamatkan akses kepada akaun atau ciri platform sekiranya pengguna melanggar Terma ini, menyalahgunakan platform atau menimbulkan risiko keselamatan.",
+terms_section_12_p2: "Pengguna boleh berhenti menggunakan platform pada bila-bila masa. Permintaan berkaitan maklumat akaun atau data peribadi adalah tertakluk kepada Dasar Privasi dan undang-undang yang berkuat kuasa.",
+
+terms_section_13: "13. Perubahan kepada Terma Ini",
+terms_section_13_p1: "Kerjiva Malaysia boleh mengemas kini Terma dan Syarat ini dari semasa ke semasa.",
+terms_section_13_p2: "Terma yang dikemas kini akan diterbitkan pada halaman ini bersama tarikh Kemaskini Terakhir yang baharu.",
+terms_section_13_p3: "Penggunaan platform yang berterusan selepas perubahan diterbitkan dianggap sebagai penerimaan terhadap Terma yang dikemas kini, setakat yang dibenarkan oleh undang-undang yang berkuat kuasa.",
+
+terms_section_14: "14. Undang-undang yang Mentadbir",
+terms_section_14_p1: "Terma dan Syarat ini hendaklah ditafsirkan mengikut undang-undang Malaysia, tertakluk kepada keperluan undang-undang yang berkuat kuasa.",
+
+terms_section_15: "15. Hubungi Kami",
+terms_section_15_intro: "Jika anda mempunyai sebarang pertanyaan mengenai Terma dan Syarat ini, sila hubungi kami:",
+terms_customer_support: "Khidmat Sokongan Pelanggan:",
+terms_official_email: "E-mel Rasmi Kerjiva:",
+terms_website: "Laman Web:",
+
+terms_thank_you: "Terima kasih kerana menggunakan Kerjiva Malaysia.",
+terms_back_home: "← Kembali ke Laman Utama",
+
 
 
 

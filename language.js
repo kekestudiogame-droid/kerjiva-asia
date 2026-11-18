@@ -488,6 +488,7 @@ about_back_home: "← Kembali ke Laman Utama",
      safe_job_menu_title: "Panduan Mencari Pekerjaan dengan Selamat",
 
      cv_menu_title: "Cara Menghasilkan CV yang Menarik",
+     interview_menu_title: "Cara Membuat Persediaan untuk Temu Duga Kerja",
      
 // ================= INFORMATION CENTER - ARTICLE 1 =================
 
@@ -577,6 +578,56 @@ cv_reminder_text: "Sediakan CV anda dengan jujur dan tonjolkan kemahiran yang be
 cv_closing: "Kerjiva — Temui peluang kerjaya dan tonjolkan potensi terbaik anda.",
 
 cv_footer: "© Kerjiva - Platform Kerjaya Malaysia",
+
+     
+// ================= INFORMATION CENTER - ARTICLE 3 =================
+
+interview_back_home: "Kembali ke Kerjiva",
+
+interview_banner_alt: "Cara Membuat Persediaan untuk Temu Duga Kerja bersama Kerjiva",
+
+interview_category: "TIPS KERJAYA",
+
+interview_title: "Cara Membuat Persediaan untuk Temu Duga Kerja",
+
+interview_subtitle: "Yakinlah, tonjolkan kelebihan diri anda dan berikan tanggapan yang baik.",
+
+interview_intro_1: "Temu duga kerja merupakan salah satu peringkat penting dalam proses pengambilan pekerja. Melalui temu duga, majikan berpeluang mengenali personaliti, pengalaman dan kebolehan anda dengan lebih mendalam.",
+
+interview_intro_2: "Persediaan yang baik dapat membantu anda berasa lebih yakin semasa temu duga. Berikut ialah beberapa panduan berguna untuk membantu anda membuat persediaan.",
+
+interview_section_1: "1. Kenali Syarikat yang Dipohon",
+
+interview_section_1_text: "Dapatkan maklumat tentang bidang perniagaan, produk, perkhidmatan dan latar belakang syarikat sebelum menghadiri temu duga. Ini akan membantu anda memahami organisasi tersebut dan menunjukkan minat anda untuk menyertai syarikat berkenaan.",
+
+interview_section_2: "2. Fahami Jawatan yang Dipohon",
+
+interview_section_2_text: "Teliti huraian kerja dan syarat kelayakan dengan baik. Fahami tanggungjawab serta kemahiran yang diperlukan supaya anda dapat menerangkan bagaimana pengalaman dan kebolehan anda sesuai dengan jawatan tersebut.",
+
+interview_section_3: "3. Berlatih Menjawab Soalan Temu Duga",
+
+interview_section_3_text: "Berlatih menjawab soalan lazim tentang diri, pengalaman, kekuatan dan matlamat kerjaya anda. Berikan jawapan yang jelas, jujur dan berdasarkan pengalaman sebenar anda.",
+
+interview_section_4: "4. Tonjolkan Kemahiran dan Pengalaman",
+
+interview_section_4_text: "Ketengahkan kemahiran, pencapaian dan pengalaman kerja yang berkaitan. Terangkan bagaimana kebolehan anda dapat menyumbang kepada jawatan dan syarikat tersebut.",
+
+interview_section_5: "5. Ajukan Soalan yang Bersesuaian",
+
+interview_section_5_text: "Apabila diberi peluang, ajukan soalan yang berkaitan dengan jawatan, tanggungjawab, pasukan atau proses pengambilan pekerja. Ini menunjukkan minat dan kesungguhan anda untuk mengetahui lebih lanjut tentang jawatan tersebut.",
+
+interview_section_6: "6. Buat Susulan Selepas Temu Duga",
+
+interview_section_6_text: "Selepas temu duga, anda boleh menghantar mesej ringkas sebagai tanda penghargaan kepada penemu duga. Kekalkan sikap profesional dan bersabar sementara menunggu keputusan daripada pihak syarikat.",
+
+interview_reminder_title: "Ingat!",
+
+interview_reminder_text: "Bersikap jujur dan jadilah diri sendiri semasa temu duga. Persediaan yang rapi, sikap positif dan komunikasi yang jelas dapat membantu anda memberikan tanggapan yang baik kepada majikan.",
+
+interview_closing: "Kerjiva — Rakan Kerjaya Anda untuk Masa Depan yang Lebih Cerah.",
+
+interview_footer: "© Kerjiva - Platform Kerjaya Malaysia",
+
 
 
     /* ================= JOBSEEKER DASHBOARD ================= */

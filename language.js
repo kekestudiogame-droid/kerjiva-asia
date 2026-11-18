@@ -495,6 +495,8 @@ about_back_home: "← Kembali ke Laman Utama",
 safe_job_category: "TIPS KERJAYA",
 
 safe_job_title: "Panduan Mencari Pekerjaan dengan Selamat",
+     
+     safe_job_back_home: "← Kembali ke Laman Utama",
 
 safe_job_subtitle: "Cari pekerjaan dengan bijak, selamat dan yakin bersama Kerjiva.",
 

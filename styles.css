@@ -3523,6 +3523,105 @@ body.contact-page {
 }
 
 
+/* =====================================================
+   KERJIVA MALAYSIA - HELP PAGE
+===================================================== */
+
+body.help-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.help-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.help-header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.help-header h1 {
+  color: #123b6d;
+  margin-bottom: 10px;
+}
+
+.help-header p {
+  line-height: 1.7;
+}
+
+.help-content {
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 45px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.help-section {
+  margin-bottom: 35px;
+}
+
+.help-section:last-child {
+  margin-bottom: 0;
+}
+
+.help-section h2 {
+  color: #123b6d;
+  margin-bottom: 20px;
+}
+
+.help-section h3 {
+  color: #263445;
+  margin-top: 22px;
+  margin-bottom: 8px;
+}
+
+.help-section p {
+  line-height: 1.7;
+  margin-top: 0;
+}
+
+.help-section a {
+  color: #123b6d;
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.help-section a:hover {
+  text-decoration: underline;
+}
+
+.help-thank-you {
+  margin-top: 35px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.help-back-btn {
+  display: block;
+  width: fit-content;
+  margin: 25px auto 0;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  body.help-page {
+    padding: 20px 12px;
+  }
+
+  .help-content {
+    padding: 25px 18px;
+  }
+}
+
+
+
 
 
 

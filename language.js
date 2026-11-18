@@ -271,6 +271,48 @@ contact_official_title: "E-mel Rasmi Kerjiva",
 contact_thank_you: "Terima kasih kerana menjadi sebahagian daripada Kerjiva Malaysia.",
 contact_back_home: "← Kembali ke Laman Utama",
 
+     
+/* ================= HELP PAGE ================= */
+
+help_title: "Pusat Bantuan",
+help_brand: "Kerjiva Malaysia",
+help_intro: "Cari jawapan kepada soalan lazim dan pelajari cara menggunakan Kerjiva Malaysia.",
+     
+help_general_title: "1. Soalan Umum",
+help_general_q1: "Apakah itu Kerjiva Malaysia?",
+help_general_a1: "Kerjiva Malaysia ialah platform kerjaya yang menghubungkan pencari kerja dengan syarikat serta membantu pengguna mencari peluang pekerjaan yang sesuai.",
+help_general_q2: "Adakah Kerjiva Malaysia percuma untuk digunakan?",
+help_general_a2: "Pengguna boleh membuat akaun dan meneroka peluang pekerjaan yang tersedia melalui platform ini.",
+
+help_jobseeker_title: "2. Bantuan Pencari Kerja",
+help_jobseeker_q1: "Bagaimanakah saya boleh membuat akaun pencari kerja?",
+help_jobseeker_a1: "Pilih pilihan pendaftaran, lengkapkan maklumat yang diperlukan dan sahkan alamat e-mel anda.",
+help_jobseeker_q2: "Bagaimanakah saya boleh memohon pekerjaan?",
+help_jobseeker_a2: "Terokai pekerjaan yang tersedia, buka iklan pekerjaan yang dipilih dan klik Mohon Sekarang. Ikuti arahan untuk menghantar permohonan serta dokumen yang diperlukan.",
+help_jobseeker_q3: "Bolehkah saya mengemas kini profil dan dokumen saya?",
+help_jobseeker_a3: "Ya. Anda boleh mengurus profil dan dokumen yang telah dimuat naik melalui Papan Pemuka Pencari Kerja.",
+
+help_company_title: "3. Bantuan Syarikat",
+help_company_q1: "Bagaimanakah saya boleh mendaftar sebagai syarikat?",
+help_company_a1: "Pilih pendaftaran syarikat, lengkapkan maklumat yang diperlukan dan sahkan alamat e-mel anda.",
+help_company_q2: "Bagaimanakah saya boleh menerbitkan iklan jawatan kosong?",
+help_company_a2: "Log masuk ke Papan Pemuka Syarikat, cipta dan simpan iklan pekerjaan sebagai draf, kemudian pilih pilihan Terbitkan apabila iklan tersebut sudah sedia.",
+help_company_q3: "Bagaimanakah saya boleh mengurus permohonan pekerjaan?",
+help_company_a3: "Anda boleh menyemak dan mengurus permohonan melalui Papan Pemuka Syarikat.",
+
+help_account_title: "4. Akaun & Log Masuk",
+help_account_q1: "Saya belum menerima e-mel pengesahan. Apakah yang perlu saya lakukan?",
+help_account_a1: "Semak peti masuk dan folder spam anda. Pastikan alamat e-mel yang dimasukkan adalah betul. Jika masalah masih berterusan, hubungi pasukan sokongan kami.",
+help_account_q2: "Bagaimanakah jika saya terlupa kata laluan?",
+help_account_a2: "Gunakan pilihan Lupa Kata Laluan pada halaman log masuk dan ikuti arahan yang dihantar ke alamat e-mel berdaftar anda.",
+
+help_support_title: "5. Hubungi Sokongan",
+help_support_description: "Jika anda memerlukan bantuan lanjut atau mempunyai pertanyaan yang tidak dibincangkan di sini, sila hubungi kami.",
+help_support_email_label: "Khidmat Sokongan Pelanggan:",
+help_official_email_label: "E-mel Rasmi Kerjiva:",
+
+help_thank_you: "Terima kasih kerana menggunakan Kerjiva Malaysia.",
+help_back_home: "← Kembali ke Laman Utama",
 
 
 

@@ -9295,6 +9295,63 @@ document.addEventListener("click", function (event) {
 });
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   HOMEPAGE LOGIN BUTTON - CHECK EXISTING SESSION
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const homepageLoginBtn =
+    document.querySelector(".header-actions .login-btn");
+
+  if (!homepageLoginBtn) return;
+
+  homepageLoginBtn.addEventListener("click", async function (event) {
+
+    event.preventDefault();
+
+    try {
+
+      const { data, error } =
+        await supabaseAuth.auth.getSession();
+
+      if (error) throw error;
+
+      // USER ALREADY LOGGED IN
+      if (data.session?.user) {
+
+        showKerjivaNotification(
+          "You are already logged in.",
+          "success"
+        );
+
+        return;
+      }
+
+      // USER NOT LOGGED IN
+      window.location.href = "login.html";
+
+    } catch (error) {
+
+      console.error(
+        "Homepage Login Session Check Error:",
+        error
+      );
+
+      showKerjivaNotification(
+        "Unable to check your login session. Please try again.",
+        "error"
+      );
+
+    }
+
+  });
+
+});
+
+
+
 
 
 

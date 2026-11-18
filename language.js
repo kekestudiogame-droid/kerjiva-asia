@@ -485,6 +485,9 @@ about_future_description: "Setiap orang mempunyai perjalanan kerjaya masing-masi
 about_final_tagline: "Kerjiva — Kerjaya Anda, Masa Depan Anda.",
 
 about_back_home: "← Kembali ke Laman Utama",
+     safe_job_menu_title: "Panduan Mencari Pekerjaan dengan Selamat",
+
+     cv_menu_title: "Cara Menghasilkan CV yang Menarik",
      
 // ================= INFORMATION CENTER - ARTICLE 1 =================
 

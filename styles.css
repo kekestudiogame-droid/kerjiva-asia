@@ -3420,6 +3420,87 @@ body.privacy-page {
 
 
 /* =====================================================
+   KERJIVA MALAYSIA - TERMS & CONDITIONS PAGE
+===================================================== */
+
+body.terms-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.terms-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.terms-back-btn {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+.terms-content {
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 45px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.terms-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.terms-content h1,
+.terms-content h2,
+.terms-content h3,
+.terms-content p {
+  text-align: center;
+}
+
+.terms-section {
+  margin-top: 35px;
+}
+
+.terms-content ul {
+  padding: 0;
+  list-style-position: inside;
+  text-align: center;
+}
+
+.terms-content li {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.terms-contact {
+  text-align: center;
+}
+
+.terms-thank-you {
+  margin-top: 35px;
+  font-weight: 600;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  body.terms-page {
+    padding: 20px 12px;
+  }
+
+  .terms-content {
+    padding: 25px 18px;
+  }
+}
+
+
+
+/* =====================================================
    KERJIVA MALAYSIA - CONTACT US PAGE
 ===================================================== */
 

@@ -3836,7 +3836,7 @@ body.about-page {
 
 .main-header .header-content .logo img {
   display: block;
-  width: 145px;
+  width: 165px;
   max-width: 100%;
   height: auto;
   object-fit: contain;
@@ -3844,7 +3844,7 @@ body.about-page {
 
 .main-header .header-content .logo small {
   display: block;
-  margin-top: 4px;
+  margin-top: 1px;
   color: var(--secondary);
   font-size: 11px;
   font-weight: 700;
@@ -3856,7 +3856,7 @@ body.about-page {
 /* MOBILE */
 @media (max-width: 600px) {
   .main-header .header-content .logo img {
-    width: 115px;
+    width: 125px;
   }
 }
 
@@ -3869,21 +3869,6 @@ body.about-page {
   }
 
   .main-header .header-content .logo img {
-    width: 105px;
+    width: 115px;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

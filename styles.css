@@ -679,13 +679,15 @@ select {
   text-decoration: none;
 }
 
+
 .dashboard-brand .logo img {
   display: block;
-  width: 150px;
+  width: 160px;
   max-width: 100%;
   height: auto;
   object-fit: contain;
 }
+
 
 .dashboard-brand .logo small {
   display: block;
@@ -1262,13 +1264,15 @@ select {
   text-decoration: none;
 }
 
+
 #companyDashboard .dashboard-header-content .logo .company-logo img {
   display: block;
-  width: 150px;
+  width: 160px;
   max-width: 100%;
   height: auto;
   object-fit: contain;
 }
+
 
 #companyDashboard .dashboard-header-content .logo .company-logo small {
   display: block;

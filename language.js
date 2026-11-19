@@ -1109,37 +1109,25 @@ rights_footer: "© Kerjiva - Platform Kerjaya Malaysia",
 
 
 
+
   /* =====================================================
-     TRANSLATE TEXT WITHOUT REMOVING CHILD ELEMENTS
+     TRANSLATE TEXT ELEMENTS
      ===================================================== */
 
   function translateTextElement(element, key, language) {
 
-    if (!element.dataset.i18nOriginalText) {
-
-      const textNode = Array.from(element.childNodes).find(function (node) {
-        return node.nodeType === Node.TEXT_NODE &&
-          node.nodeValue.trim() !== "";
-      });
-
-      element.dataset.i18nOriginalText = textNode
-        ? textNode.nodeValue
-        : element.textContent;
+    if (!element.dataset.i18nOriginalHTML) {
+      element.dataset.i18nOriginalHTML = element.innerHTML;
     }
 
     const translatedText = language === "ms"
-      ? (translations[key] || element.dataset.i18nOriginalText)
-      : element.dataset.i18nOriginalText;
+      ? translations[key]
+      : null;
 
-    const textNode = Array.from(element.childNodes).find(function (node) {
-      return node.nodeType === Node.TEXT_NODE &&
-        node.nodeValue.trim() !== "";
-    });
-
-    if (textNode) {
-      textNode.nodeValue = translatedText;
+    if (translatedText !== undefined && translatedText !== null) {
+      element.innerHTML = translatedText;
     } else {
-      element.textContent = translatedText;
+      element.innerHTML = element.dataset.i18nOriginalHTML;
     }
   }
 

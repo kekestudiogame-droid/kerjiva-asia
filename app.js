@@ -6058,6 +6058,34 @@ async function saveCompanyJob(status) {
 
       result = data;
     }
+     
+    // ===============================================
+    // UPDATE CENTRAL COMPANY JOBS CACHE
+    // ===============================================
+
+    try {
+
+      const sync = window.kerjivaMalaysiaSync;
+
+      if (sync) {
+
+        sync.invalidate("company-jobs");
+
+        console.log(
+          "Company Jobs Cache Invalidated After Save."
+        );
+
+      }
+
+    } catch (syncError) {
+
+      console.warn(
+        "Company Jobs Cache Update Warning:",
+        syncError
+      );
+
+    }
+
 
 
   const successMessage =

@@ -1,1 +1,702 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description" content="Discover companies and explore their latest job opportunities on Kerjiva Malaysia.">
+  <title>Companies - Kerjiva Malaysia</title>
+
+  <link rel="icon" href="kerjiva.jpg.png">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .companies-page {
+      min-height: 100vh;
+      background: #f5f8fc;
+      padding-bottom: 60px;
+    }
+
+    .companies-header {
+      background: #fff;
+      border-bottom: 1px solid #e5eaf1;
+      padding: 16px 0;
+    }
+
+    .companies-header-inner {
+      max-width: 1100px;
+      width: 92%;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .companies-logo {
+      color: #123b6d;
+      font-size: 25px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .companies-logo small {
+      display: block;
+      color: #f28c28;
+      font-size: 11px;
+      font-weight: 700;
+      margin-top: -3px;
+    }
+
+    .companies-home-link {
+      color: #123b6d;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .companies-main {
+      max-width: 1000px;
+      width: 92%;
+      margin: 35px auto;
+    }
+
+    .companies-hero {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .companies-hero h1 {
+      color: #123b6d;
+      font-size: 30px;
+      margin: 0 0 10px;
+    }
+
+    .companies-hero p {
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .companies-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .companies-stat-card {
+      background: #fff;
+      border: 1px solid #e5eaf1;
+      border-radius: 14px;
+      padding: 22px;
+      text-align: center;
+      box-shadow: 0 3px 12px rgba(15, 35, 65, 0.04);
+    }
+
+    .companies-stat-number {
+      color: #123b6d;
+      font-size: 30px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .companies-stat-label {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .companies-section-title {
+      color: #123b6d;
+      font-size: 21px;
+      margin: 0 0 18px;
+    }
+
+    .companies-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .company-card {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      text-align: left;
+      background: #fff;
+      border: 1px solid #e5eaf1;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(15, 35, 65, 0.04);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .company-card:hover {
+      border-color: #123b6d;
+      transform: translateY(-2px);
+    }
+
+    .company-card.active {
+      border: 2px solid #123b6d;
+    }
+
+    .company-logo {
+      width: 68px;
+      height: 68px;
+      flex-shrink: 0;
+      object-fit: contain;
+      border: 1px solid #edf0f5;
+      border-radius: 10px;
+      background: #fff;
+      padding: 5px;
+    }
+
+    .company-logo-placeholder {
+      width: 68px;
+      height: 68px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: #edf3fa;
+      color: #123b6d;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .company-info {
+      min-width: 0;
+    }
+
+    .company-name {
+      color: #123b6d;
+      font-size: 16px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+      margin-bottom: 7px;
+    }
+
+    .company-job-count {
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .company-jobs-section {
+      margin-top: 28px;
+    }
+
+    .company-jobs-heading {
+      color: #123b6d;
+      font-size: 21px;
+      margin: 0 0 16px;
+    }
+
+    .company-jobs-list {
+      display: grid;
+      gap: 13px;
+    }
+
+    .company-job-card {
+      background: #fff;
+      border: 1px solid #e5eaf1;
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+
+    .company-job-title {
+      color: #123b6d;
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 9px;
+    }
+
+    .company-job-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .companies-message {
+      background: #fff;
+      border: 1px solid #e5eaf1;
+      border-radius: 14px;
+      padding: 25px 18px;
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .companies-footer {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 13px;
+      padding: 25px 15px;
+    }
+
+    @media (max-width: 600px) {
+      .companies-main {
+        margin-top: 25px;
+      }
+
+      .companies-hero h1 {
+        font-size: 24px;
+      }
+
+      .companies-hero p {
+        font-size: 14px;
+      }
+
+      .companies-stats {
+        gap: 10px;
+      }
+
+      .companies-stat-card {
+        padding: 17px 10px;
+      }
+
+      .companies-stat-number {
+        font-size: 25px;
+      }
+
+      .companies-stat-label {
+        font-size: 12px;
+      }
+
+      .companies-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .company-card {
+        padding: 16px;
+      }
+
+      .company-logo,
+      .company-logo-placeholder {
+        width: 58px;
+        height: 58px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="companies-page">
+
+  <header class="companies-header">
+    <div class="companies-header-inner">
+      <a href="index.html" class="companies-logo">
+        Kerjiva
+        <small>Malaysia</small>
+      </a>
+
+      <a href="index.html" class="companies-home-link"
+         data-company-text="home">
+        Home
+      </a>
+    </div>
+  </header>
+
+  <main class="companies-main">
+
+    <section class="companies-hero">
+      <h1 data-company-text="title">Companies</h1>
+      <p data-company-text="subtitle">
+        Discover companies and explore their latest job opportunities.
+      </p>
+    </section>
+
+    <section class="companies-stats">
+      <div class="companies-stat-card">
+        <div class="companies-stat-number" id="totalCompanies">-</div>
+        <div class="companies-stat-label" data-company-text="totalCompanies">
+          Total Companies
+        </div>
+      </div>
+
+      <div class="companies-stat-card">
+        <div class="companies-stat-number" id="totalPublishedJobs">-</div>
+        <div class="companies-stat-label" data-company-text="totalJobs">
+          Published Jobs
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="companies-section-title"
+          data-company-text="listTitle">
+        Explore Companies
+      </h2>
+
+      <div id="companiesMessage" class="companies-message"
+           data-company-text="loading">
+        Loading companies...
+      </div>
+
+      <div id="companiesGrid" class="companies-grid"></div>
+    </section>
+
+    <section id="companyJobsSection"
+             class="company-jobs-section"
+             hidden>
+
+      <h2 id="companyJobsHeading"
+          class="company-jobs-heading">
+      </h2>
+
+      <div id="companyJobsMessage"
+           class="companies-message"
+           hidden>
+      </div>
+
+      <div id="companyJobsList"
+           class="company-jobs-list">
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="companies-footer">
+    © <span id="companiesYear"></span> Kerjiva Malaysia
+  </footer>
+
+</div>
+
+<!-- SUPABASE & EXISTING WEBSITE SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+<script src="language.js"></script>
+
+<script>
+(function () {
+  "use strict";
+
+  const supabaseAuth = window.supabaseAuth;
+
+  const languageKey = "kerjivaMalaysiaLanguage";
+
+  const translations = {
+    en: {
+      home: "Home",
+      title: "Companies",
+      subtitle: "Discover companies and explore their latest job opportunities.",
+      totalCompanies: "Total Companies",
+      totalJobs: "Published Jobs",
+      listTitle: "Explore Companies",
+      loading: "Loading companies...",
+      noCompanies: "No companies with published jobs yet.",
+      loadError: "Unable to load companies. Please try again later.",
+      jobs: "Published Jobs",
+      loadingJobs: "Loading company jobs...",
+      noJobs: "No published jobs available for this company.",
+      jobsError: "Unable to load this company's jobs.",
+      jobType: "Job Type",
+      category: "Category",
+      location: "Location",
+      jobCount: "published jobs",
+      selectCompany: "Select a company to explore its job opportunities."
+    },
+    ms: {
+      home: "Laman Utama",
+      title: "Syarikat",
+      subtitle: "Kenali syarikat dan terokai peluang pekerjaan terkini mereka.",
+      totalCompanies: "Jumlah Syarikat",
+      totalJobs: "Jawatan Diiklankan",
+      listTitle: "Terokai Syarikat",
+      loading: "Sedang memuatkan syarikat...",
+      noCompanies: "Belum ada syarikat dengan jawatan yang diiklankan.",
+      loadError: "Syarikat tidak dapat dimuatkan. Sila cuba lagi.",
+      jobs: "Jawatan Diiklankan",
+      loadingJobs: "Sedang memuatkan jawatan syarikat...",
+      noJobs: "Tiada jawatan yang diiklankan untuk syarikat ini.",
+      jobsError: "Jawatan syarikat ini tidak dapat dimuatkan.",
+      jobType: "Jenis Pekerjaan",
+      category: "Kategori",
+      location: "Lokasi",
+      jobCount: "jawatan diiklankan",
+      selectCompany: "Pilih syarikat untuk menerokai peluang pekerjaannya."
+    }
+  };
+
+  function getLanguage() {
+    return localStorage.getItem(languageKey) === "ms" ? "ms" : "en";
+  }
+
+  function t(key) {
+    return translations[getLanguage()][key] || translations.en[key] || key;
+  }
+
+  function applyPageLanguage() {
+    document.documentElement.lang = getLanguage();
+
+    document.querySelectorAll("[data-company-text]").forEach(function (element) {
+      const key = element.getAttribute("data-company-text");
+      element.textContent = t(key);
+    });
+
+    const countElements = document.querySelectorAll(".company-job-count");
+
+    countElements.forEach(function (element) {
+      const count = element.getAttribute("data-count");
+      element.textContent = count + " " + t("jobCount");
+    });
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function (character) {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[character];
+    });
+  }
+
+  function getJobValue(job, englishField, malayField) {
+    if (getLanguage() === "ms" && job[malayField]) {
+      return job[malayField];
+    }
+
+    return job[englishField] || "";
+  }
+
+  const companiesGrid = document.getElementById("companiesGrid");
+  const companiesMessage = document.getElementById("companiesMessage");
+  const companyJobsSection = document.getElementById("companyJobsSection");
+  const companyJobsHeading = document.getElementById("companyJobsHeading");
+  const companyJobsList = document.getElementById("companyJobsList");
+  const companyJobsMessage = document.getElementById("companyJobsMessage");
+
+  let companiesData = [];
+  let selectedCompanyId = null;
+
+  document.getElementById("companiesYear").textContent =
+    new Date().getFullYear();
+
+  async function loadStatistics() {
+    const { data, error } = await supabaseAuth
+      .from("company_directory_stats")
+      .select("total_companies,total_published_jobs")
+      .single();
+
+    if (error) {
+      console.error("Companies statistics error:", error);
+      return;
+    }
+
+    document.getElementById("totalCompanies").textContent =
+      data.total_companies ?? 0;
+
+    document.getElementById("totalPublishedJobs").textContent =
+      data.total_published_jobs ?? 0;
+  }
+
+  function renderCompanies() {
+    companiesGrid.innerHTML = "";
+
+    companiesData.forEach(function (company) {
+      const card = document.createElement("button");
+
+      card.type = "button";
+      card.className = "company-card";
+
+      if (selectedCompanyId === company.id) {
+        card.classList.add("active");
+      }
+
+      const logo = company.logo_url
+        ? '<img class="company-logo" src="' +
+          escapeHTML(company.logo_url) +
+          '" alt="' + escapeHTML(company.company_name) + ' logo">'
+        : '<div class="company-logo-placeholder">' +
+          escapeHTML((company.company_name || "C").charAt(0).toUpperCase()) +
+          '</div>';
+
+      card.innerHTML =
+        logo +
+        '<div class="company-info">' +
+          '<div class="company-name">' +
+            escapeHTML(company.company_name) +
+          '</div>' +
+          '<div class="company-job-count" data-count="' +
+            Number(company.published_jobs_count || 0) +
+          '">' +
+            Number(company.published_jobs_count || 0) +
+            " " + escapeHTML(t("jobCount")) +
+          '</div>' +
+        '</div>';
+
+      card.addEventListener("click", function () {
+        loadCompanyJobs(company);
+      });
+
+      companiesGrid.appendChild(card);
+    });
+  }
+
+  async function loadCompanies() {
+    if (!supabaseAuth) {
+      console.error("Supabase client window.supabaseAuth not found.");
+      companiesMessage.textContent = t("loadError");
+      return;
+    }
+
+    const { data, error } = await supabaseAuth
+      .from("company_directory")
+      .select("id,company_name,logo_url,published_jobs_count")
+      .order("company_name", { ascending: true });
+
+    if (error) {
+      console.error("Companies directory error:", error);
+      companiesMessage.textContent = t("loadError");
+      return;
+    }
+
+    companiesData = data || [];
+
+    companiesMessage.hidden = companiesData.length > 0;
+
+    if (companiesData.length === 0) {
+      companiesMessage.textContent = t("noCompanies");
+      return;
+    }
+
+    renderCompanies();
+  }
+
+  async function loadCompanyJobs(company) {
+    selectedCompanyId = company.id;
+
+    renderCompanies();
+
+    companyJobsSection.hidden = false;
+    companyJobsHeading.textContent =
+      company.company_name + " - " + t("jobs");
+
+    companyJobsList.innerHTML = "";
+    companyJobsMessage.hidden = false;
+    companyJobsMessage.textContent = t("loadingJobs");
+
+    companyJobsSection.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+    const { data, error } = await supabaseAuth
+      .from("jobs")
+      .select(`
+        id,
+        title,
+        category,
+        job_type,
+        city,
+        state,
+        title_ms,
+        category_ms,
+        job_type_ms
+      `)
+      .eq("company_id", company.id)
+      .eq("status", "published");
+
+    if (error) {
+      console.error("Company jobs error:", error);
+      companyJobsMessage.textContent = t("jobsError");
+      return;
+    }
+
+    companyJobsMessage.hidden = true;
+
+    if (!data || data.length === 0) {
+      companyJobsMessage.hidden = false;
+      companyJobsMessage.textContent = t("noJobs");
+      return;
+    }
+
+    data.forEach(function (job) {
+      const title = getJobValue(job, "title", "title_ms");
+      const category = getJobValue(job, "category", "category_ms");
+      const jobType = getJobValue(job, "job_type", "job_type_ms");
+
+      const location = [job.city, job.state]
+        .filter(Boolean)
+        .join(", ");
+
+      const card = document.createElement("article");
+      card.className = "company-job-card";
+
+      card.innerHTML =
+        '<div class="company-job-title">' +
+          escapeHTML(title || "Untitled Job") +
+        '</div>' +
+        '<div class="company-job-meta">' +
+          (category
+            ? '<span>' + escapeHTML(t("category")) + ': ' +
+              escapeHTML(category) + '</span>'
+            : '') +
+          (jobType
+            ? '<span>' + escapeHTML(t("jobType")) + ': ' +
+              escapeHTML(jobType) + '</span>'
+            : '') +
+          (location
+            ? '<span>' + escapeHTML(t("location")) + ': ' +
+              escapeHTML(location) + '</span>'
+            : '') +
+        '</div>';
+
+      companyJobsList.appendChild(card);
+    });
+  }
+
+  function refreshLanguage() {
+    applyPageLanguage();
+
+    if (companiesData.length > 0) {
+      renderCompanies();
+    }
+
+    if (selectedCompanyId) {
+      const selectedCompany = companiesData.find(function (company) {
+        return company.id === selectedCompanyId;
+      });
+
+      if (selectedCompany) {
+        loadCompanyJobs(selectedCompany);
+      }
+    }
+  }
+
+  window.addEventListener("storage", function (event) {
+    if (event.key === languageKey) {
+      refreshLanguage();
+    }
+  });
+
+  applyPageLanguage();
+
+  if (supabaseAuth) {
+    Promise.all([
+      loadStatistics(),
+      loadCompanies()
+    ]);
+  } else {
+    companiesMessage.textContent = t("loadError");
+    console.error("Supabase client is not available.");
+  }
+
+})();
+</script>
+
+</body>
+</html>
+

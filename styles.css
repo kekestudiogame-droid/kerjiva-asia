@@ -3305,9 +3305,34 @@ select {
   }
 
 }
-#companyDashboard .company-applicant-card button + button {
+
+/* ALIGN APPLICANT ACTION BUTTONS */
+
+#companyDashboard .company-applicant-card button.company-applicant-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(50% - 5px);
+  min-width: 0;
+  min-height: 42px;
+  padding: 10px 8px;
+  box-sizing: border-box;
+  text-align: center;
+  white-space: normal;
+  vertical-align: top;
+}
+
+#companyDashboard .company-applicant-card button.company-applicant-action + button.company-applicant-action {
   margin-left: 10px;
 }
+
+@media (max-width: 650px) {
+  #companyDashboard .company-applicant-card button.company-applicant-action {
+    font-size: 12px;
+    padding: 9px 5px;
+  }
+}
+
 
 /* =====================================================
    KERJIVA MALAYSIA

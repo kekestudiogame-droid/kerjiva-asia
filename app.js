@@ -23,6 +23,380 @@ const supabaseAuth = window.supabase.createClient(
 window.supabaseAuth = supabaseAuth;
 
 /* =========================================================
+   KERJIVA MALAYSIA
+   CENTRAL DATA SYNCHRONIZER
+   ========================================================= */
+
+(function () {
+  "use strict";
+
+  if (window.kerjivaMalaysiaSync) {
+    console.warn("Kerjiva Malaysia Sync already initialized.");
+    return;
+  }
+
+  const supabase = window.supabaseAuth;
+
+  if (!supabase) {
+    console.error("Kerjiva Malaysia Sync: Supabase is unavailable.");
+    return;
+  }
+
+  // =========================================
+  // INTERNAL STORAGE
+  // =========================================
+
+  const cache = new Map();
+  const pendingRequests = new Map();
+
+  let sessionRequest = null;
+  let currentUserId = null;
+  let revision = 0;
+
+  const DEFAULT_TTL = 30000;
+
+  // =========================================
+  // SESSION MANAGER
+  // =========================================
+
+  async function getSession() {
+
+    if (sessionRequest) {
+      return sessionRequest;
+    }
+
+    sessionRequest = (async function () {
+
+      const { data, error } =
+        await supabase.auth.getSession();
+
+      if (error) throw error;
+
+      const session = data?.session || null;
+      const userId = session?.user?.id || null;
+
+      if (currentUserId !== userId) {
+        currentUserId = userId;
+        clear();
+      }
+
+      return {
+        session,
+        user: session?.user || null,
+        userId
+      };
+
+    })();
+
+    try {
+      return await sessionRequest;
+    } finally {
+      sessionRequest = null;
+    }
+
+  }
+
+  // =========================================
+  // CACHE KEY
+  // =========================================
+
+  function createCacheKey(key, scope, userId) {
+
+    return [
+      scope,
+      scope === "user" ? userId : "public",
+      key
+    ].join(":");
+
+  }
+
+  // =========================================
+  // GET DATA
+  // REUSE VALID CACHE OR FETCH FROM SUPABASE
+  // =========================================
+
+  async function get(key, loader, options = {}) {
+
+    if (typeof key !== "string" || !key.trim()) {
+      throw new Error("Sync key is required.");
+    }
+
+    if (typeof loader !== "function") {
+      throw new Error("Sync loader must be a function.");
+    }
+
+    const scope = options.scope || "user";
+
+    if (!["user", "public"].includes(scope)) {
+      throw new Error("Invalid sync scope.");
+    }
+
+    let identity = {
+      session: null,
+      user: null,
+      userId: null
+    };
+
+    if (scope === "user") {
+
+      identity = await getSession();
+
+      if (!identity.userId) {
+        throw new Error("User session is required.");
+      }
+
+    }
+
+    const cacheKey = createCacheKey(
+      key,
+      scope,
+      identity.userId
+    );
+
+    const ttl = options.ttl ?? DEFAULT_TTL;
+
+    // REUSE VALID DATA
+    if (!options.force) {
+
+      const cached = cache.get(cacheKey);
+
+      if (
+        cached &&
+        Date.now() < cached.expiresAt
+      ) {
+        return cached.data;
+      }
+
+    }
+
+    // PREVENT DUPLICATE REQUESTS
+    if (pendingRequests.has(cacheKey)) {
+      return pendingRequests.get(cacheKey);
+    }
+
+    const requestRevision = revision;
+
+    const request = (async function () {
+
+      const data = await loader({
+        supabase,
+        session: identity.session,
+        user: identity.user,
+        userId: identity.userId
+      });
+
+      // SAVE ONLY IF CACHE WAS NOT CLEARED
+      if (requestRevision === revision && ttl > 0) {
+
+        cache.set(cacheKey, {
+          data,
+          expiresAt: Date.now() + ttl
+        });
+
+        window.dispatchEvent(
+          new CustomEvent("kerjivaMalaysiaSyncUpdated", {
+            detail: {
+              key,
+              scope,
+              userId: identity.userId
+            }
+          })
+        );
+
+      }
+
+      return data;
+
+    })();
+
+    pendingRequests.set(cacheKey, request);
+
+    try {
+      return await request;
+    } finally {
+
+      if (pendingRequests.get(cacheKey) === request) {
+        pendingRequests.delete(cacheKey);
+      }
+
+    }
+
+  }
+
+  // =========================================
+  // SAVE DATA TO CACHE
+  // =========================================
+
+  async function set(key, data, options = {}) {
+
+    const scope = options.scope || "user";
+
+    let userId = null;
+
+    if (scope === "user") {
+
+      const identity = await getSession();
+
+      if (!identity.userId) {
+        throw new Error("User session is required.");
+      }
+
+      userId = identity.userId;
+
+    }
+
+    const cacheKey = createCacheKey(
+      key,
+      scope,
+      userId
+    );
+
+    const ttl = options.ttl ?? DEFAULT_TTL;
+
+    if (ttl <= 0) {
+      cache.delete(cacheKey);
+      return data;
+    }
+
+    cache.set(cacheKey, {
+      data,
+      expiresAt: Date.now() + ttl
+    });
+
+    window.dispatchEvent(
+      new CustomEvent("kerjivaMalaysiaSyncUpdated", {
+        detail: { key, scope, userId }
+      })
+    );
+
+    return data;
+
+  }
+
+
+  // =========================================
+  // INVALIDATE DATA
+  // =========================================
+
+  function invalidate(key, options = {}) {
+
+    const prefix = options.prefix === true;
+
+    // Prevent in-flight requests from saving stale data
+    revision++;
+
+    function isTarget(cacheKey) {
+
+      const logicalKey = cacheKey.split(":").slice(2).join(":");
+
+      return (
+        key === undefined ||
+        logicalKey === key ||
+        (prefix && logicalKey.startsWith(key))
+      );
+
+    }
+
+    // Remove matching cached data
+    for (const cacheKey of cache.keys()) {
+
+      if (isTarget(cacheKey)) {
+        cache.delete(cacheKey);
+      }
+
+    }
+
+    // Remove matching pending requests
+    for (const cacheKey of pendingRequests.keys()) {
+
+      if (isTarget(cacheKey)) {
+        pendingRequests.delete(cacheKey);
+      }
+
+    }
+
+    window.dispatchEvent(
+      new CustomEvent("kerjivaMalaysiaSyncInvalidated", {
+        detail: { key: key || null }
+      })
+    );
+
+  }
+
+
+  // =========================================
+  // REFRESH DATA
+  // =========================================
+
+  async function refresh(key, loader, options = {}) {
+
+    return get(key, loader, {
+      ...options,
+      force: true
+    });
+
+  }
+
+  // =========================================
+  // CLEAR ALL DATA
+  // =========================================
+
+  function clear() {
+
+    revision++;
+
+    cache.clear();
+    pendingRequests.clear();
+
+  }
+
+  // =========================================
+  // AUTH STATE LISTENER
+  // =========================================
+
+  supabase.auth.onAuthStateChange(function (event, session) {
+
+    const nextUserId = session?.user?.id || null;
+
+    if (
+      event === "SIGNED_OUT" ||
+      currentUserId !== nextUserId
+    ) {
+
+      currentUserId = nextUserId;
+      clear();
+
+    }
+
+  });
+
+  // =========================================
+  // PUBLIC API
+  // =========================================
+
+  window.kerjivaMalaysiaSync = Object.freeze({
+
+    get,
+    set,
+    invalidate,
+    refresh,
+    clear,
+    getSession,
+
+    getCacheSize: function () {
+      return cache.size;
+    }
+
+  });
+
+  console.log(
+    "Kerjiva Malaysia Data Synchronizer initialized."
+  );
+
+})();
+
+
+/* =========================================================
    INITIALIZATION CHECK
    ========================================================= */
 

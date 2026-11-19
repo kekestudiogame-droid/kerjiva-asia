@@ -606,8 +606,10 @@
         category_ms,
         job_type_ms
       `)
-      .eq("company_id", company.id)
-      .eq("status", "published");
+      
+     .eq("company_id", company.id)
+     .eq("status", "published")
+     .order("published_at", { ascending: false });
 
     if (error) {
       console.error("Company jobs error:", error);

@@ -5662,32 +5662,45 @@ let originalJobTranslations = null;
 
   }
 
+
   // =====================================================
   // LOAD COMPANY ID
   // =====================================================
 
   async function loadCompanyId() {
 
-    const { data: sessionData, error: sessionError } =
-      await supabaseAuth.auth.getSession();
+    const sync = window.kerjivaMalaysiaSync;
 
-    if (sessionError) throw sessionError;
+    if (!sync) {
+      throw new Error("Kerjiva Malaysia Sync is unavailable.");
+    }
 
-    const session = sessionData.session;
+    // 1. Get logged-in user through central synchronizer
+    const identity = await sync.getSession();
 
-    if (!session?.user) {
+    if (!identity.user) {
       throw new Error("Please sign in again.");
     }
 
-    companyUserId = session.user.id;
+    companyUserId = identity.userId;
 
-    const { data: company, error } = await supabaseAuth
-      .from("companies")
-      .select("id")
-      .eq("user_id", companyUserId)
-      .maybeSingle();
+    // 2. Reuse cached company profile
+    const company = await sync.get(
+      "company-profile",
+      async function ({ supabase, userId }) {
 
-    if (error) throw error;
+        const { data, error } = await supabase
+          .from("companies")
+          .select("id")
+          .eq("user_id", userId)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        return data;
+
+      }
+    );
 
     if (!company) {
       throw new Error("Company profile not found.");
@@ -5695,7 +5708,9 @@ let originalJobTranslations = null;
 
     companyId = company.id;
 
-    console.log("Company Post a Job: Company ID Loaded.");
+    console.log(
+      "Company Post a Job: Company ID Loaded From Central Sync."
+    );
 
   }
 

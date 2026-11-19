@@ -7419,65 +7419,81 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   if (!supabase || !jobsList) return;
 
+ 
   async function loadCompanyJobs() {
+
     jobsList.textContent = "Loading your job postings...";
 
     try {
-      // 1. Get logged-in company user
-      const {
-        data: sessionData,
-        error: sessionError
-      } = await supabase.auth.getSession();
 
-      if (sessionError) throw sessionError;
+      const sync = window.kerjivaMalaysiaSync;
 
-      const user = sessionData?.session?.user;
-
-      if (!user) {
-        jobsList.textContent = "Please log in to view your job postings.";
-        return;
+      if (!sync) {
+        throw new Error("Kerjiva Malaysia Sync is unavailable.");
       }
 
-      // 2. Get company ID
-      const {
-        data: company,
-        error: companyError
-      } = await supabase
-        .from("companies")
-        .select("id")
-        .eq("user_id", user.id)
-        .maybeSingle();
+      // 1. Get company profile from central sync
+      const company = await sync.get(
+        "company-profile",
+        async function ({ supabase, userId }) {
 
-      if (companyError) throw companyError;
+          const { data, error } = await supabase
+            .from("companies")
+            .select("id")
+            .eq("user_id", userId)
+            .maybeSingle();
+
+          if (error) throw error;
+
+          return data;
+
+        }
+      );
 
       if (!company) {
         jobsList.textContent = "Company profile not found.";
         return;
       }
 
-      // 3. Get all jobs belonging to this company
-      const {
-        data: jobs,
-        error: jobsError
-      } = await supabase
-        .from("jobs")
-        .select("*")
-        .eq("company_id", company.id)
-        .order("created_at", { ascending: false });
+      // 2. Get company jobs from central sync
+      const jobs = await sync.get(
+        "company-jobs",
+        async function ({ supabase }) {
 
-      if (jobsError) throw jobsError;
+          const { data, error } = await supabase
+            .from("jobs")
+            .select(`
+              id,
+              title,
+              status,
+              city,
+              state,
+              published_at,
+              created_at
+            `)
+            .eq("company_id", company.id)
+            .order("created_at", {
+              ascending: false
+            });
 
-      // 4. Show empty state
+          if (error) throw error;
+
+          return data || [];
+
+        }
+      );
+
+      // 3. Show empty state
       if (!jobs || jobs.length === 0) {
         jobsList.textContent = "No job postings yet.";
         return;
       }
 
-    
-      // 5. Render job list
+      // 4. Render job list
       jobsList.replaceChildren();
 
       jobs.forEach(function (job) {
+
         const jobCard = document.createElement("div");
         jobCard.className = "company-job-card";
 
@@ -7489,39 +7505,43 @@ document.addEventListener("DOMContentLoaded", async function () {
           .filter(Boolean)
           .join(", ");
 
-     const status = document.createElement("p");
-status.textContent =
-  "Status: " + (job.status || "Unknown").toUpperCase();
+        const status = document.createElement("p");
+        status.textContent =
+          "Status: " + (job.status || "Unknown").toUpperCase();
 
-jobCard.append(title, location, status);
+        jobCard.append(title, location, status);
 
-// Display publication date for published jobs.
-if (job.status === "published" && job.published_at) {
-  const postedDate = document.createElement("p");
+        if (job.status === "published" && job.published_at) {
 
-  postedDate.textContent =
-    "Posted on " +
-    new Date(job.published_at).toLocaleDateString("en-MY", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric"
-    });
+          const postedDate = document.createElement("p");
 
-  jobCard.appendChild(postedDate);
-}
+          postedDate.textContent =
+            "Posted on " +
+            new Date(job.published_at).toLocaleDateString("en-MY", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            });
 
-        // Show Publish button only for Draft jobs.
+          jobCard.appendChild(postedDate);
+
+        }
+
+        // Show Publish button only for Draft jobs
         if (job.status === "draft") {
-        const publishBtn = document.createElement("button");
 
-        publishBtn.type = "button";
-        publishBtn.className = "company-job-publish-btn";
-        publishBtn.textContent = "Publish";
+          const publishBtn = document.createElement("button");
+
+          publishBtn.type = "button";
+          publishBtn.className = "company-job-publish-btn";
+          publishBtn.textContent = "Publish";
 
           publishBtn.addEventListener("click", async function () {
+
             publishBtn.disabled = true;
 
             try {
+
               if (typeof window.openCompanyJobForEdit !== "function") {
                 throw new Error("Job editing function is not available.");
               }
@@ -7547,43 +7567,40 @@ if (job.status === "published" && job.published_at) {
               submitJobBtn.click();
 
             } catch (error) {
+
               console.error("Publish Draft Error:", error);
+
               alert(error.message || "Unable to publish this draft.");
+
               publishBtn.disabled = false;
+
             }
+
           });
 
           jobCard.appendChild(publishBtn);
+
         }
 
         jobsList.appendChild(jobCard);
+
       });
 
-
-      console.log("Company My Jobs Loaded:", jobs.length);
+      console.log(
+        "Company My Jobs Loaded From Central Sync:",
+        jobs.length
+      );
 
     } catch (error) {
+
       console.error("Company My Jobs Error:", error);
+
       jobsList.textContent =
         "Unable to load your job postings. Please try again.";
+
     }
+
   }
-
-  // Load when opening My Jobs
- const myJobsLink = document.querySelector(
-  '#companyDashboard .dashboard-nav a[href="#companyMyJobs"]'
-);
-
-  if (myJobsLink) {
-    myJobsLink.addEventListener("click", loadCompanyJobs);
-  }
-
-  // Also load if My Jobs is the initial section
-  if (window.location.hash === "#companyMyJobs") {
-    loadCompanyJobs();
-  }
-});
-
 
 /* =====================================================
    KERJIVA MALAYSIA

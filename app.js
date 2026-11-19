@@ -3284,6 +3284,7 @@ if (typeof window.applyKerjivaTranslations === "function") {
       error.message || "Unable to initialize My Documents.";
 
   }
+   });
 
 /* =====================================================
    KERJIVA MALAYSIA

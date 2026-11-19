@@ -707,6 +707,74 @@ company_guide_closing: "Kerjiva — Penyelesaian Pengambilan Pekerja yang Diperc
 
 company_guide_footer: "© Kerjiva - Platform Kerjaya Malaysia",
 
+     
+// ================= INFORMATION CENTER - ARTICLE 5 =================
+
+rights_menu_title: "Hak dan Tanggungjawab Pencari Kerja",
+
+rights_back_home: "← Kembali ke Kerjiva",
+
+rights_banner_alt: "Hak dan Tanggungjawab Pencari Kerja - Kerjiva",
+
+rights_category: "PANDUAN PENCARI KERJA",
+
+rights_title: "Hak dan Tanggungjawab Pencari Kerja",
+
+rights_subtitle: "Fahami hak dan tanggungjawab anda agar proses mencari pekerjaan lebih selamat, selesa dan profesional.",
+
+rights_intro: "Mencari pekerjaan bukan sekadar menemukan jawatan kosong yang sesuai, tetapi juga memahami hak dan tanggungjawab anda sebagai pencari kerja. Dengan memahami kedua-duanya, anda dapat melalui proses pengambilan pekerja dengan lebih bijak dan yakin.",
+
+rights_section_1: "1. Hak Pencari Kerja",
+
+rights_section_1_text: "Setiap pencari kerja berhak mendapat proses pengambilan pekerja yang adil, telus dan profesional. Berikut ialah beberapa perkara penting yang perlu diketahui:",
+
+rights_right_1: "<strong>Maklumat jawatan yang jelas:</strong> Mendapatkan maklumat tentang jawatan, tanggungjawab kerja, lokasi dan syarat kelayakan.",
+
+rights_right_2: "<strong>Layanan yang adil:</strong> Mendapat peluang untuk menyertai proses pemilihan tanpa diskriminasi.",
+
+rights_right_3: "<strong>Maklumat proses pemilihan:</strong> Mendapat penjelasan tentang peringkat pengambilan pekerja mengikut dasar syarikat.",
+
+rights_right_4: "<strong>Keselamatan data peribadi:</strong> Maklumat peribadi dan dokumen yang diberikan semasa proses permohonan hendaklah dirahsiakan.",
+
+rights_section_2: "2. Tanggungjawab Pencari Kerja",
+
+rights_section_2_text: "Selain mempunyai hak, pencari kerja juga perlu melaksanakan tanggungjawab sepanjang proses memohon pekerjaan:",
+
+rights_duty_1: "<strong>Memberikan maklumat yang tepat:</strong> Pastikan CV, pengalaman kerja, pendidikan dan kemahiran anda menggambarkan keadaan sebenar.",
+
+rights_duty_2: "<strong>Menyediakan dokumen yang diperlukan:</strong> Sediakan dokumen yang diminta oleh syarikat mengikut keperluan jawatan.",
+
+rights_duty_3: "<strong>Mengekalkan komunikasi profesional:</strong> Gunakan bahasa yang sopan dan berikan maklum balas sewajarnya ketika berkomunikasi dengan wakil syarikat.",
+
+rights_duty_4: "<strong>Mengikuti proses pemilihan:</strong> Hadir tepat pada masanya dan hormati jadual temu duga serta peringkat pemilihan yang lain.",
+
+rights_section_3: "3. Tips Mencari Kerja dengan Lebih Bijak",
+
+rights_section_3_text: "Untuk mengelakkan pengalaman yang tidak menyenangkan atau boleh mendatangkan kerugian, ambil perhatian terhadap beberapa tips berikut:",
+
+rights_tip_1: "Semak identiti dan maklumat syarikat sebelum memohon pekerjaan.",
+
+rights_tip_2: "Baca huraian kerja dan syarat kelayakan dengan teliti.",
+
+rights_tip_3: "Berhati-hati dengan permintaan bayaran yang tidak jelas semasa proses pengambilan pekerja.",
+
+rights_tip_4: "Jangan berkongsi maklumat peribadi atau dokumen penting secara sembarangan.",
+
+rights_tip_5: "Gunakan platform pencarian kerja yang menyediakan maklumat kekosongan jawatan dengan jelas dan boleh dipercayai.",
+
+rights_section_4: "4. Peranan Kerjiva",
+
+rights_section_4_text: "Kerjiva merupakan platform kerjaya yang membantu pencari kerja menemukan maklumat kekosongan jawatan dan peluang kerjaya. Kami menggalakkan pengguna supaya sentiasa peka, melindungi data peribadi dan menggunakan platform dengan bertanggungjawab.",
+
+rights_conclusion_title: "Penutup",
+
+rights_conclusion: "Memahami hak dan tanggungjawab merupakan langkah penting untuk menjalani proses pencarian kerja yang selamat dan profesional. Jadilah pencari kerja yang aktif, jujur dan bertanggungjawab ketika meneroka peluang kerjaya.",
+
+rights_closing: "Kerjiva — Kerjaya Anda, Masa Depan Anda.",
+
+rights_footer: "© Kerjiva - Platform Kerjaya Malaysia",
+
+
 
 
 

@@ -1058,6 +1058,25 @@ scam_footer: "© Kerjiva - Platform Kerjaya Malaysia",
     login_no_account: "Belum mempunyai akaun?",
     login_create_account: "Cipta Akaun",
 
+     
+    /* ================= COMMUNITY PAGE ================= */
+
+    community_back_home: "Kembali ke Laman Utama",
+    community_title: "Komuniti Kerjiva Malaysia",
+    community_intro: "Kongsi pengalaman, cerita, soalan atau idea anda tentang dunia pekerjaan bersama komuniti Kerjiva. Setiap cerita dan pandangan anda bermakna!",
+    community_rating_title: "Penilaian Komuniti",
+    community_rating_count: "Berdasarkan {count} penilaian",
+    community_share_title: "Kongsi Pengalaman Anda",
+    community_post_placeholder: "Kongsikan pengalaman, cerita, soalan atau idea anda...",
+    community_your_rating: "Penilaian Anda",
+    community_no_rating: "Belum Ada Penilaian",
+    community_post_button: "Hantar Catatan",
+    community_recent_posts: "Catatan Terkini",
+    community_loading: "Memuatkan catatan...",
+    community_footer: "© Kerjiva - Platform Kerjaya Malaysia",
+
+
+
 
 
     /* ================= COMPANY DASHBOARD ================= */

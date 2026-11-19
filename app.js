@@ -7598,14 +7598,32 @@ document.addEventListener("DOMContentLoaded", async function () {
       jobsList.textContent =
         "Unable to load your job postings. Please try again.";
 
+  
     }
 
   }
+
+  // Load when opening My Jobs
+  const myJobsLink = document.querySelector(
+    '#companyDashboard .dashboard-nav a[href="#companyMyJobs"]'
+  );
+
+  if (myJobsLink) {
+    myJobsLink.addEventListener("click", loadCompanyJobs);
+  }
+
+  // Also load if My Jobs is the initial section
+  if (window.location.hash === "#companyMyJobs") {
+    loadCompanyJobs();
+  }
+
+});
 
 /* =====================================================
    KERJIVA MALAYSIA
    HOMEPAGE HAMBURGER MENU
    ===================================================== */
+
 
 document.addEventListener("DOMContentLoaded", function () {
 

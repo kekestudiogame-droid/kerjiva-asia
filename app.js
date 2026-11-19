@@ -5416,6 +5416,7 @@ function updateCompanySidebar(profile) {
         .update(updatedProfile)
         .eq("user_id", companyUserId)
         .select(`
+          id,
           company_name,
           registration_number,
           industry,
@@ -5430,9 +5431,31 @@ function updateCompanySidebar(profile) {
         `)
         .single();
 
-    if (error) throw error;
+  if (error) throw error;
 
-    profileUpdated = true;
+profileUpdated = true;
+
+// -----------------------------------------------
+// UPDATE CENTRAL COMPANY PROFILE CACHE
+// -----------------------------------------------
+
+try {
+
+  await window.kerjivaMalaysiaSync.set(
+    "company-profile",
+    savedProfile
+  );
+
+  console.log("Company Profile Cache Updated.");
+
+} catch (syncError) {
+
+  console.warn(
+    "Company Profile Cache Update Warning:",
+    syncError
+  );
+
+}
 
       // -----------------------------------------------
       // DELETE OLD LOGO AFTER DATABASE UPDATE SUCCEEDS

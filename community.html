@@ -1,1 +1,877 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Join the Kerjiva Malaysia Community. Share your experiences, stories, questions, and ideas about the world of work."
+  >
+
+  <meta name="theme-color" content="#123b6d">
+
+  <title>Kerjiva Malaysia Community</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* =====================================
+       KERJIVA MALAYSIA COMMUNITY
+    ===================================== */
+
+    .community-page {
+      min-height: 100vh;
+      background: #f5f8fc;
+      padding-bottom: 60px;
+    }
+
+    .community-header {
+      background: #ffffff;
+      border-bottom: 1px solid #e5eaf1;
+      padding: 16px 0;
+    }
+
+    .community-header-inner {
+      max-width: 1100px;
+      width: 92%;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .community-logo {
+      text-decoration: none;
+      color: #123b6d;
+      font-size: 25px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .community-logo small {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 2px;
+      margin-top: 5px;
+      color: #f28c28;
+      text-align: center;
+    }
+
+    .community-home-link {
+      color: #123b6d;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .community-main {
+      max-width: 850px;
+      width: 92%;
+      margin: 35px auto;
+    }
+
+    .community-hero {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .community-hero h1 {
+      color: #123b6d;
+      font-size: 30px;
+      margin: 0 0 12px;
+    }
+
+    .community-hero p {
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 650px;
+      margin: auto;
+    }
+
+    .community-rating-card,
+    .community-post-form,
+    .community-post-card {
+      background: #ffffff;
+      border: 1px solid #e5eaf1;
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(18, 59, 109, 0.04);
+    }
+
+    .community-rating-card {
+      text-align: center;
+    }
+
+    .community-rating-card h2 {
+      color: #123b6d;
+      font-size: 18px;
+      margin: 0 0 12px;
+    }
+
+    .community-average {
+      color: #f28c28;
+      font-size: 34px;
+      font-weight: 800;
+    }
+
+    .community-stars {
+      color: #f5a623;
+      letter-spacing: 3px;
+      font-size: 22px;
+      margin: 5px 0;
+    }
+
+    .community-rating-count {
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .community-section-title {
+      color: #123b6d;
+      font-size: 20px;
+      margin: 0 0 16px;
+    }
+
+    .community-post-form textarea {
+      display: block;
+      width: 100%;
+      min-height: 125px;
+      resize: vertical;
+      box-sizing: border-box;
+      border: 1px solid #d8e0eb;
+      border-radius: 10px;
+      padding: 14px;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.6;
+      outline: none;
+    }
+
+    .community-post-form textarea:focus {
+      border-color: #123b6d;
+      box-shadow: 0 0 0 3px rgba(18, 59, 109, 0.08);
+    }
+
+    .community-form-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 15px;
+    }
+
+    .community-rating-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #475569;
+      font-size: 13px;
+    }
+
+    .community-rating-input select {
+      border: 1px solid #d8e0eb;
+      border-radius: 7px;
+      padding: 8px;
+      background: #ffffff;
+      font-family: inherit;
+    }
+
+    .community-submit-btn {
+      background: #123b6d;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 22px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .community-submit-btn:hover {
+      background: #0d2d54;
+    }
+
+    .community-submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .community-notice {
+      padding: 15px;
+      border-radius: 9px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .community-notice a {
+      color: #123b6d;
+      font-weight: 700;
+    }
+
+    .community-notice-info {
+      background: #eaf2fb;
+      color: #123b6d;
+    }
+
+    .community-notice-warning {
+      background: #fff5e8;
+      color: #8a4b08;
+    }
+
+    .community-notice-error {
+      background: #fff0f0;
+      color: #a12626;
+    }
+
+    .community-post-author {
+      color: #123b6d;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .community-post-date {
+      color: #94a3b8;
+      font-size: 12px;
+      margin-bottom: 13px;
+    }
+
+    .community-post-content {
+      color: #334155;
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .community-post-rating {
+      color: #f5a623;
+      margin-top: 12px;
+      letter-spacing: 2px;
+    }
+
+    .community-empty,
+    .community-loading {
+      text-align: center;
+      color: #64748b;
+      padding: 30px 15px;
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e5eaf1;
+    }
+
+    .community-footer {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 12px;
+      padding: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .community-main {
+        margin-top: 25px;
+      }
+
+      .community-hero h1 {
+        font-size: 24px;
+      }
+
+      .community-hero p {
+        font-size: 14px;
+      }
+
+      .community-rating-card,
+      .community-post-form,
+      .community-post-card {
+        padding: 17px;
+      }
+
+      .community-form-bottom {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .community-submit-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="community-page">
+
+  <!-- HEADER -->
+  <header class="community-header">
+    <div class="community-header-inner">
+
+      <a href="index.html" class="community-logo">
+        Kerjiva
+        <small>Malaysia</small>
+      </a>
+
+      <a
+        href="index.html"
+        class="community-home-link"
+        data-i18n="community_back_home"
+      >
+        ← Back to Home
+      </a>
+
+    </div>
+  </header>
+
+
+  <!-- MAIN CONTENT -->
+  <main class="community-main">
+
+    <!-- INTRODUCTION -->
+    <section class="community-hero">
+
+      <h1 data-i18n="community_title">
+        Kerjiva Malaysia Community
+      </h1>
+
+      <p data-i18n="community_intro">
+        Share your experiences, stories, questions, or ideas about the
+        world of work with the Kerjiva community. Every story and opinion matters!
+      </p>
+
+    </section>
+
+
+    <!-- RATING SUMMARY -->
+    <section class="community-rating-card">
+
+      <h2 data-i18n="community_rating_title">
+        Community Rating
+      </h2>
+
+      <div
+        class="community-average"
+        id="communityAverage"
+      >
+        0.0/5
+      </div>
+
+      <div class="community-stars" id="communityAverageStars">
+        ☆☆☆☆☆
+      </div>
+
+      <div
+        class="community-rating-count"
+        id="communityRatingCount"
+        data-i18n="community_rating_count"
+      >
+        Based on 0 ratings
+      </div>
+
+    </section>
+
+
+    <!-- AUTHENTICATION NOTICE -->
+    <div
+      id="communityAuthNotice"
+      class="community-notice community-notice-info"
+      hidden
+    ></div>
+
+
+    <!-- POST FORM -->
+    <section
+      class="community-post-form"
+      id="communityPostSection"
+      hidden
+    >
+
+      <h2
+        class="community-section-title"
+        data-i18n="community_share_title"
+      >
+        Share with the Community
+      </h2>
+
+      <form id="communityPostForm">
+
+        <textarea
+          id="communityPostContent"
+          maxlength="5000"
+          required
+          data-i18n="community_post_placeholder"
+          placeholder="Write your experience, story, question, or idea here..."
+        ></textarea>
+
+        <div class="community-form-bottom">
+
+          <div class="community-rating-input">
+
+            <label
+              for="communityPostRating"
+              data-i18n="community_your_rating"
+            >
+              Your rating:
+            </label>
+
+            <select id="communityPostRating">
+
+              <option value="" data-i18n="community_no_rating">
+                No rating
+              </option>
+
+              <option value="5">5 - Excellent</option>
+              <option value="4">4 - Very Good</option>
+              <option value="3">3 - Good</option>
+              <option value="2">2 - Fair</option>
+              <option value="1">1 - Poor</option>
+
+            </select>
+
+          </div>
+
+          <button
+            type="submit"
+            class="community-submit-btn"
+            id="communitySubmitBtn"
+            data-i18n="community_post_button"
+          >
+            Publish Post
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+
+    <!-- POSTS -->
+    <section class="community-posts-section">
+
+      <h2
+        class="community-section-title"
+        data-i18n="community_recent_posts"
+      >
+        Community Stories
+      </h2>
+
+      <div id="communityPostsList">
+
+        <div
+          class="community-loading"
+          data-i18n="community_loading"
+        >
+          Loading community posts...
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer
+    class="community-footer"
+    data-i18n="community_footer"
+  >
+    © Kerjiva Malaysia. All rights reserved.
+  </footer>
+
+</div>
+
+
+<!-- SUPABASE LIBRARY -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- KERJIVA MALAYSIA APP -->
+<script src="app.js"></script>
+
+<!-- LANGUAGE SYSTEM -->
+<script src="language.js"></script>
+
+
+<!-- COMMUNITY FUNCTIONALITY -->
+<script>
+(function () {
+  "use strict";
+
+  const supabaseClient = window.supabaseAuth;
+
+  const postForm = document.getElementById("communityPostForm");
+  const postSection = document.getElementById("communityPostSection");
+  const authNotice = document.getElementById("communityAuthNotice");
+  const postsList = document.getElementById("communityPostsList");
+  const postContent = document.getElementById("communityPostContent");
+  const postRating = document.getElementById("communityPostRating");
+  const submitButton = document.getElementById("communitySubmitBtn");
+
+  let currentSession = null;
+  let currentLanguage = localStorage.getItem(
+    "kerjivaMalaysiaLanguage"
+  ) || "en";
+
+
+  function getText(key) {
+    const translations = {
+      en: {
+        loginRequired: "Please log in and verify your email to share a post. ",
+        login: "Log In",
+        register: "Sign Up",
+        verificationRequired: "Please verify your email address before posting. ",
+        verify: "Check your email",
+        loading: "Loading community posts...",
+        empty: "No community posts yet. Be the first to share your story!",
+        loadError: "Unable to load community posts. Please try again later.",
+        submitSuccess: "Your post has been published successfully.",
+        submitError: "Unable to publish your post. Please try again.",
+        contentRequired: "Please write something before publishing.",
+        ratingCount: "Based on {count} ratings",
+        noRating: "No rating yet"
+      },
+      ms: {
+        loginRequired: "Sila log masuk dan sahkan e-mel anda untuk berkongsi hantaran. ",
+        login: "Log Masuk",
+        register: "Daftar",
+        verificationRequired: "Sila sahkan alamat e-mel anda sebelum membuat hantaran. ",
+        verify: "Semak e-mel anda",
+        loading: "Memuatkan hantaran komuniti...",
+        empty: "Belum ada hantaran komuniti. Jadilah orang pertama untuk berkongsi cerita!",
+        loadError: "Hantaran komuniti tidak dapat dimuatkan. Sila cuba lagi.",
+        submitSuccess: "Hantaran anda berjaya diterbitkan.",
+        submitError: "Hantaran tidak dapat diterbitkan. Sila cuba lagi.",
+        contentRequired: "Sila tulis sesuatu sebelum menerbitkan hantaran.",
+        ratingCount: "Berdasarkan {count} penilaian",
+        noRating: "Belum ada penilaian"
+      }
+    };
+
+    return translations[currentLanguage]?.[key] ||
+      translations.en[key] ||
+      key;
+  }
+
+
+  function showNotice(message, type) {
+    authNotice.className =
+      "community-notice community-notice-" + (type || "info");
+
+    authNotice.textContent = message;
+    authNotice.hidden = false;
+  }
+
+
+  function hideNotice() {
+    authNotice.hidden = true;
+    authNotice.textContent = "";
+  }
+
+
+  function escapeText(value) {
+    return String(value ?? "");
+  }
+
+
+  function getDisplayContent(post) {
+    if (currentLanguage === "ms") {
+      return post.content_ms || post.content;
+    }
+
+    return post.content_en || post.content;
+  }
+
+
+  function formatDate(dateValue) {
+    const date = new Date(dateValue);
+
+    return new Intl.DateTimeFormat(
+      currentLanguage === "ms" ? "ms-MY" : "en-MY",
+      {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      }
+    ).format(date);
+  }
+
+
+  function renderRatingSummary(posts) {
+    const ratings = posts
+      .map(post => Number(post.rating))
+      .filter(value => Number.isInteger(value) && value >= 1 && value <= 5);
+
+    const averageElement = document.getElementById("communityAverage");
+    const starsElement = document.getElementById("communityAverageStars");
+    const countElement = document.getElementById("communityRatingCount");
+
+    if (ratings.length === 0) {
+      averageElement.textContent = "0.0/5";
+      starsElement.textContent = "☆☆☆☆☆";
+      countElement.textContent = getText("noRating");
+      return;
+    }
+
+    const average = ratings.reduce((sum, value) => sum + value, 0)
+      / ratings.length;
+
+    averageElement.textContent = average.toFixed(1) + "/5";
+
+    const fullStars = Math.round(average);
+
+    starsElement.textContent =
+      "★".repeat(fullStars) +
+      "☆".repeat(5 - fullStars);
+
+    countElement.textContent =
+      getText("ratingCount").replace("{count}", ratings.length);
+  }
+
+
+  function renderPosts(posts) {
+    postsList.replaceChildren();
+
+    if (!posts.length) {
+      const emptyElement = document.createElement("div");
+
+      emptyElement.className = "community-empty";
+      emptyElement.textContent = getText("empty");
+
+      postsList.appendChild(emptyElement);
+      return;
+    }
+
+    posts.forEach(post => {
+      const card = document.createElement("article");
+      card.className = "community-post-card";
+
+      const author = document.createElement("div");
+      author.className = "community-post-author";
+      author.textContent = escapeText(post.author_name);
+
+      const date = document.createElement("div");
+      date.className = "community-post-date";
+      date.textContent = formatDate(post.created_at);
+
+      const content = document.createElement("div");
+      content.className = "community-post-content";
+      content.textContent = escapeText(getDisplayContent(post));
+
+      card.appendChild(author);
+      card.appendChild(date);
+      card.appendChild(content);
+
+      if (post.rating !== null && post.rating !== undefined) {
+        const rating = document.createElement("div");
+        rating.className = "community-post-rating";
+
+        const numericRating = Number(post.rating);
+
+        if (Number.isInteger(numericRating) &&
+            numericRating >= 1 &&
+            numericRating <= 5) {
+          rating.textContent =
+            "★".repeat(numericRating) +
+            "☆".repeat(5 - numericRating);
+
+          card.appendChild(rating);
+        }
+      }
+
+      postsList.appendChild(card);
+    });
+  }
+
+
+  async function loadCommunityPosts() {
+    if (!supabaseClient) {
+      postsList.textContent = getText("loadError");
+      console.error("Supabase client window.supabaseAuth is unavailable.");
+      return;
+    }
+
+    postsList.textContent = getText("loading");
+
+    const { data, error } = await supabaseClient
+      .from("community_posts")
+      .select(
+        "id, author_name, content, content_en, content_ms, rating, created_at"
+      )
+      .eq("is_hidden", false)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Community load error:", error);
+      postsList.textContent = getText("loadError");
+      return;
+    }
+
+    renderRatingSummary(data || []);
+    renderPosts(data || []);
+  }
+
+
+  async function checkCommunityAccess() {
+    if (!supabaseClient) {
+      showNotice(
+        "Community service is temporarily unavailable.",
+        "error"
+      );
+      return;
+    }
+
+    const { data, error } = await supabaseClient.auth.getSession();
+
+    if (error) {
+      console.error("Session check error:", error);
+      showNotice(
+        "Unable to check your login session. Please refresh the page.",
+        "error"
+      );
+      return;
+    }
+
+    currentSession = data.session;
+
+    if (!currentSession) {
+      postSection.hidden = true;
+
+      authNotice.innerHTML =
+        getText("loginRequired") +
+        '<a href="login.html">' + getText("login") + '</a>' +
+        " · " +
+        '<a href="register.html">' + getText("register") + '</a>';
+
+      authNotice.className =
+        "community-notice community-notice-info";
+
+      authNotice.hidden = false;
+      return;
+    }
+
+    const user = currentSession.user;
+
+    if (!user.email_confirmed_at) {
+      postSection.hidden = true;
+
+      showNotice(
+        getText("verificationRequired") + getText("verify"),
+        "warning"
+      );
+
+      return;
+    }
+
+    hideNotice();
+    postSection.hidden = false;
+  }
+
+
+  postForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    if (!supabaseClient) return;
+
+    const content = postContent.value.trim();
+    const ratingValue = postRating.value;
+
+    if (!content) {
+      alert(getText("contentRequired"));
+      return;
+    }
+
+    submitButton.disabled = true;
+
+    const originalButtonText = submitButton.textContent;
+    submitButton.textContent =
+      currentLanguage === "ms" ? "Menerbitkan..." : "Publishing...";
+
+    try {
+      const { data: sessionData, error: sessionError } =
+        await supabaseClient.auth.getSession();
+
+      if (sessionError || !sessionData.session) {
+        throw new Error("LOGIN_REQUIRED");
+      }
+
+      if (!sessionData.session.user.email_confirmed_at) {
+        throw new Error("EMAIL_NOT_VERIFIED");
+      }
+
+      const { error } = await supabaseClient
+        .from("community_posts")
+        .insert({
+          content: content,
+          rating: ratingValue ? Number(ratingValue) : null
+        });
+
+      if (error) {
+        console.error("Community insert error:", error);
+        throw error;
+      }
+
+      postContent.value = "";
+      postRating.value = "";
+
+      alert(getText("submitSuccess"));
+
+      await loadCommunityPosts();
+
+    } catch (error) {
+      console.error("Community posting error:", error);
+
+      if (error.message === "LOGIN_REQUIRED") {
+        showNotice(getText("loginRequired"), "warning");
+      } else if (error.message === "EMAIL_NOT_VERIFIED") {
+        showNotice(getText("verificationRequired"), "warning");
+      } else {
+        alert(getText("submitError"));
+      }
+
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = originalButtonText;
+    }
+  });
+
+
+  // Refresh language-dependent content when language changes
+  const languageSelect = document.getElementById("languageSelect");
+
+  if (languageSelect) {
+    languageSelect.addEventListener("change", function () {
+      currentLanguage = this.value || "en";
+      setTimeout(loadCommunityPosts, 100);
+      checkCommunityAccess();
+    });
+  }
+
+
+  // Initialize Community
+  document.addEventListener("DOMContentLoaded", async function () {
+    currentLanguage = localStorage.getItem(
+      "kerjivaMalaysiaLanguage"
+    ) || "en";
+
+    await checkCommunityAccess();
+    await loadCommunityPosts();
+
+    if (supabaseClient) {
+      supabaseClient.auth.onAuthStateChange(function () {
+        checkCommunityAccess();
+      });
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
+

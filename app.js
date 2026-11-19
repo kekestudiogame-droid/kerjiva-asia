@@ -2680,8 +2680,9 @@ if (typeof window.applyKerjivaTranslations === "function") {
 
 }
 
+ 
   // =========================================
-  // LOAD DOCUMENTS FROM SUPABASE
+  // LOAD DOCUMENTS FROM CENTRAL SYNC
   // =========================================
 
   async function loadJobseekerDocuments() {
@@ -2690,24 +2691,40 @@ if (typeof window.applyKerjivaTranslations === "function") {
 
     try {
 
-      const { data, error } = await supabaseAuth
-        .from("jobseeker_documents")
-        .select(`
-          id,
-          document_type,
-          file_name,
-          storage_path,
-          file_size,
-          mime_type,
-          created_at
-        `)
-        .eq("user_id", currentUser.id)
-        .order("created_at", { ascending: false });
+      const sync = window.kerjivaMalaysiaSync;
 
-      if (error) throw error;
+      if (!sync) {
+        throw new Error("Kerjiva Malaysia Sync is unavailable.");
+      }
+
+      const data = await sync.get(
+        "jobseeker-documents",
+        async function ({ supabase, userId }) {
+
+          const { data: documents, error } = await supabase
+            .from("jobseeker_documents")
+            .select(`
+              id,
+              document_type,
+              file_name,
+              storage_path,
+              file_size,
+              mime_type,
+              created_at
+            `)
+            .eq("user_id", userId)
+            .order("created_at", { ascending: false });
+
+          if (error) throw error;
+
+          return documents || [];
+
+        }
+      );
 
       if (!data || data.length === 0) {
         showEmptyState();
+        console.log("Jobseeker Documents Loaded From Central Sync: 0");
         return;
       }
 
@@ -2739,6 +2756,7 @@ if (typeof window.applyKerjivaTranslations === "function") {
         viewLink.target = "_blank";
         viewLink.rel = "noopener noreferrer";
 
+        // Signed URL is generated fresh, not cached.
         const { data: signedData, error: signedError } =
           await supabaseAuth.storage
             .from(BUCKET_NAME)
@@ -2755,8 +2773,6 @@ if (typeof window.applyKerjivaTranslations === "function") {
 
         }
 
-     
-     
         const editBtn = document.createElement("button");
         editBtn.type = "button";
         editBtn.className = "document-edit-btn";
@@ -2792,14 +2808,12 @@ if (typeof window.applyKerjivaTranslations === "function") {
 
           typeSelect.value = item.document_type;
 
-          // CURRENT FILE
           const currentFileLabel = document.createElement("label");
           currentFileLabel.textContent = "Current File";
 
           const currentFileInfo = document.createElement("p");
           currentFileInfo.textContent = item.file_name;
 
-          // CHOOSE REPLACEMENT FILE
           const fileLabel = document.createElement("label");
           fileLabel.textContent = "Choose Replacement File";
 
@@ -2899,132 +2913,132 @@ if (typeof window.applyKerjivaTranslations === "function") {
             saveBtn.textContent = "Saving...";
             formStatus.textContent = "Saving document changes...";
 
-          
-let replacementPath = null;
-const oldStoragePath = item.storage_path;
+            let replacementPath = null;
+            const oldStoragePath = item.storage_path;
 
-try {
+            try {
 
-  // Upload replacement file if selected.
-  if (replacementFile) {
+              if (replacementFile) {
 
-    const safeFileName = replacementFile.name
-      .replace(/[^a-zA-Z0-9._-]/g, "_");
+                const safeFileName = replacementFile.name
+                  .replace(/[^a-zA-Z0-9._-]/g, "_");
 
-    replacementPath =
-      `${currentUser.id}/${crypto.randomUUID()}-${safeFileName}`;
+                replacementPath =
+                  `${currentUser.id}/${crypto.randomUUID()}-${safeFileName}`;
 
-    const { error: uploadError } =
-      await supabaseAuth.storage
-        .from(BUCKET_NAME)
-        .upload(replacementPath, replacementFile, {
-          cacheControl: "3600",
-          upsert: false,
-          contentType: replacementFile.type
-        });
+                const { error: uploadError } =
+                  await supabaseAuth.storage
+                    .from(BUCKET_NAME)
+                    .upload(replacementPath, replacementFile, {
+                      cacheControl: "3600",
+                      upsert: false,
+                      contentType: replacementFile.type
+                    });
 
-    if (uploadError) throw uploadError;
+                if (uploadError) throw uploadError;
 
-  }
+              }
 
-  const updateData = {
-    document_type: selectedType,
-    updated_at: new Date().toISOString()
-  };
+              const updateData = {
+                document_type: selectedType,
+                updated_at: new Date().toISOString()
+              };
 
-  if (replacementFile) {
-    updateData.file_name = replacementFile.name;
-    updateData.storage_path = replacementPath;
-    updateData.file_size = replacementFile.size;
-    updateData.mime_type = replacementFile.type;
-  }
+              if (replacementFile) {
+                updateData.file_name = replacementFile.name;
+                updateData.storage_path = replacementPath;
+                updateData.file_size = replacementFile.size;
+                updateData.mime_type = replacementFile.type;
+              }
 
-  const { data, error } = await supabaseAuth
-    .from("jobseeker_documents")
-    .update(updateData)
-    .eq("id", item.id)
-    .eq("user_id", currentUser.id)
-    .select("id")
-    .single();
+              const { data, error } = await supabaseAuth
+                .from("jobseeker_documents")
+                .update(updateData)
+                .eq("id", item.id)
+                .eq("user_id", currentUser.id)
+                .select("id")
+                .single();
 
-  if (error) throw error;
+              if (error) throw error;
 
-  if (!data) {
-    throw new Error(
-      "Document was not found or could not be updated."
-    );
-  }
+              if (!data) {
+                throw new Error(
+                  "Document was not found or could not be updated."
+                );
+              }
 
-  // Database update succeeded.
-  // New file is now the active source document.
-  replacementPath = null;
+              replacementPath = null;
 
-  // Remove old Storage file only after successful replacement.
-  if (replacementFile && oldStoragePath) {
+              // Invalidate cached document list after successful update.
+              const sync = window.kerjivaMalaysiaSync;
+              if (sync) {
+                sync.invalidate("jobseeker-documents");
+              }
 
-    const { error: deleteError } =
-      await supabaseAuth.storage
-        .from(BUCKET_NAME)
-        .remove([oldStoragePath]);
+              if (replacementFile && oldStoragePath) {
 
-    if (deleteError) {
-      console.error(
-        "Old Document Cleanup Error:",
-        deleteError
-      );
+                const { error: deleteError } =
+                  await supabaseAuth.storage
+                    .from(BUCKET_NAME)
+                    .remove([oldStoragePath]);
 
-      statusEl.textContent =
-        "Document updated successfully, but the old file could not be removed.";
-    } else {
-      statusEl.textContent =
-        "Document updated successfully.";
-    }
+                if (deleteError) {
+                  console.error(
+                    "Old Document Cleanup Error:",
+                    deleteError
+                  );
 
-  } else {
+                  statusEl.textContent =
+                    "Document updated successfully, but the old file could not be removed.";
+                } else {
+                  statusEl.textContent =
+                    "Document updated successfully.";
+                }
 
-    statusEl.textContent =
-      "Document updated successfully.";
+              } else {
 
-  }
+                statusEl.textContent =
+                  "Document updated successfully.";
 
-  await loadJobseekerDocuments();
+              }
 
-} catch (error) {
+              await loadJobseekerDocuments();
 
-  console.error(
-    "Update Jobseeker Document Error:",
-    error
-  );
+            } catch (error) {
 
-  // Remove replacement upload if database update failed.
-  if (replacementPath) {
+              console.error(
+                "Update Jobseeker Document Error:",
+                error
+              );
 
-    const { error: cleanupError } =
-      await supabaseAuth.storage
-        .from(BUCKET_NAME)
-        .remove([replacementPath]);
+              if (replacementPath) {
 
-    if (cleanupError) {
-      console.error(
-        "Replacement File Cleanup Error:",
-        cleanupError
-      );
-    }
+                const { error: cleanupError } =
+                  await supabaseAuth.storage
+                    .from(BUCKET_NAME)
+                    .remove([replacementPath]);
 
-  }
+                if (cleanupError) {
+                  console.error(
+                    "Replacement File Cleanup Error:",
+                    cleanupError
+                  );
+                }
 
-  formStatus.textContent =
-    error.message || "Unable to update document.";
+              }
 
-} finally {
+              formStatus.textContent =
+                error.message || "Unable to update document.";
 
-  saveBtn.disabled = false;
-  cancelBtn.disabled = false;
-  typeSelect.disabled = false;
-  fileInput.disabled = false;
-  saveBtn.textContent = originalButtonText;
+            } finally {
 
-}
+              saveBtn.disabled = false;
+              cancelBtn.disabled = false;
+              typeSelect.disabled = false;
+              fileInput.disabled = false;
+              saveBtn.textContent = originalButtonText;
+
+            }
 
           });
 
@@ -3058,6 +3072,11 @@ try {
 
       }
 
+      console.log(
+        "Jobseeker Documents Loaded From Central Sync:",
+        data.length
+      );
+
     } catch (error) {
 
       console.error("Load Jobseeker Documents Error:", error);
@@ -3070,6 +3089,7 @@ try {
     }
 
   }
+
   // =========================================
   // SELECT DOCUMENT FILE
   // =========================================
@@ -3184,6 +3204,10 @@ try {
       if (insertError) throw insertError;
 
       uploadedPath = null;
+       const sync = window.kerjivaMalaysiaSync;
+       if (sync) {
+       sync.invalidate("jobseeker-documents");
+      }
 
       selectedFile = null;
       documentFile.value = "";
@@ -3233,20 +3257,22 @@ try {
   // INITIALIZE MY DOCUMENTS
   // =========================================
 
+
   try {
 
-    const { data: sessionData, error: sessionError } =
-      await supabaseAuth.auth.getSession();
+    const sync = window.kerjivaMalaysiaSync;
 
-    if (sessionError) throw sessionError;
+    if (!sync) {
+      throw new Error("Kerjiva Malaysia Sync is unavailable.");
+    }
 
-    const session = sessionData.session;
+    const identity = await sync.getSession();
 
-    if (!session || !session.user) {
+    if (!identity || !identity.user) {
       throw new Error("Please sign in again.");
     }
 
-    currentUser = session.user;
+    currentUser = identity.user;
 
     await loadJobseekerDocuments();
 
@@ -3258,8 +3284,6 @@ try {
       error.message || "Unable to initialize My Documents.";
 
   }
-
-});
 
 /* =====================================================
    KERJIVA MALAYSIA

@@ -708,6 +708,7 @@ company_guide_closing: "Kerjiva — Penyelesaian Pengambilan Pekerja yang Diperc
 company_guide_footer: "© Kerjiva - Platform Kerjaya Malaysia",
 
      
+
 // ================= INFORMATION CENTER - ARTICLE 5 =================
 
 rights_menu_title: "Hak dan Tanggungjawab Pencari Kerja",
@@ -734,19 +735,19 @@ rights_right_2: "<strong>Layanan yang adil:</strong> Mendapat peluang untuk meny
 
 rights_right_3: "<strong>Maklumat proses pemilihan:</strong> Mendapat penjelasan tentang peringkat pengambilan pekerja mengikut dasar syarikat.",
 
-rights_right_4: "<strong>Keselamatan data peribadi:</strong> Maklumat peribadi dan dokumen yang diberikan semasa proses permohonan hendaklah dirahsiakan.",
+rights_right_4: "<strong>Perlindungan data peribadi:</strong> Maklumat peribadi dan dokumen yang diberikan semasa proses permohonan hendaklah dirahsiakan.",
 
 rights_section_2: "2. Tanggungjawab Pencari Kerja",
 
 rights_section_2_text: "Selain mempunyai hak, pencari kerja juga perlu melaksanakan tanggungjawab sepanjang proses memohon pekerjaan:",
 
-rights_duty_1: "<strong>Memberikan maklumat yang tepat:</strong> Pastikan CV, pengalaman kerja, pendidikan dan kemahiran anda menggambarkan keadaan sebenar.",
+rights_duty_1: "<strong>Memberikan maklumat yang benar:</strong> Pastikan CV, pengalaman kerja, pendidikan dan kemahiran anda menggambarkan keadaan sebenar.",
 
 rights_duty_2: "<strong>Menyediakan dokumen yang diperlukan:</strong> Sediakan dokumen yang diminta oleh syarikat mengikut keperluan jawatan.",
 
 rights_duty_3: "<strong>Mengekalkan komunikasi profesional:</strong> Gunakan bahasa yang sopan dan berikan maklum balas sewajarnya ketika berkomunikasi dengan wakil syarikat.",
 
-rights_duty_4: "<strong>Mengikuti proses pemilihan:</strong> Hadir tepat pada masanya dan hormati jadual temu duga serta peringkat pemilihan yang lain.",
+rights_duty_4: "<strong>Mematuhi proses pemilihan:</strong> Hadir tepat pada masanya dan hormati jadual temu duga serta peringkat pemilihan yang lain.",
 
 rights_section_3: "3. Tips Mencari Kerja dengan Lebih Bijak",
 
@@ -773,8 +774,6 @@ rights_conclusion: "Memahami hak dan tanggungjawab merupakan langkah penting unt
 rights_closing: "Kerjiva — Kerjaya Anda, Masa Depan Anda.",
 
 rights_footer: "© Kerjiva - Platform Kerjaya Malaysia",
-
-
 
 
 

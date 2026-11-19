@@ -1476,15 +1476,72 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       if (jobseekerError) throw jobseekerError;
 
-      const { data: company, error: companyError } =
-        await supabaseAuth
-          .from("companies")
-          .select("id")
-          .eq("user_id", userId)
-          .maybeSingle();
+    
+      const sync = window.kerjivaMalaysiaSync;
 
-      if (companyError) throw companyError;
+      if (!sync) {
+        throw new Error("Kerjiva Malaysia Sync is unavailable.");
+      }
 
+      // 1. Get session from Central Sync
+      const identity = await sync.getSession();
+
+      if (!identity || !identity.user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      // 2. Load both account profiles through Central Sync
+      const [jobseeker, company] = await Promise.all([
+
+        sync.get(
+          "jobseeker-profile",
+          async function ({ supabase, userId }) {
+
+            const { data, error } = await supabase
+              .from("jobseeker_profiles")
+              .select("*")
+              .eq("user_id", userId)
+              .maybeSingle();
+
+            if (error) throw error;
+
+            return data;
+          }
+        ),
+
+        sync.get(
+          "company-profile",
+          async function ({ supabase, userId }) {
+
+            const { data, error } = await supabase
+              .from("companies")
+              .select(`
+                id,
+                company_name,
+                registration_number,
+                industry,
+                email,
+                phone,
+                website,
+                state,
+                city,
+                address,
+                description,
+                logo_url
+              `)
+              .eq("user_id", userId)
+              .maybeSingle();
+
+            if (error) throw error;
+
+            return data;
+          }
+        )
+
+      ]);
+
+      // 3. Determine actual account role
       let actualRole = null;
 
       if (jobseeker && !company) {

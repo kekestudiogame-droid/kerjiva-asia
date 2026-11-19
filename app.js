@@ -2141,10 +2141,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+
 /* =====================================================
    KERJIVA MALAYSIA
    JOBSEEKER PROFILE PHOTO
    PRIVATE SUPABASE STORAGE
+   CENTRAL SYNC INTEGRATION
    ===================================================== */
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -2191,9 +2193,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     "image/webp"
   ];
 
+  const sync = window.kerjivaMalaysiaSync;
+
   let currentUser = null;
   let currentAvatarPath = null;
   let selectedPhoto = null;
+  let currentProfile = null;
 
   // =========================================
   // INITIALS
@@ -2223,9 +2228,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     photoImage.removeAttribute("src");
 
     if (sidebarAvatar) {
-
       sidebarAvatar.textContent = initials;
-
     }
 
   }
@@ -2261,6 +2264,27 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   // =========================================
+  // UPDATE CENTRAL PROFILE CACHE
+  // =========================================
+
+  async function updateProfileCache(avatarPath) {
+
+    if (!currentProfile || !sync) return;
+
+    currentProfile = {
+      ...currentProfile,
+      avatar_url: avatarPath,
+      updated_at: new Date().toISOString()
+    };
+
+    await sync.set(
+      "jobseeker-profile",
+      currentProfile
+    );
+
+  }
+
+  // =========================================
   // LOAD CURRENT PHOTO
   // =========================================
 
@@ -2270,39 +2294,46 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     try {
 
-      const { data: sessionData, error: sessionError } =
-        await supabaseAuth.auth.getSession();
+      if (!sync) {
+        throw new Error("Kerjiva Malaysia Sync is unavailable.");
+      }
 
-      if (sessionError) throw sessionError;
+      const identity = await sync.getSession();
 
-      const session = sessionData.session;
-
-      if (!session || !session.user) {
+      if (!identity || !identity.user) {
         throw new Error("Please sign in again.");
       }
 
-      currentUser = session.user;
+      currentUser = identity.user;
 
-      const { data: profile, error: profileError } =
-        await supabaseAuth
-          .from("jobseeker_profiles")
-          .select("full_name, avatar_url")
-          .eq("user_id", currentUser.id)
-          .maybeSingle();
+      currentProfile = await sync.get(
+        "jobseeker-profile",
+        async function ({ supabase, userId }) {
 
-      if (profileError) throw profileError;
+          const { data, error } = await supabase
+            .from("jobseeker_profiles")
+            .select("*")
+            .eq("user_id", userId)
+            .maybeSingle();
 
-      if (!profile) {
+          if (error) throw error;
+
+          return data;
+
+        }
+      );
+
+      if (!currentProfile) {
         throw new Error("Jobseeker profile was not found.");
       }
 
-      if (sidebarName && profile.full_name) {
-        sidebarName.textContent = profile.full_name;
+      if (sidebarName && currentProfile.full_name) {
+        sidebarName.textContent = currentProfile.full_name;
       }
 
-      showInitials(profile.full_name);
+      showInitials(currentProfile.full_name);
 
-      currentAvatarPath = profile.avatar_url || null;
+      currentAvatarPath = currentProfile.avatar_url || null;
 
       if (currentAvatarPath) {
 
@@ -2325,6 +2356,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
 
       photoStatus.textContent = "";
+
+      console.log("Jobseeker Profile Photo Loaded From Central Sync.");
 
     } catch (error) {
 
@@ -2428,6 +2461,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       currentAvatarPath = avatarPath;
 
+      await updateProfileCache(avatarPath);
+
       const { data: signedData, error: signedError } =
         await supabaseAuth.storage
           .from(BUCKET_NAME)
@@ -2443,6 +2478,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       photoFileInput.value = "";
 
       photoStatus.textContent = "Profile photo uploaded successfully.";
+
+      console.log("Jobseeker Photo Cache Updated.");
 
     } catch (error) {
 
@@ -2503,6 +2540,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       currentAvatarPath = null;
 
+      await updateProfileCache(null);
+
       showInitials(
         sidebarName ? sidebarName.textContent : "Job Seeker"
       );
@@ -2510,6 +2549,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       removePhotoBtn.hidden = true;
 
       photoStatus.textContent = "Profile photo removed successfully.";
+
+      console.log("Jobseeker Photo Cache Updated.");
 
     } catch (error) {
 
@@ -2531,7 +2572,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   await loadJobseekerPhoto();
 
 });
-
 
 /* =====================================================
    KERJIVA MALAYSIA

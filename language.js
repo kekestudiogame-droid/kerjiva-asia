@@ -774,6 +774,91 @@ rights_conclusion: "Memahami hak dan tanggungjawab merupakan langkah penting unt
 rights_closing: "Kerjiva — Kerjaya Anda, Masa Depan Anda.",
 
 rights_footer: "© Kerjiva - Platform Kerjaya Malaysia",
+     
+// ================= INFORMATION CENTER - ARTICLE 6 =================
+
+scam_menu_title: "Panduan Mengelakkan Penipuan Pekerjaan",
+
+scam_back_home: "← Kembali ke Kerjiva",
+
+scam_banner_alt: "Panduan Mengelakkan Penipuan Pekerjaan - Kerjiva",
+
+scam_category: "PANDUAN PENCARI KERJA",
+
+scam_title: "Cara Mengelakkan Penipuan Pekerjaan",
+
+scam_subtitle: "Ketahui cara mengenal pasti iklan jawatan kosong palsu dan melindungi diri anda sepanjang proses pencarian kerja.",
+
+scam_intro: "Mencari pekerjaan memerlukan pertimbangan yang teliti. Dengan banyaknya peluang pekerjaan yang tersedia, pencari kerja perlu berhati-hati terhadap tawaran yang tidak jelas atau berkemungkinan merupakan penipuan. Dengan mengenali tanda-tanda amaran, anda dapat melindungi diri dan meneroka peluang kerjaya dengan lebih selamat.",
+
+scam_section_1: "1. Kenali Tanda-tanda Iklan Jawatan Kosong Palsu",
+
+scam_section_1_text: "Berhati-hati apabila menemui iklan pekerjaan yang menunjukkan tanda-tanda mencurigakan seperti berikut:",
+
+scam_sign_1: "<strong>Identiti syarikat atau perekrut tidak jelas:</strong> Nama syarikat, alamat atau maklumat pihak yang mengiklankan jawatan sukar dikenal pasti.",
+
+scam_sign_2: "<strong>Maklumat pekerjaan tidak lengkap:</strong> Huraian tugas, tanggungjawab dan syarat kelayakan tidak dinyatakan dengan jelas.",
+
+scam_sign_3: "<strong>Gaji atau faedah tidak munasabah:</strong> Tawaran gaji terlalu tinggi atau faedah yang luar biasa tanpa penjelasan yang meyakinkan.",
+
+scam_sign_4: "<strong>Jaminan diterima bekerja dengan mudah:</strong> Menjanjikan pekerjaan tanpa proses temu duga atau penilaian yang sewajarnya.",
+
+scam_sign_5: "<strong>Maklumat hubungan sukar disahkan:</strong> Nombor telefon, alamat e-mel atau akaun media sosial perekrut tidak dapat disahkan.",
+
+scam_section_2: "2. Berhati-hati dengan Permintaan Bayaran",
+
+scam_payment_1: "Elakkan tawaran pekerjaan yang meminta anda membayar yuran pentadbiran, latihan, pakaian seragam, perjalanan atau bayaran lain sebagai syarat untuk mendapatkan pekerjaan.",
+
+scam_payment_2: "Sebelum membuat sebarang pembayaran, semak kesahihan syarikat dan maklumat pengambilan pekerja melalui saluran rasmi. Jangan terburu-buru membuat pembayaran hanya kerana dijanjikan peluang pekerjaan.",
+
+scam_section_3: "3. Lindungi Maklumat Peribadi Anda",
+
+scam_section_3_text: "Maklumat peribadi dan dokumen penting perlu dilindungi daripada pihak yang tidak dikenali atau tidak dapat disahkan. Amalkan langkah berikut:",
+
+scam_data_1: "Jangan sesekali berkongsi kata laluan atau kod OTP dengan sesiapa.",
+
+scam_data_2: "Jangan menghantar dokumen peribadi kepada pihak yang identitinya belum disahkan.",
+
+scam_data_3: "Pastikan anda memahami tujuan sesuatu dokumen atau maklumat diminta sebelum memberikannya.",
+
+scam_data_4: "Elakkan menekan pautan yang mencurigakan atau berasal daripada sumber yang tidak dipercayai.",
+
+scam_section_4: "4. Sahkan Identiti Syarikat",
+
+scam_section_4_text: "Sebelum memohon pekerjaan, luangkan masa untuk menyemak latar belakang syarikat dan kesahihan jawatan yang ditawarkan:",
+
+scam_verify_1: "Semak laman web rasmi dan profil media sosial syarikat.",
+
+scam_verify_2: "Pastikan alamat dan maklumat perhubungan syarikat dapat disahkan.",
+
+scam_verify_3: "Semak sama ada jawatan yang diiklankan benar-benar ditawarkan oleh syarikat tersebut.",
+
+scam_verify_4: "Hubungi syarikat melalui saluran rasmi jika anda mempunyai sebarang keraguan.",
+
+scam_section_5: "5. Apakah yang Perlu Dilakukan Jika Menemui Penipuan Pekerjaan?",
+
+scam_section_5_text: "Jika anda mengesyaki sesuatu tawaran pekerjaan merupakan penipuan, ambil tindakan berikut dengan segera:",
+
+scam_action_1: "Hentikan komunikasi dengan pihak yang mencurigakan.",
+
+scam_action_2: "Jangan hantar wang atau berkongsi maklumat peribadi dan dokumen tambahan.",
+
+scam_action_3: "Simpan bukti komunikasi seperti mesej, e-mel, nombor telefon dan maklumat transaksi jika ada.",
+
+scam_action_4: "Laporkan kejadian tersebut kepada platform berkaitan atau pihak berkuasa melalui saluran rasmi.",
+
+scam_section_6: "6. Peranan Kerjiva",
+
+scam_section_6_text: "Kerjiva merupakan platform kerjaya yang membantu pencari kerja menemukan maklumat jawatan kosong dan peluang kerjaya. Kami menggalakkan pengguna supaya sentiasa menyemak kesahihan maklumat pekerjaan, melindungi data peribadi dan berhati-hati sebelum membuat sebarang keputusan. Pengguna juga bertanggungjawab untuk mengesahkan maklumat syarikat dan tawaran pekerjaan sebelum memohon.",
+
+scam_conclusion_title: "Penutup",
+
+scam_conclusion: "Berhati-hati ketika mencari pekerjaan merupakan langkah penting untuk melindungi diri daripada penipuan. Sentiasa semak maklumat, sahkan identiti syarikat dan jangan mudah terpengaruh dengan tawaran yang kelihatan terlalu menarik untuk dipercayai.",
+
+scam_closing: "Kerjiva — Kerjaya Anda, Masa Depan Anda.",
+
+scam_footer: "© Kerjiva - Platform Kerjaya Malaysia",
+
 
 
 

@@ -8297,7 +8297,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
           const { data, error } = await supabase
             .from("jobs")
-            .select("id, title, status")
+          .select(`
+                id,
+                title,
+                status,
+                city,
+                state,
+                published_at,
+                created_at
+               `)
             .eq("company_id", company.id);
 
           if (error) throw error;

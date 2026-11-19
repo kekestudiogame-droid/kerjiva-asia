@@ -1765,8 +1765,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   }
 
+ 
   // =========================================
-  // LOAD PROFILE FROM SUPABASE
+  // LOAD PROFILE FROM CENTRAL SYNC
   // =========================================
 
   async function loadJobseekerProfile() {
@@ -1775,45 +1776,28 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     try {
 
-      const { data: sessionData, error: sessionError } =
-        await supabaseAuth.auth.getSession();
+      const sync = window.kerjivaMalaysiaSync;
 
-      if (sessionError) throw sessionError;
-
-      const session = sessionData.session;
-
-      if (!session || !session.user) {
-        throw new Error("Please sign in again to view your profile.");
+      if (!sync) {
+        throw new Error("Kerjiva Malaysia Sync is unavailable.");
       }
 
-      const { data, error } = await supabaseAuth
-        .from("jobseeker_profiles")
-        .select(`
-          full_name,
-          email,
-          phone,
-          address,
-          state,
-          city,
-          headline,
-          about_me,
-          education_level,
-          field_of_study,
-          institution,
-          graduation_year,
-          experience_years,
-          skills,
-          employment_type,
-          expected_salary_min,
-          expected_salary_max,
-          salary_currency,
-          linkedin_url,
-          portfolio_url
-        `)
-        .eq("user_id", session.user.id)
-        .maybeSingle();
+      // Get jobseeker profile from central cache
+      const data = await sync.get(
+        "jobseeker-profile",
+        async function ({ supabase, userId }) {
 
-      if (error) throw error;
+          const { data, error } = await supabase
+            .from("jobseeker_profiles")
+            .select("*")
+            .eq("user_id", userId)
+            .maybeSingle();
+
+          if (error) throw error;
+
+          return data;
+        }
+      );
 
       if (!data) {
         throw new Error("Jobseeker profile was not found.");
@@ -1826,6 +1810,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       setProfileMode(false);
 
       statusEl.textContent = "";
+
+      console.log("Jobseeker Profile Loaded From Central Sync.");
 
     } catch (error) {
 

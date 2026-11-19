@@ -1492,8 +1492,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
 
       // 2. Load both account profiles through Central Sync
-      const [jobseeker, company] = await Promise.all([
-
+    const [jobseekerProfile, company] = await Promise.all([
         sync.get(
           "jobseeker-profile",
           async function ({ supabase, userId }) {
@@ -1544,11 +1543,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       // 3. Determine actual account role
       let actualRole = null;
 
-      if (jobseeker && !company) {
-        actualRole = "jobseeker";
-      } else if (company && !jobseeker) {
-        actualRole = "company";
-      }
+    if (jobseekerProfile && !company) {
+      actualRole = "jobseeker";
+     } else if (company && !jobseekerProfile) {
+       actualRole = "company";
+     }
 
      
       if (!actualRole) {

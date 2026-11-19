@@ -5119,6 +5119,7 @@ function updateCompanySidebar(profile) {
 
   }
 
+
   // =====================================================
   // LOAD COMPANY PROFILE
   // =====================================================
@@ -5129,43 +5130,57 @@ function updateCompanySidebar(profile) {
 
     showStatus("Loading company profile...");
 
-    const { data: sessionData, error: sessionError } =
-      await supabaseAuth.auth.getSession();
+    const sync = window.kerjivaMalaysiaSync;
 
-    if (sessionError) throw sessionError;
+    if (!sync) {
+      throw new Error("Kerjiva Malaysia Sync is unavailable.");
+    }
 
-    const session = sessionData.session;
+    // 1. Get logged-in user through central synchronizer
+    const identity = await sync.getSession();
 
-    if (!session?.user) {
+    if (!identity.user) {
       throw new Error("Please sign in again.");
     }
 
-    companyUserId = session.user.id;
+    companyUserId = identity.userId;
 
-    const { data: profile, error } = await supabaseAuth
-      .from("companies")
-      .select(`
-        company_name,
-        registration_number,
-        industry,
-        email,
-        phone,
-        website,
-        state,
-        city,
-        address,
-        description,
-        logo_url
-      `)
-      .eq("user_id", companyUserId)
-      .maybeSingle();
+    // 2. Reuse cached company profile or fetch from Supabase
+    const profile = await sync.get(
+      "company-profile",
+      async function ({ supabase, userId }) {
 
-    if (error) throw error;
+        const { data, error } = await supabase
+          .from("companies")
+          .select(`
+            id,
+            company_name,
+            registration_number,
+            industry,
+            email,
+            phone,
+            website,
+            state,
+            city,
+            address,
+            description,
+            logo_url
+          `)
+          .eq("user_id", userId)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        return data;
+
+      }
+    );
 
     if (!profile) {
       throw new Error("Company profile not found.");
     }
 
+    // 3. Update company profile interface
     fillProfile(profile);
 
     captureOriginalProfile(profile);

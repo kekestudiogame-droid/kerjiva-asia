@@ -7437,6 +7437,7 @@ document.addEventListener("DOMContentLoaded", function () {
      
 const viewButton = document.createElement("button");
 viewButton.type = "button";
+viewButton.className = "company-applicant-action";
 viewButton.textContent = "View Details";
          
 viewButton.addEventListener("click", function () {
@@ -7446,6 +7447,7 @@ viewButton.addEventListener("click", function () {
 // Invite to Interview button
 const inviteButton = document.createElement("button");
 inviteButton.type = "button";
+inviteButton.className = "company-applicant-action";
 inviteButton.textContent = "Invite to Interview";
 
 inviteButton.addEventListener("click", function () {

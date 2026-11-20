@@ -8627,9 +8627,11 @@ async function loadIncomingApplicants() {
 });
 
         
+
 /* =========================================================
    KERJIVA MALAYSIA - COMPANY DASHBOARD OVERVIEW
    Dynamic Statistics, Recent Applications and Realtime
+   Central Sync Integrated
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -8640,6 +8642,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (params.has("preview")) return;
 
   const supabase = window.supabaseAuth;
+  const sync = window.kerjivaMalaysiaSync;
 
   const totalJobsEl = document.getElementById("companyTotalJobs");
   const publishedJobsEl = document.getElementById("companyPublishedJobs");
@@ -8649,6 +8652,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (
     !supabase ||
+    !sync ||
     !totalJobsEl ||
     !publishedJobsEl ||
     !draftJobsEl ||
@@ -8661,7 +8665,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let refreshAfterLoad = false;
   let refreshTimer = null;
 
- 
   async function loadCompanyOverview() {
 
     if (isLoading) {
@@ -8673,13 +8676,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
 
-      const sync = window.kerjivaMalaysiaSync;
-
-      if (!sync) {
-        throw new Error("Kerjiva Malaysia Sync is unavailable.");
-      }
-
-      // 1. Get company profile from central cache
+      // 1. Get company profile from Central Sync
       const company = await sync.get(
         "company-profile",
         async function ({ supabase, userId }) {
@@ -8716,22 +8713,22 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      // 2. Get company jobs from central cache
+      // 2. Get company jobs from Central Sync
       const companyJobs = await sync.get(
         "company-jobs",
         async function ({ supabase }) {
 
           const { data, error } = await supabase
             .from("jobs")
-          .select(`
-                id,
-                title,
-                status,
-                city,
-                state,
-                published_at,
-                created_at
-               `)
+            .select(`
+              id,
+              title,
+              status,
+              city,
+              state,
+              published_at,
+              created_at
+            `)
             .eq("company_id", company.id);
 
           if (error) throw error;
@@ -8756,128 +8753,150 @@ document.addEventListener("DOMContentLoaded", function () {
           (job.status || "").toLowerCase() === "draft"
         ).length;
 
-      // 4. Handle company with no jobs
-      if (jobIds.length === 0) {
+      // 4. Get application statistics from Central Sync
+      const overviewData = await sync.get(
+        "company-overview-data",
+        async function ({ supabase }) {
 
-        totalApplicantsEl.textContent = "0";
+          if (jobIds.length === 0) {
+            return {
+              applicationCount: 0,
+              recentApplications: [],
+              applicantProfiles: []
+            };
+          }
+
+          // Count and latest applications are independent
+          const [countResult, applicationsResult] =
+            await Promise.all([
+
+              supabase
+                .from("applications")
+                .select("id", {
+                  count: "exact",
+                  head: true
+                })
+                .in("job_id", jobIds),
+
+              supabase
+                .from("applications")
+                .select(`
+                  id,
+                  job_id,
+                  user_id,
+                  status,
+                  applied_at
+                `)
+                .in("job_id", jobIds)
+                .order("applied_at", {
+                  ascending: false
+                })
+                .limit(5)
+
+            ]);
+
+          if (countResult.error) throw countResult.error;
+          if (applicationsResult.error) throw applicationsResult.error;
+
+          const recentApplications =
+            applicationsResult.data || [];
+
+          // 5. Load applicant profiles only when needed
+          let applicantProfiles = [];
+
+          if (recentApplications.length > 0) {
+
+            const applicantIds = [
+              ...new Set(
+                recentApplications.map(app => app.user_id)
+              )
+            ];
+
+            if (applicantIds.length > 0) {
+
+              const { data, error } = await supabase
+                .from("jobseeker_profiles")
+                .select("user_id, full_name")
+                .in("user_id", applicantIds);
+
+              if (error) throw error;
+
+              applicantProfiles = data || [];
+
+            }
+
+          }
+
+          return {
+            applicationCount: countResult.count || 0,
+            recentApplications,
+            applicantProfiles
+          };
+
+        }
+      );
+
+      // 6. Update application statistics
+      totalApplicantsEl.textContent =
+        overviewData.applicationCount;
+
+      const recentApplications =
+        overviewData.recentApplications || [];
+
+      const applicantProfiles =
+        overviewData.applicantProfiles || [];
+
+      if (recentApplications.length === 0) {
 
         recentApplicantsEl.textContent =
           "No applications yet.";
 
       } else {
 
-        // 5. Count applications
-        const {
-          count: applicationCount,
-          error: countError
-        } = await supabase
-          .from("applications")
-          .select("id", {
-            count: "exact",
-            head: true
-          })
-          .in("job_id", jobIds);
+        // 7. Render recent applications
+        recentApplicantsEl.replaceChildren();
 
-        if (countError) throw countError;
+        recentApplications.forEach(function (application) {
 
-        totalApplicantsEl.textContent =
-          applicationCount || 0;
+          const job = companyJobs.find(
+            item => item.id === application.job_id
+          );
 
-        // 6. Get five most recent applications
-        const {
-          data: applications,
-          error: applicationsError
-        } = await supabase
-          .from("applications")
-          .select(`
-            id,
-            job_id,
-            user_id,
-            status,
-            applied_at
-          `)
-          .in("job_id", jobIds)
-          .order("applied_at", {
-            ascending: false
-          })
-          .limit(5);
+          const profile = applicantProfiles.find(
+            item => item.user_id === application.user_id
+          );
 
-        if (applicationsError) throw applicationsError;
+          const card = document.createElement("div");
+          card.className = "company-recent-application-card";
 
-        const recentApplications = applications || [];
+          const name = document.createElement("h4");
+          name.textContent =
+            profile?.full_name || "Applicant";
 
-        if (recentApplications.length === 0) {
+          const position = document.createElement("p");
+          position.textContent =
+            "Position: " + (job?.title || "Unknown Job");
 
-          recentApplicantsEl.textContent =
-            "No applications yet.";
+          const status = document.createElement("p");
+          status.textContent =
+            "Status: " +
+            (application.status || "pending").toUpperCase();
 
-        } else {
+          const date = document.createElement("p");
+          date.textContent = application.applied_at
+            ? "Applied: " +
+              new Date(application.applied_at)
+                .toLocaleDateString("en-MY")
+            : "Application date unavailable";
 
-          // 7. Get applicant names
-          const applicantIds = [
-            ...new Set(
-              recentApplications.map(app => app.user_id)
-            )
-          ];
+          card.append(name, position, status, date);
+          recentApplicantsEl.appendChild(card);
 
-          const {
-            data: profiles,
-            error: profilesError
-          } = await supabase
-            .from("jobseeker_profiles")
-            .select("user_id, full_name")
-            .in("user_id", applicantIds);
-
-          if (profilesError) throw profilesError;
-
-          const applicantProfiles = profiles || [];
-
-          // 8. Render recent applications
-          recentApplicantsEl.replaceChildren();
-
-          recentApplications.forEach(function (application) {
-
-            const job = companyJobs.find(
-              item => item.id === application.job_id
-            );
-
-            const profile = applicantProfiles.find(
-              item => item.user_id === application.user_id
-            );
-
-            const card = document.createElement("div");
-            card.className = "company-recent-application-card";
-
-            const name = document.createElement("h4");
-            name.textContent =
-              profile?.full_name || "Applicant";
-
-            const position = document.createElement("p");
-            position.textContent =
-              "Position: " + (job?.title || "Unknown Job");
-
-            const status = document.createElement("p");
-            status.textContent =
-              "Status: " +
-              (application.status || "pending").toUpperCase();
-
-            const date = document.createElement("p");
-            date.textContent = application.applied_at
-              ? "Applied: " +
-                new Date(application.applied_at)
-                  .toLocaleDateString("en-MY")
-              : "Application date unavailable";
-
-            card.append(name, position, status, date);
-            recentApplicantsEl.appendChild(card);
-
-          });
-
-        }
+        });
 
       }
 
-      // 9. Subscribe to Supabase Realtime once
+      // 8. Subscribe to Supabase Realtime once
       if (!realtimeChannel) {
 
         realtimeChannel = supabase
@@ -8915,9 +8934,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       }
 
-      console.log("Company Overview Updated:", {
+      console.log("Company Overview Loaded From Central Sync:", {
         totalJobs: companyJobs.length,
-        totalApplicants: totalApplicantsEl.textContent
+        totalApplicants: overviewData.applicationCount,
+        recentApplications: recentApplications.length
       });
 
     } catch (error) {
@@ -8943,13 +8963,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   }
 
-  // Refresh after a Realtime database event
+  // 9. Refresh related caches after Realtime events
   function queueOverviewRefresh() {
-         const sync = window.kerjivaMalaysiaSync;
 
-    if (sync) {
-      sync.invalidate("company-jobs");
-    }
+    sync.invalidate("company-jobs");
+    sync.invalidate("company-overview-data");
+    sync.invalidate("company-incoming-applicants");
+
+    // Public job listings may also be affected by job changes
+    sync.invalidate("published-jobs-with-companies");
+    sync.invalidate("homepage-published-jobs-with-companies");
 
     if (refreshTimer) {
       clearTimeout(refreshTimer);
@@ -8961,7 +8984,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   }
 
-  // Load when opening Company Overview
+  // 10. Load when opening Company Overview
   const overviewLink = document.querySelector(
     '#companyDashboard .dashboard-nav a[href="#companyOverview"]'
   );
@@ -8973,7 +8996,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
   }
 
-  // Load when Company Dashboard first opens
+  // 11. Load when Company Dashboard first opens
   if (
     !window.location.hash ||
     window.location.hash === "#companyOverview"
@@ -8982,7 +9005,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 });
-
 
 /* =========================================================
    KERJIVA MALAYSIA - COMPANY SEND INTERVIEW INVITATION

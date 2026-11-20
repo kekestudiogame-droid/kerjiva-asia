@@ -7387,6 +7387,14 @@ document.addEventListener("kerjivaLanguageChanged", function () {
       const companyMap = new Map(
         companies.map(company => [company.id, company])
       );
+       console.log(
+  "HOMEPAGE COMPANY LOGO DATA:",
+  companies.map(company => ({
+    id: company.id,
+    company_name: company.company_name,
+    logo_url: company.logo_url
+  }))
+);
 
       homepageJobs = activeJobs.map(job => {
         const company = companyMap.get(job.company_id);

@@ -9548,193 +9548,217 @@ document.addEventListener("DOMContentLoaded", async function () {
   // LOAD JOBSEEKER INTERVIEW INVITATIONS
   // =========================================
 
-  async function loadJobseekerInterviews() {
+ 
+async function loadJobseekerInterviews() {
 
-    if (!currentUser) return;
+  if (!currentUser) return;
 
-    const requestId = ++loadRequestId;
+  const requestId = ++loadRequestId;
 
-    interviewList.textContent =
-      "Loading interview invitations...";
+  interviewList.textContent =
+    "Loading interview invitations...";
 
-    try {
+  try {
 
-      // 1. Get invitations belonging to this Jobseeker.
-      const { data: interviews, error: interviewError } =
-        await supabaseAuth
-          .from("interviews")
-          .select(`
-            id,
-            application_id,
-            company_id,
-            interview_date,
-            interview_type,
-            interview_location,
-            meeting_link,
-            message,
-            status,
-            created_at
-          `)
-          .eq("jobseeker_id", currentUser.id)
-          .order("interview_date", { ascending: true });
+    // Load the complete interview bundle through Central Sync.
+    const interviewData = await sync.get(
+      "jobseeker-interviews",
+      async function ({ supabase, userId }) {
 
-      if (interviewError) throw interviewError;
+        // 1. Get this Jobseeker's invitations.
+        const { data: interviews, error: interviewError } =
+          await supabase
+            .from("interviews")
+            .select(`
+              id,
+              application_id,
+              company_id,
+              interview_date,
+              interview_type,
+              interview_location,
+              meeting_link,
+              message,
+              status,
+              created_at
+            `)
+            .eq("jobseeker_id", userId)
+            .order("interview_date", { ascending: true });
 
-      if (requestId !== loadRequestId) return;
-       
-       // Update Interview Invitations Dashboard Statistic.
-         if (totalInterviewsElement) {
-         totalInterviewsElement.textContent = String(
-         interviews?.length || 0
-       );
+        if (interviewError) throw interviewError;
+
+        const interviewRows = interviews || [];
+
+        if (interviewRows.length === 0) {
+          return {
+            interviews: [],
+            applications: [],
+            jobs: [],
+            companies: []
+          };
+        }
+
+        const applicationIds = [
+          ...new Set(
+            interviewRows
+              .map(item => item.application_id)
+              .filter(Boolean)
+          )
+        ];
+
+        const companyIds = [
+          ...new Set(
+            interviewRows
+              .map(item => item.company_id)
+              .filter(Boolean)
+          )
+        ];
+
+        // 2. Load applications and companies in parallel.
+        const [applicationResult, companyResult] =
+          await Promise.all([
+
+            applicationIds.length
+              ? supabase
+                  .from("applications")
+                  .select("id, job_id")
+                  .in("id", applicationIds)
+              : Promise.resolve({
+                  data: [],
+                  error: null
+                }),
+
+            companyIds.length
+              ? supabase
+                  .from("companies")
+                  .select("id, company_name")
+                  .in("id", companyIds)
+              : Promise.resolve({
+                  data: [],
+                  error: null
+                })
+
+          ]);
+
+        if (applicationResult.error) {
+          throw applicationResult.error;
+        }
+
+        if (companyResult.error) {
+          throw companyResult.error;
+        }
+
+        const applications = applicationResult.data || [];
+        const companies = companyResult.data || [];
+
+        // 3. Load related job titles.
+        const jobIds = [
+          ...new Set(
+            applications
+              .map(item => item.job_id)
+              .filter(Boolean)
+          )
+        ];
+
+        let jobs = [];
+
+        if (jobIds.length > 0) {
+
+          const { data, error } = await supabase
+            .from("jobs")
+            .select("id, title")
+            .in("id", jobIds);
+
+          if (error) throw error;
+
+          jobs = data || [];
+
+        }
+
+        return {
+          interviews: interviewRows,
+          applications,
+          jobs,
+          companies
+        };
+
       }
+    );
 
-      if (!interviews || interviews.length === 0) {
+    if (requestId !== loadRequestId) return;
 
-        showInterviewEmptyState();
-        return;
+    const interviews = interviewData.interviews || [];
+    const applications = interviewData.applications || [];
+    const jobs = interviewData.jobs || [];
+    const companies = interviewData.companies || [];
 
-      }
+    // Update dashboard statistic.
+    if (totalInterviewsElement) {
+      totalInterviewsElement.textContent =
+        String(interviews.length);
+    }
 
-      // 2. Get related applications.
-      const applicationIds = [
-        ...new Set(
-          interviews
-            .map(item => item.application_id)
-            .filter(Boolean)
-        )
-      ];
+    if (interviews.length === 0) {
+      showInterviewEmptyState();
+      return;
+    }
 
-      let applications = [];
+    const applicationMap = new Map(
+      applications.map(item => [item.id, item])
+    );
 
-      if (applicationIds.length > 0) {
+    const jobMap = new Map(
+      jobs.map(item => [item.id, item])
+    );
 
-        const { data, error } = await supabaseAuth
-          .from("applications")
-          .select("id, job_id")
-          .in("id", applicationIds);
+    const companyMap = new Map(
+      companies.map(item => [item.id, item])
+    );
 
-        if (error) throw error;
+    // Display invitations.
+    interviewList.replaceChildren();
 
-        applications = data || [];
+    interviews.forEach(interview => {
 
-      }
-
-      if (requestId !== loadRequestId) return;
-
-      const applicationMap = new Map(
-        applications.map(item => [item.id, item])
+      const application = applicationMap.get(
+        interview.application_id
       );
 
-      // 3. Get related jobs.
-      const jobIds = [
-        ...new Set(
-          applications
-            .map(item => item.job_id)
-            .filter(Boolean)
-        )
-      ];
+      const job = application
+        ? jobMap.get(application.job_id)
+        : null;
 
-      let jobs = [];
-
-      if (jobIds.length > 0) {
-
-        const { data, error } = await supabaseAuth
-          .from("jobs")
-          .select("id, title")
-          .in("id", jobIds);
-
-        if (error) throw error;
-
-        jobs = data || [];
-
-      }
-
-      if (requestId !== loadRequestId) return;
-
-      const jobMap = new Map(
-        jobs.map(item => [item.id, item])
+      const company = companyMap.get(
+        interview.company_id
       );
 
-      // 4. Get related companies.
-      const companyIds = [
-        ...new Set(
-          interviews
-            .map(item => item.company_id)
-            .filter(Boolean)
-        )
-      ];
-
-      let companies = [];
-
-      if (companyIds.length > 0) {
-
-        const { data, error } = await supabaseAuth
-          .from("companies")
-          .select("id, company_name")
-          .in("id", companyIds);
-
-        if (error) throw error;
-
-        companies = data || [];
-
-      }
-
-      if (requestId !== loadRequestId) return;
-
-      const companyMap = new Map(
-        companies.map(item => [item.id, item])
+      interviewList.appendChild(
+        createInterviewCard(interview, job, company)
       );
 
-      // 5. Display interview invitations.
-      interviewList.replaceChildren();
+    });
 
-      interviews.forEach(interview => {
+    console.log(
+      "Jobseeker Interview Invitations Loaded From Central Sync:",
+      interviews.length
+    );
 
-        const application = applicationMap.get(
-          interview.application_id
-        );
+  } catch (error) {
 
-        const job = application
-          ? jobMap.get(application.job_id)
-          : null;
+    console.error(
+      "Load Jobseeker Interview Invitations Error:",
+      error
+    );
 
-        const company = companyMap.get(
-          interview.company_id
-        );
+    if (requestId === loadRequestId) {
 
-        const card = createInterviewCard(
-          interview,
-          job,
-          company
-        );
-
-        interviewList.appendChild(card);
-
-      });
-
-      console.log(
-        "Jobseeker Interview Invitations Loaded:",
-        interviews.length
-      );
-
-    } catch (error) {
-
-      console.error(
-        "Load Jobseeker Interview Invitations Error:",
-        error
-      );
-
-      if (requestId === loadRequestId) {
-
-        interviewList.textContent =
-          "Unable to load interview invitations. Please try again.";
-
-      }
+      interviewList.textContent =
+        "Unable to load interview invitations. Please try again.";
 
     }
 
   }
+
+}
 
   // =========================================
   // REFRESH WHEN OPENING INTERVIEW INVITATIONS
@@ -9766,16 +9790,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   try {
 
-    const { data: sessionData, error: sessionError } =
-      await supabaseAuth.auth.getSession();
+  const identity = await sync.getSession();
 
-    if (sessionError) throw sessionError;
+  if (!identity || !identity.user) {
+  throw new Error("Please sign in again.");
+  }
 
-    if (!sessionData.session?.user) {
-      throw new Error("Please sign in again.");
-    }
-
-    currentUser = sessionData.session.user;
+   currentUser = identity.user;
 
     // Load invitations when Jobseeker Dashboard opens.
     await loadJobseekerInterviews();
@@ -9794,11 +9815,14 @@ document.addEventListener("DOMContentLoaded", async function () {
           table: "interviews",
           filter: "jobseeker_id=eq." + currentUser.id
         },
-        function () {
+         
+         function () {
 
-          loadJobseekerInterviews();
+         sync.invalidate("jobseeker-interviews");
 
-        }
+         loadJobseekerInterviews();
+
+       }
       )
       .subscribe(function (status) {
 

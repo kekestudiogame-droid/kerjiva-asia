@@ -7713,6 +7713,22 @@ window.submitMalaysiaJobApplication = async function ({
 
       uploadedPaths.push(document.copy_storage_path);
     }
+     // 5. INVALIDATE RELATED CENTRAL SYNC CACHE
+const sync = window.kerjivaMalaysiaSync;
+
+if (sync && typeof sync.invalidate === "function") {
+  sync.invalidate("jobseeker-applications");
+  sync.invalidate("company-incoming-applicants");
+  sync.invalidate("company-overview-data");
+
+  console.log(
+    "Application-related Central Sync caches invalidated."
+  );
+} else {
+  console.warn(
+    "Central Sync unavailable: application caches were not invalidated."
+  );
+}
 
     showStatus("Application submitted successfully!");
 

@@ -7050,18 +7050,24 @@ if (homepageSubmitButton) {
         jobDetailsModal.hidden = false;
         jobDetailsModal.style.display = "flex";
       }
-
       // SHOW SUCCESS NOTIFICATION
-      if (applyStatus) {
-        applyStatus.textContent =
-          "Your application has been submitted successfully!";
-        applyStatus.hidden = false;
-        applyStatus.style.display = "block";
-        applyStatus.scrollIntoView({
-          behavior: "smooth",
-          block: "center"
-        });
-      }
+if (applyStatus) {
+  applyStatus.textContent =
+    "Your application has been submitted successfully!";
+  applyStatus.hidden = false;
+  applyStatus.style.display = "block";
+
+  applyStatus.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+
+  // AUTO HIDE AFTER 4 SECONDS
+  setTimeout(function () {
+    applyStatus.hidden = true;
+    applyStatus.style.display = "none";
+  }, 4000);
+}
       console.log(
         "Homepage Application Submitted:",
         result.applicationId,

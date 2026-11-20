@@ -2318,6 +2318,49 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
   <script src="language.js"></script>
+
+  
+<script>
+/* =====================================================
+   KERJIVA MALAYSIA - PREVENT REGISTER WHILE LOGGED IN
+===================================================== */
+
+document.addEventListener("click", async function (event) {
+  const registerLink = event.target.closest('a[href="register.html"]');
+
+  if (!registerLink) return;
+
+  event.preventDefault();
+
+  const supabase = window.supabaseAuth;
+
+  if (!supabase || !supabase.auth) {
+    alert("Unable to verify your login session. Please try again.");
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase.auth.getSession();
+
+    if (error) throw error;
+
+    if (data.session) {
+      alert(
+        "You are already logged in. Please log out first if you want to register a new account."
+      );
+      return;
+    }
+
+    window.location.href = registerLink.href;
+
+  } catch (error) {
+    console.error("Register Session Check Error:", error);
+
+    alert("Unable to verify your login session. Please try again.");
+  }
+});
+</script>
+
   
 <!-- =====================================================
      KERJIVA MALAYSIA - CHATBOT

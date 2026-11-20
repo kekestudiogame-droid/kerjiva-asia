@@ -4652,14 +4652,47 @@ async function loadDashboardApplicationDocuments() {
       const title = document.createElement("h3");
       title.textContent = job.title || "Untitled Job";
 
-      const company = document.createElement("p");
-      company.className = "find-job-company";
+    
+const company = document.createElement("div");
+company.className = "find-job-company";
 
-      const companyData = companyMap.get(job.company_id);
+const companyData = companyMap.get(job.company_id);
 
-      company.textContent = companyData
-        ? companyData.company_name
-        : "Company information unavailable";
+if (companyData && companyData.logo_url) {
+
+  const companyLogo = document.createElement("img");
+
+  companyLogo.src = companyData.logo_url;
+  companyLogo.alt = companyData.company_name
+    ? companyData.company_name + " Logo"
+    : "Company Logo";
+
+  companyLogo.style.width = "42px";
+  companyLogo.style.height = "42px";
+  companyLogo.style.objectFit = "contain";
+  companyLogo.style.borderRadius = "8px";
+  companyLogo.style.flexShrink = "0";
+
+  companyLogo.addEventListener("error", function () {
+    this.remove();
+  });
+
+  company.appendChild(companyLogo);
+
+}
+
+   const companyName = document.createElement("span");
+
+    companyName.textContent = companyData
+    ? companyData.company_name
+    : "Company information unavailable";
+
+     company.appendChild(companyName);
+
+      company.style.display = "flex";
+      company.style.alignItems = "center";
+      company.style.gap = "10px";
+
 
       const details = document.createElement("div");
       details.className = "find-job-details";
@@ -4887,7 +4920,7 @@ function searchJobs() {
             const { data: companies, error: companyError } =
               await supabaseAuth
                 .from("companies")
-                .select("id, company_name")
+                .select("id, company_name, logo_url")
                 .in("id", companyIds);
 
             if (companyError) throw companyError;

@@ -1452,31 +1452,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const jobseekerDashboard = document.getElementById("jobseekerDashboard");
     const companyDashboard = document.getElementById("companyDashboard");
 
-    try {
-      const { data: sessionData, error: sessionError } =
-        await supabaseAuth.auth.getSession();
-
-      if (sessionError) throw sessionError;
-
-      const session = sessionData.session;
-
-      if (!session || !session.user) {
-        window.location.href = "login.html";
-        return;
-      }
-
-      const userId = session.user.id;
-
-      const { data: jobseeker, error: jobseekerError } =
-        await supabaseAuth
-          .from("jobseeker_profiles")
-          .select("id")
-          .eq("user_id", userId)
-          .maybeSingle();
-
-      if (jobseekerError) throw jobseekerError;
-
-    
+ 
       const sync = window.kerjivaMalaysiaSync;
 
       if (!sync) {

@@ -2660,8 +2660,37 @@ async function sendChatbotMessage() {
   }
 }
 </script>
+  
+<!-- =====================================================
+     KERJIVA MALAYSIA - SERVICE WORKER REGISTRATION
+===================================================== -->
 
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
 
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(function (registration) {
+        console.log(
+          "Kerjiva Malaysia Service Worker registered:",
+          registration.scope
+        );
+      })
+      .catch(function (error) {
+        console.error(
+          "Kerjiva Malaysia Service Worker registration failed:",
+          error
+        );
+      });
+
+  });
+}
+  
+</script>
+  
 </body>
 </html>
+
+
+
 

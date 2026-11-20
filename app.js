@@ -6990,6 +6990,9 @@ if (homepageSubmitButton) {
     const documentsModal = document.getElementById(
       "homepageApplyDocumentsModal"
     );
+     const jobDetailsModal = document.getElementById(
+     "homepageJobDetailsModal"
+   );
     const documentStatus = document.getElementById(
       "homepageApplyDocumentStatus"
     );
@@ -7036,25 +7039,29 @@ if (homepageSubmitButton) {
         throw new Error("APPLICATION_SUBMISSION_FAILED");
       }
 
-    // CLOSE DOCUMENT MODAL AFTER SUCCESS
-if (documentsModal) {
-  documentsModal.hidden = true;
-  documentsModal.style.display = "none";
-}
+           // CLOSE DOCUMENT MODAL
+      if (documentsModal) {
+        documentsModal.hidden = true;
+        documentsModal.style.display = "none";
+      }
 
-// RESTORE JOB DETAILS MODAL
-if (jobDetailsModal) {
-  jobDetailsModal.hidden = false;
-  jobDetailsModal.style.display = "flex";
-}
+      // RESTORE JOB DETAILS MODAL
+      if (jobDetailsModal) {
+        jobDetailsModal.hidden = false;
+        jobDetailsModal.style.display = "flex";
+      }
 
-// SHOW SUCCESS IN JOB DETAILS
-if (applyStatus) {
-  applyStatus.textContent =
-    "Your application has been submitted successfully!";
-  applyStatus.hidden = false;
-}
-
+      // SHOW SUCCESS NOTIFICATION
+      if (applyStatus) {
+        applyStatus.textContent =
+          "Your application has been submitted successfully!";
+        applyStatus.hidden = false;
+        applyStatus.style.display = "block";
+        applyStatus.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }
       console.log(
         "Homepage Application Submitted:",
         result.applicationId,

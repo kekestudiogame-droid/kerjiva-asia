@@ -7038,7 +7038,13 @@ const homepageSubmitButton = document.getElementById(
 
 if (homepageSubmitButton) {
   homepageSubmitButton.addEventListener("click", async function () {
-    if (!selectedHomepageJob) return;
+   if (!selectedHomepageJob) return;
+
+const sync = window.kerjivaMalaysiaSync;
+if (!sync) {
+  console.error("Kerjiva Malaysia Central Sync is unavailable.");
+  return;
+}
 
     const documentsModal = document.getElementById(
       "homepageApplyDocumentsModal"

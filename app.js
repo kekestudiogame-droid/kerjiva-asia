@@ -733,7 +733,27 @@ const { data, error } = await supabaseAuth.auth.signUp({
       }
 
     
+
 if (data.user) {
+
+  // CHECK WHETHER THE EMAIL IS ALREADY REGISTERED
+  if (
+    Array.isArray(data.user.identities) &&
+    data.user.identities.length === 0
+  ) {
+    const message =
+      "This email is already registered. Please log in instead.";
+
+    registerStatus.textContent = message;
+
+    showKerjivaNotification(message, "error");
+
+    setTimeout(function () {
+      window.location.href = "login.html";
+    }, 1500);
+
+    return;
+  }
 
   // SAVE EMAIL WAITING FOR VERIFICATION
   localStorage.setItem(
@@ -755,6 +775,7 @@ if (data.user) {
   // Restore the default Jobseeker form
   registerRole.value = "jobseeker";
   registerRole.dispatchEvent(new Event("change"));
+
 
 } else {
 

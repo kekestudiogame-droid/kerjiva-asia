@@ -4823,6 +4823,7 @@ function searchJobs() {
   // LOAD PUBLISHED JOBS FROM SUPABASE
   // =========================================
 
+
   async function loadPublishedJobs() {
 
     if (isLoading) return;
@@ -4833,63 +4834,84 @@ function searchJobs() {
 
     try {
 
-      const { data: jobs, error: jobsError } =
-        await supabaseAuth
-          .from("jobs")
-          .select(`
-            id,
-            title,
-            description,
-            requirements,
-            job_type,
-            category,
-            salary_min,
-            salary_max,
-            salary_currency,
-            experience,
-            education,
-            city,
-            state,
-            application_deadline,
-            created_at,
-            company_id
-          `)
-          .eq("status", "published")
-          .order("created_at", { ascending: false });
+      const sync = window.kerjivaMalaysiaSync;
 
-      if (jobsError) throw jobsError;
-
-      publishedJobs = jobs || [];
-
-      // Load company names belonging to published jobs.
-      const companyIds = [
-        ...new Set(
-          publishedJobs
-            .map(job => job.company_id)
-            .filter(Boolean)
-        )
-      ];
-
-      companyMap = new Map();
-
-      if (companyIds.length > 0) {
-
-        const { data: companies, error: companyError } =
-          await supabaseAuth
-            .from("companies")
-            .select("id, company_name")
-            .in("id", companyIds);
-
-        if (companyError) throw companyError;
-
-        companyMap = new Map(
-          (companies || []).map(company => [
-            company.id,
-            company
-          ])
-        );
-
+      if (!sync || typeof sync.get !== "function") {
+        throw new Error("Central Sync is unavailable.");
       }
+
+      const result = await sync.get(
+        "published-jobs-with-companies",
+        async function () {
+
+          const { data: jobs, error: jobsError } =
+            await supabaseAuth
+              .from("jobs")
+              .select(`
+                id,
+                title,
+                description,
+                requirements,
+                job_type,
+                category,
+                salary_min,
+                salary_max,
+                salary_currency,
+                experience,
+                education,
+                city,
+                state,
+                application_deadline,
+                created_at,
+                company_id
+              `)
+              .eq("status", "published")
+              .order("created_at", { ascending: false });
+
+          if (jobsError) throw jobsError;
+
+          const publishedJobsData = jobs || [];
+
+          const companyIds = [
+            ...new Set(
+              publishedJobsData
+                .map(job => job.company_id)
+                .filter(Boolean)
+            )
+          ];
+
+          let companiesData = [];
+
+          if (companyIds.length > 0) {
+
+            const { data: companies, error: companyError } =
+              await supabaseAuth
+                .from("companies")
+                .select("id, company_name")
+                .in("id", companyIds);
+
+            if (companyError) throw companyError;
+
+            companiesData = companies || [];
+
+          }
+
+          return {
+            jobs: publishedJobsData,
+            companies: companiesData
+          };
+
+        }
+      );
+
+      publishedJobs = result.jobs || [];
+
+      companyMap = new Map(
+        (result.companies || []).map(company => [
+          company.id,
+          company
+        ])
+      );
 
       populateJobFilters();
 
@@ -4904,6 +4926,11 @@ function searchJobs() {
       }
 
       searchJobs();
+
+      console.log(
+        "Jobseeker Find Jobs Loaded From Central Sync:",
+        publishedJobs.length
+      );
 
     } catch (error) {
 

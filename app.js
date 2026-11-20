@@ -1934,17 +1934,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     try {
 
-      const { data: sessionData, error: sessionError } =
-        await supabaseAuth.auth.getSession();
+     const identity = await sync.getSession();
 
-      if (sessionError) throw sessionError;
-
-      const session = sessionData.session;
-
-      if (!session || !session.user) {
-        throw new Error("Your session has expired. Please sign in again.");
+     if (!identity || !identity.user) {
+       throw new Error("Your session has expired. Please sign in again.");
       }
-
       const { data, error } = await supabaseAuth
         .from("jobseeker_profiles")
         .update({
@@ -1957,12 +1951,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       if (error) throw error;
 
-      originalProfile = {
-        ...originalProfile,
-        ...data
-      };
+       originalProfile = {
+      ...originalProfile,
+      ...data
+     };
 
-      fillProfile(originalProfile);
+   // Update Central Sync with the latest saved profile.
+      sync.set("jobseeker-profile", originalProfile);
+
+fillProfile(originalProfile);
 
       setProfileMode(false);
 

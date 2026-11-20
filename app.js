@@ -7377,118 +7377,164 @@ document.addEventListener("kerjivaLanguageChanged", function () {
 });
 
 
-  async function loadHomepageJobs() {
-    jobsGrid.innerHTML =
-      '<div class="job-card-loading">Loading latest jobs...</div>';
 
-    try {
-      const { data: jobs, error: jobsError } = await supabase
-        .from("jobs")
-       .select(`
-        id,
-        title,
-        title_ms,
-        description,
-        description_ms,
-        requirements,
-        requirements_ms,
-       job_type,
-       job_type_ms,
-       category,
-       category_ms,
-       city,
-       state,
-       salary_min,
-       salary_max,
-       salary_currency,
-       education,
-       education_ms,
-       experience,
-       experience_ms,
-           application_deadline,
-      created_at,
-      published_at,
-      company_id
-      `)
-        .eq("status", "published")
-        .order("created_at", { ascending: false });
+async function loadHomepageJobs() {
+  jobsGrid.innerHTML =
+    '<div class="job-card-loading">Loading latest jobs...</div>';
 
-      if (jobsError) throw jobsError;
+  try {
+    const sync = window.kerjivaMalaysiaSync;
 
-      const today = getMalaysiaDate();
+    if (!sync || typeof sync.get !== "function") {
+      throw new Error("Central Sync is unavailable.");
+    }
 
-      const activeJobs = (jobs || []).filter(job => {
-        return (
-          !job.application_deadline ||
-          job.application_deadline >= today
+    // REUSE HOMEPAGE JOBS AND COMPANY CACHE
+    const homepageData = await sync.get(
+      "homepage-published-jobs-with-companies",
+      async function ({ supabase }) {
+
+        // 1. LOAD PUBLISHED JOBS
+        const { data: jobs, error: jobsError } = await supabase
+          .from("jobs")
+          .select(`
+            id,
+            title,
+            title_ms,
+            description,
+            description_ms,
+            requirements,
+            requirements_ms,
+            job_type,
+            job_type_ms,
+            category,
+            category_ms,
+            city,
+            state,
+            salary_min,
+            salary_max,
+            salary_currency,
+            education,
+            education_ms,
+            experience,
+            experience_ms,
+            application_deadline,
+            created_at,
+            published_at,
+            company_id
+          `)
+          .eq("status", "published")
+          .order("created_at", { ascending: false });
+
+        if (jobsError) throw jobsError;
+
+        const today = getMalaysiaDate();
+
+        const activeJobs = (jobs || []).filter(job => {
+          return (
+            !job.application_deadline ||
+            job.application_deadline >= today
+          );
+        });
+
+        // 2. GET COMPANY IDS
+        const companyIds = [
+          ...new Set(
+            activeJobs
+              .map(job => job.company_id)
+              .filter(Boolean)
+          )
+        ];
+
+        console.log(
+          "HOMEPAGE COMPANY IDS:",
+          companyIds
         );
-      });
-       
-       // UPDATE HOMEPAGE PUBLISHED JOB COUNT
-       updateHomepagePublishedJobCount((jobs || []).length);
 
-      const companyIds = [
-        ...new Set(
-          activeJobs
-            .map(job => job.company_id)
-            .filter(Boolean)
-        )
-      ];
-       console.log(
-       "HOMEPAGE COMPANY IDS:",
-        companyIds
-      );
+        // 3. LOAD COMPANY DATA AND LOGOS
+        let companies = [];
 
-      let companies = [];
+        if (companyIds.length) {
+          const { data, error: companyError } = await supabase
+            .from("public_job_companies")
+            .select("id, company_name, logo_url")
+            .in("id", companyIds);
 
-      if (companyIds.length) {
-        const { data, error: companyError } = await supabase
-          .from("public_job_companies")
-          .select("id, company_name, logo_url")
-          .in("id", companyIds);
+          if (companyError) throw companyError;
 
-        if (companyError) throw companyError;
-
-        companies = data || [];
-      }
-
-      const companyMap = new Map(
-        companies.map(company => [company.id, company])
-      );
-       console.log(
-  "HOMEPAGE COMPANY LOGO DATA:",
-  companies.map(company => ({
-    id: company.id,
-    company_name: company.company_name,
-    logo_url: company.logo_url
-  }))
-);
-
-      homepageJobs = activeJobs.map(job => {
-        const company = companyMap.get(job.company_id);
+          companies = data || [];
+        }
 
         return {
-          ...job,
-          company_name: company?.company_name || "Company",
-          logo_url: company?.logo_url || ""
+          jobs: jobs || [],
+          companies
         };
-      });
 
-      filterHomepageJobs();
+      },
+      {
+        scope: "public"
+      }
+    );
 
-      console.log(
-        "Homepage Latest Jobs Ready:",
-        homepageJobs.length,
-        "active jobs."
+    // 4. PRESERVE EXISTING HOMEPAGE LOGIC
+    const jobs = homepageData.jobs || [];
+    const companies = homepageData.companies || [];
+
+    const today = getMalaysiaDate();
+
+    const activeJobs = jobs.filter(job => {
+      return (
+        !job.application_deadline ||
+        job.application_deadline >= today
       );
+    });
 
-    } catch (error) {
-      console.error("Homepage Latest Jobs Error:", error);
+    // UPDATE PUBLISHED JOB COUNT
+    updateHomepagePublishedJobCount(jobs.length);
 
-      jobsGrid.innerHTML =
-        '<div class="job-card-error">Unable to load jobs. Please try again later.</div>';
-    }
+    console.log(
+      "HOMEPAGE COMPANY LOGO DATA:",
+      companies.map(company => ({
+        id: company.id,
+        company_name: company.company_name,
+        logo_url: company.logo_url
+      }))
+    );
+
+    const companyMap = new Map(
+      companies.map(company => [company.id, company])
+    );
+
+    homepageJobs = activeJobs.map(job => {
+      const company = companyMap.get(job.company_id);
+
+      return {
+        ...job,
+        company_name: company?.company_name || "Company",
+        logo_url: company?.logo_url || ""
+      };
+    });
+
+    filterHomepageJobs();
+
+    console.log(
+      "Homepage Latest Jobs Ready:",
+      homepageJobs.length,
+      "active jobs."
+    );
+
+    console.log(
+      "Homepage Jobs Loaded From Central Sync:",
+      homepageJobs.length
+    );
+
+  } catch (error) {
+    console.error("Homepage Latest Jobs Error:", error);
+
+    jobsGrid.innerHTML =
+      '<div class="job-card-error">Unable to load jobs. Please try again later.</div>';
   }
+}
 
        if (searchButton) {
   searchButton.addEventListener("click", function () {

@@ -6858,16 +6858,7 @@ if (!sync) {
         }
       );
 
-      // 3. CHECK COMPANY PROFILE
-      const { data: company, error: companyError } =
-        await window.supabaseAuth
-          .from("companies")
-          .select("id")
-          .eq("user_id", userId)
-          .maybeSingle();
-
-      if (companyError) throw companyError;
-
+    
       // COMPANY ACCOUNT
       if (company && !jobseeker) {
         throw new Error("JOBSEEKER_ACCOUNT_REQUIRED");

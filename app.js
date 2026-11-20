@@ -5018,19 +5018,25 @@ function searchJobs() {
   // INITIALIZE SESSION
   // =========================================
 
+ 
   try {
 
-    const { data: sessionData, error: sessionError } =
-      await supabaseAuth.auth.getSession();
+    const sync = window.kerjivaMalaysiaSync;
 
-    if (sessionError) throw sessionError;
+    if (!sync || typeof sync.getSession !== "function") {
+      throw new Error("Central Sync is unavailable.");
+    }
 
-    if (!sessionData.session?.user) {
+    const identity = await sync.getSession();
+
+    if (!identity || !identity.user) {
       throw new Error("Please sign in again.");
     }
 
     // Load jobs when the dashboard opens.
     await loadPublishedJobs();
+
+  }
 
   } catch (error) {
 

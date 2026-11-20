@@ -6881,6 +6881,14 @@ if (applyNowButton) {
         documents.forEach(function (doc) {
           const label = document.createElement("label");
           label.className = "application-document-option";
+           label.style.display = "flex";
+         label.style.alignItems = "center";
+         label.style.gap = "12px";
+         label.style.padding = "12px";
+        label.style.marginBottom = "10px";
+        label.style.border = "1px solid #e2e8f0";
+        label.style.borderRadius = "8px";
+        label.style.cursor = "pointer";
 
           const checkbox = document.createElement("input");
           checkbox.type = "checkbox";
@@ -6889,6 +6897,9 @@ if (applyNowButton) {
 
           const details = document.createElement("span");
           details.className = "application-document-details";
+           details.style.display = "flex";
+           details.style.flexDirection = "column";
+           details.style.gap = "4px";
 
           const fileName = document.createElement("strong");
           fileName.textContent = doc.file_name || "Unnamed document";
@@ -6920,14 +6931,19 @@ if (applyNowButton) {
     documentsModal.hidden = false;
     documentsModal.style.display = "flex";
 
-      // CLOSE DOCUMENT MODAL
-      if (closeDocumentsButton) {
-        closeDocumentsButton.onclick = function () {
-          documentsModal.hidden = true;
-          documentsModal.style.display = "none";
-        };
-      }
+     // CLOSE DOCUMENT MODAL
+     if (closeDocumentsButton) {
+     closeDocumentsButton.onclick = function () {
+     documentsModal.hidden = true;
+     documentsModal.style.display = "none";
 
+    // RESTORE JOB DETAILS MODAL
+    if (jobDetailsModal) {
+      jobDetailsModal.hidden = false;
+      jobDetailsModal.style.display = "flex";
+     }
+   };
+  }
     } catch (error) {
       console.error("Homepage Apply Now Error:", error);
 

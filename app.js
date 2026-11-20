@@ -9018,6 +9018,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (params.has("preview")) return;
 
   const supabase = window.supabaseAuth;
+   const sync = window.kerjivaMalaysiaSync;
 
   const form = document.getElementById("companyInterviewForm");
   const statusEl = document.getElementById("companyInterviewStatus");
@@ -9034,127 +9035,166 @@ document.addEventListener("DOMContentLoaded", function () {
   const meetingLinkInput = document.getElementById("companyInterviewMeetingLink");
   const messageInput = document.getElementById("companyInterviewMessage");
 
-  if (
-    !supabase ||
-    !form ||
-    !statusEl ||
-    !interviewList ||
-    !applicationInput
-  ) return;
+if (
+  !supabase ||
+  !sync ||
+  !form ||
+  !statusEl ||
+  !interviewList ||
+  !applicationInput
+) return;
 
-  async function loadCompanyInterviews(companyId) {
+ 
+async function loadCompanyInterviews(companyId) {
 
-    interviewList.textContent = "Loading interview invitations...";
+  interviewList.textContent = "Loading interview invitations...";
 
-    try {
+  try {
 
-      const { data: interviews, error } = await supabase
-        .from("interviews")
-        .select(`
-          id,
-          application_id,
-          jobseeker_id,
-          interview_date,
-          interview_type,
-          interview_location,
-          meeting_link,
-          message,
-          status,
-          created_at
-        `)
-        .eq("company_id", companyId)
-        .order("interview_date", { ascending: true });
+    const interviewData = await sync.get(
+      "company-interviews",
+      async function ({ supabase }) {
 
-      if (error) throw error;
+        const { data: interviews, error } = await supabase
+          .from("interviews")
+          .select(`
+            id,
+            application_id,
+            jobseeker_id,
+            interview_date,
+            interview_type,
+            interview_location,
+            meeting_link,
+            message,
+            status,
+            created_at
+          `)
+          .eq("company_id", companyId)
+          .order("interview_date", { ascending: true });
 
-      if (!interviews || interviews.length === 0) {
-        interviewList.textContent = "No interview invitations yet.";
-        return;
+        if (error) throw error;
+
+        const interviewRows = interviews || [];
+
+        if (interviewRows.length === 0) {
+          return {
+            interviews: [],
+            profiles: []
+          };
+        }
+
+        const userIds = [
+          ...new Set(
+            interviewRows.map(item => item.jobseeker_id)
+          )
+        ];
+
+        let profiles = [];
+
+        if (userIds.length > 0) {
+
+          const { data, error: profilesError } = await supabase
+            .from("jobseeker_profiles")
+            .select("user_id, full_name")
+            .in("user_id", userIds);
+
+          if (profilesError) throw profilesError;
+
+          profiles = data || [];
+
+        }
+
+        return {
+          interviews: interviewRows,
+          profiles
+        };
+
+      }
+    );
+
+    const interviews = interviewData.interviews || [];
+    const profiles = interviewData.profiles || [];
+
+    if (interviews.length === 0) {
+      interviewList.textContent = "No interview invitations yet.";
+      return;
+    }
+
+    interviewList.replaceChildren();
+
+    interviews.forEach(function (interview) {
+
+      const profile = profiles.find(
+        item => item.user_id === interview.jobseeker_id
+      );
+
+      const card = document.createElement("div");
+      card.className = "company-interview-card";
+
+      const name = document.createElement("h3");
+      name.textContent = profile?.full_name || "Applicant";
+
+      const date = document.createElement("p");
+      date.textContent =
+        "Date: " +
+        new Date(interview.interview_date).toLocaleString("en-MY", {
+          timeZone: "Asia/Kuala_Lumpur",
+          dateStyle: "medium",
+          timeStyle: "short"
+        }) +
+        " (Malaysia Time)";
+
+      const type = document.createElement("p");
+      type.textContent =
+        "Type: " + (interview.interview_type || "-");
+
+      const status = document.createElement("p");
+      status.textContent =
+        "Status: " + (interview.status || "pending").toUpperCase();
+
+      card.append(name, date, type, status);
+
+      if (interview.interview_location) {
+        const location = document.createElement("p");
+        location.textContent =
+          "Location: " + interview.interview_location;
+        card.appendChild(location);
       }
 
-      const userIds = [
-        ...new Set(interviews.map(item => item.jobseeker_id))
-      ];
+      if (interview.meeting_link) {
+        const link = document.createElement("a");
+        link.href = interview.meeting_link;
+        link.textContent = "Open Meeting Link";
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        card.appendChild(link);
+      }
 
-      const { data: profiles, error: profilesError } = await supabase
-        .from("jobseeker_profiles")
-        .select("user_id, full_name")
-        .in("user_id", userIds);
+      if (interview.message) {
+        const message = document.createElement("p");
+        message.textContent =
+          "Message: " + interview.message;
+        card.appendChild(message);
+      }
 
-      if (profilesError) throw profilesError;
+      interviewList.appendChild(card);
 
-      interviewList.replaceChildren();
+    });
 
-      interviews.forEach(function (interview) {
+    console.log("Company Interviews Loaded From Central Sync:", {
+      total: interviews.length
+    });
 
-        const profile = (profiles || []).find(
-          item => item.user_id === interview.jobseeker_id
-        );
+  } catch (error) {
 
-        const card = document.createElement("div");
-        card.className = "company-interview-card";
+    console.error("Load Company Interviews Error:", error);
 
-        const name = document.createElement("h3");
-        name.textContent = profile?.full_name || "Applicant";
-
-        const date = document.createElement("p");
-        date.textContent =
-          "Date: " +
-          new Date(interview.interview_date).toLocaleString("en-MY", {
-            timeZone: "Asia/Kuala_Lumpur",
-            dateStyle: "medium",
-            timeStyle: "short"
-          }) +
-          " (Malaysia Time)";
-
-        const type = document.createElement("p");
-        type.textContent =
-          "Type: " + (interview.interview_type || "-");
-
-        const status = document.createElement("p");
-        status.textContent =
-          "Status: " + (interview.status || "pending").toUpperCase();
-
-        card.append(name, date, type, status);
-
-        if (interview.interview_location) {
-          const location = document.createElement("p");
-          location.textContent =
-            "Location: " + interview.interview_location;
-          card.appendChild(location);
-        }
-
-        if (interview.meeting_link) {
-          const link = document.createElement("a");
-          link.href = interview.meeting_link;
-          link.textContent = "Open Meeting Link";
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          card.appendChild(link);
-        }
-
-        if (interview.message) {
-          const message = document.createElement("p");
-          message.textContent =
-            "Message: " + interview.message;
-          card.appendChild(message);
-        }
-
-        interviewList.appendChild(card);
-
-      });
-
-    } catch (error) {
-
-      console.error("Load Company Interviews Error:", error);
-
-      interviewList.textContent =
-        "Unable to load interview invitations.";
-
-    }
+    interviewList.textContent =
+      "Unable to load interview invitations.";
 
   }
 
+}
 
   form.addEventListener("submit", async function (event) {
 
@@ -9226,30 +9266,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
 
-      const { data: sessionData, error: sessionError } =
-        await supabase.auth.getSession();
+     const session = await sync.getSession();
 
-      if (sessionError) throw sessionError;
+const user = session?.user;
 
-      const user = sessionData?.session?.user;
+if (!user) {
+  throw new Error("Please log in again.");
+}
 
-      if (!user) {
-        throw new Error("Please log in again.");
-      }
+// Get company profile from Central Sync
+const company = await sync.get(
+  "company-profile",
+  async function ({ supabase, userId }) {
 
-      // Get company profile
-      const { data: company, error: companyError } = await supabase
-        .from("companies")
-        .select("id")
-        .eq("user_id", user.id)
-        .maybeSingle();
+    const { data, error } = await supabase
+      .from("companies")
+      .select("id")
+      .eq("user_id", userId)
+      .maybeSingle();
 
-      if (companyError) throw companyError;
+    if (error) throw error;
 
-      if (!company) {
-        throw new Error("Company profile not found.");
-      }
+    return data;
 
+  }
+);
+
+if (!company) {
+  throw new Error("Company profile not found.");
+}
       // Verify the selected application belongs to this company
       const { data: application, error: applicationError } =
         await supabase
@@ -9280,6 +9325,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
       if (insertError) throw insertError;
+       // Refresh interview data across company and jobseeker dashboards
+          sync.invalidate("company-interviews");
+          sync.invalidate("jobseeker-interviews");
 
       statusEl.textContent =
         "Interview invitation sent successfully!";
@@ -9313,47 +9361,47 @@ document.addEventListener("DOMContentLoaded", function () {
     '#companyDashboard .dashboard-nav a[href="#companyInterviews"]'
   );
 
-  async function refreshCompanyInterviews() {
 
-    const { data: sessionData, error } =
-      await supabase.auth.getSession();
+async function refreshCompanyInterviews() {
 
-    if (error) {
-      console.error(error);
-      return;
-    }
+  try {
 
-    const user = sessionData?.session?.user;
+    const session = await sync.getSession();
+    const user = session?.user;
 
     if (!user) return;
 
-    const { data: company, error: companyError } = await supabase
-      .from("companies")
-      .select("id")
-      .eq("user_id", user.id)
-      .maybeSingle();
+    const company = await sync.get(
+      "company-profile",
+      async function ({ supabase, userId }) {
 
-    if (companyError) {
-      console.error(companyError);
-      return;
-    }
+        const { data, error } = await supabase
+          .from("companies")
+          .select("id")
+          .eq("user_id", userId)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        return data;
+
+      }
+    );
 
     if (company) {
       await loadCompanyInterviews(company.id);
     }
 
-  }
+  } catch (error) {
 
-  if (interviewsLink) {
-    interviewsLink.addEventListener(
-      "click",
-      refreshCompanyInterviews
+    console.error(
+      "Refresh Company Interviews Error:",
+      error
     );
+
   }
 
-  if (window.location.hash === "#companyInterviews") {
-    refreshCompanyInterviews();
-  }
+}
 
 });
 

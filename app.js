@@ -7036,18 +7036,24 @@ if (homepageSubmitButton) {
         throw new Error("APPLICATION_SUBMISSION_FAILED");
       }
 
-      // CLOSE DOCUMENT MODAL AFTER SUCCESS
-      if (documentsModal) {
-        documentsModal.hidden = true;
-        documentsModal.style.display = "none";
-      }
+    // CLOSE DOCUMENT MODAL AFTER SUCCESS
+if (documentsModal) {
+  documentsModal.hidden = true;
+  documentsModal.style.display = "none";
+}
 
-      // SHOW SUCCESS IN JOB DETAILS
-      if (applyStatus) {
-        applyStatus.textContent =
-          "Your application has been submitted successfully!";
-        applyStatus.hidden = false;
-      }
+// RESTORE JOB DETAILS MODAL
+if (jobDetailsModal) {
+  jobDetailsModal.hidden = false;
+  jobDetailsModal.style.display = "flex";
+}
+
+// SHOW SUCCESS IN JOB DETAILS
+if (applyStatus) {
+  applyStatus.textContent =
+    "Your application has been submitted successfully!";
+  applyStatus.hidden = false;
+}
 
       console.log(
         "Homepage Application Submitted:",

@@ -4355,6 +4355,7 @@ function populateJobFilters() {
 // LOAD JOBSEEKER APPLICATION DOCUMENTS
 // =========================================
 
+
 async function loadDashboardApplicationDocuments() {
 
   const list = document.getElementById(
@@ -4373,36 +4374,16 @@ async function loadDashboardApplicationDocuments() {
 
   try {
 
-    const {
-      data: sessionData,
-      error: sessionError
-    } = await supabaseAuth.auth.getSession();
+    const sync = window.kerjivaMalaysiaSync;
 
-    if (sessionError) throw sessionError;
-
-    const user = sessionData.session?.user;
-
-    if (!user) {
-      throw new Error("Please sign in again.");
+    if (!sync || typeof sync.get !== "function") {
+      throw new Error("Central Sync is unavailable.");
     }
 
-    const {
-      data: documents,
-      error: documentsError
-    } = await supabaseAuth
-      .from("jobseeker_documents")
-      .select(`
-        id,
-        document_type,
-        file_name,
-        file_size,
-        mime_type,
-        created_at
-      `)
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
-
-    if (documentsError) throw documentsError;
+    // Reuse the same document cache as My Documents.
+    const documents = await sync.get(
+      "jobseeker-documents"
+    );
 
     dashboardApplicationDocuments = documents || [];
 
@@ -4418,9 +4399,14 @@ async function loadDashboardApplicationDocuments() {
       cv: "CV / Resume",
       resume: "CV / Resume",
       certificate: "Certificate",
+      education: "Education Certificate",
       education_certificate: "Education Certificate",
+      experience: "Work Experience Letter",
       employment_certificate: "Work Experience Letter",
+      mykad: "MyKad",
       identity_card: "MyKad",
+      passport: "Passport",
+      driving_license: "Driving Licence",
       driving_licence: "Driving Licence",
       other: "Other Documents"
     };
@@ -4454,6 +4440,11 @@ async function loadDashboardApplicationDocuments() {
 
     status.textContent =
       "Select the documents you want to attach to your application.";
+
+    console.log(
+      "Dashboard Application Documents Loaded From Central Sync:",
+      dashboardApplicationDocuments.length
+    );
 
   } catch (error) {
 

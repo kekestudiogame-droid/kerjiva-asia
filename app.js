@@ -6754,6 +6754,12 @@ function openJobDetails(job) {
 if (applyNowButton) {
   applyNowButton.addEventListener("click", async function () {
     if (!selectedHomepageJob) return;
+     const sync = window.kerjivaMalaysiaSync;
+
+if (!sync) {
+  console.error("Kerjiva Malaysia Central Sync is unavailable.");
+  return;
+}
 
     const applyStatus = document.getElementById("homepageApplyStatus");
 
@@ -6788,16 +6794,14 @@ if (applyNowButton) {
     }
 
     try {
-      // 1. CHECK LOGIN SESSION
-      const { data: sessionData, error: sessionError } =
-        await window.supabaseAuth.auth.getSession();
-
-      if (sessionError) throw sessionError;
-
-      const session = sessionData.session;
+       
+    
+      // 1. CHECK LOGIN SESSION THROUGH CENTRAL SYNC
+      const identity = await sync.getSession();
+      const sessionUser = identity?.user;
 
       // NOT LOGGED IN
-      if (!session || !session.user) {
+      if (!sessionUser) {
         if (applyStatus) {
           applyStatus.textContent =
             "Please log in to your Jobseeker account to apply for this job.";
@@ -6811,22 +6815,48 @@ if (applyNowButton) {
         setTimeout(function () {
           window.location.href =
             "login.html?applyJob=" + encodeURIComponent(jobId);
-        }, 1800);
+        }, 800);
 
         return;
       }
 
-      const userId = session.user.id;
+      const userId = sessionUser.id;
 
-      // 2. CHECK JOBSEEKER PROFILE
-      const { data: jobseeker, error: jobseekerError } =
-        await window.supabaseAuth
-          .from("jobseeker_profiles")
-          .select("id")
-          .eq("user_id", userId)
-          .maybeSingle();
+      // 2. CHECK JOBSEEKER PROFILE THROUGH CENTRAL SYNC
+      const jobseeker = await sync.get(
+        "jobseeker-profile",
+        async function ({ supabase, userId }) {
 
-      if (jobseekerError) throw jobseekerError;
+          const { data, error } = await supabase
+            .from("jobseeker_profiles")
+            .select("*")
+            .eq("user_id", userId)
+            .maybeSingle();
+
+          if (error) throw error;
+
+          return data;
+
+        }
+      );
+
+      // 3. CHECK COMPANY PROFILE THROUGH CENTRAL SYNC
+      const company = await sync.get(
+        "company-profile",
+        async function ({ supabase, userId }) {
+
+          const { data, error } = await supabase
+            .from("companies")
+            .select("*")
+            .eq("user_id", userId)
+            .maybeSingle();
+
+          if (error) throw error;
+
+          return data;
+
+        }
+      );
 
       // 3. CHECK COMPANY PROFILE
       const { data: company, error: companyError } =
@@ -6867,14 +6897,19 @@ if (applyNowButton) {
 
       submitButton.disabled = true;
 
-      const { data: documents, error: documentsError } =
-        await window.supabaseAuth
-          .from("jobseeker_documents")
-          .select("id, document_type, file_name, created_at")
-          .eq("user_id", userId)
-          .order("created_at", { ascending: false });
+     const documents = await sync.get(
+     "jobseeker-documents",
+     async ({ supabase, userId }) => {
+     const { data, error } = await supabase
+      .from("jobseeker_documents")
+      .select("id, document_type, file_name, created_at")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
 
-      if (documentsError) throw documentsError;
+    if (error) throw error;
+    return data || [];
+  }
+);
 
       documentList.innerHTML = "";
 

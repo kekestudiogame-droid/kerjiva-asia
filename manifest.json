@@ -1,0 +1,13 @@
+
+{
+  "name": "Kerjiva Malaysia",
+  "short_name": "Kerjiva",
+  "description": "Find jobs and build your career with Kerjiva Malaysia.",
+  "lang": "en-MY",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff"
+}

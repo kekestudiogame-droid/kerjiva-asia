@@ -2620,24 +2620,23 @@ select {
 .homepage-job-details-notice {
   grid-area: notice;
   min-width: 0;
-  position: sticky;
-  top: 10px;
+  position: static;
 }
 
 #homepageApplyStatus:not([hidden]) {
   display: block;
-  padding: 14px;
-  margin: 0;
-  background: #edf3fa;
-  border: 1px solid #cbd9e8;
+  width: 100%;
+  padding: 16px;
+  margin: 0 0 16px;
+  background: #e8f7ed;
+  border: 1px solid #a7dfb8;
+  border-left: 5px solid #22a447;
   border-radius: 8px;
-  color: #123b6d;
+  color: #176b32;
   font-size: 14px;
   font-weight: 600;
   line-height: 1.6;
 }
-
-
 .job-modal-content h2 {
   margin-bottom: 15px;
   color: var(--primary);

@@ -5036,7 +5036,6 @@ function searchJobs() {
     // Load jobs when the dashboard opens.
     await loadPublishedJobs();
 
-  }
 
   } catch (error) {
 

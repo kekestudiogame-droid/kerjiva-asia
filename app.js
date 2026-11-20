@@ -7370,6 +7370,10 @@ document.addEventListener("kerjivaLanguageChanged", function () {
             .filter(Boolean)
         )
       ];
+       console.log(
+       "HOMEPAGE COMPANY IDS:",
+        companyIds
+      );
 
       let companies = [];
 

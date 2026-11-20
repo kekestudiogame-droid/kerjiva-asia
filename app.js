@@ -2410,6 +2410,73 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   });
 
+ 
+  // =========================================
+  // COMPRESS PROFILE PHOTO
+  // =========================================
+
+  async function compressProfilePhoto(file) {
+
+    const bitmap = await createImageBitmap(file);
+
+    try {
+
+      const maxDimension = 512;
+
+      const scale = Math.min(
+        1,
+        maxDimension / Math.max(bitmap.width, bitmap.height)
+      );
+
+      const canvas = document.createElement("canvas");
+
+      canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+      canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+
+      const context = canvas.getContext("2d");
+
+      if (!context) {
+        throw new Error("Unable to process profile photo.");
+      }
+
+      // Use a white background for JPEG output.
+      context.fillStyle = "#ffffff";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
+      context.drawImage(
+        bitmap,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      const compressedBlob = await new Promise((resolve, reject) => {
+
+        canvas.toBlob(
+          function (blob) {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error("Unable to compress profile photo."));
+            }
+          },
+          "image/jpeg",
+          0.82
+        );
+
+      });
+
+      return compressedBlob;
+
+    } finally {
+
+      bitmap.close();
+
+    }
+
+  }
+
   // =========================================
   // UPLOAD PHOTO
   // =========================================
@@ -2425,19 +2492,24 @@ document.addEventListener("DOMContentLoaded", async function () {
     removePhotoBtn.disabled = true;
 
     uploadPhotoBtn.textContent = "Uploading...";
-    photoStatus.textContent = "Uploading profile photo...";
+    photoStatus.textContent = "Preparing profile photo...";
 
     try {
 
+      // Compress image before uploading.
+      const compressedPhoto = await compressProfilePhoto(selectedPhoto);
+
       const avatarPath = `${currentUser.id}/profile`;
+
+      photoStatus.textContent = "Uploading profile photo...";
 
       const { error: uploadError } =
         await supabaseAuth.storage
           .from(BUCKET_NAME)
-          .upload(avatarPath, selectedPhoto, {
+          .upload(avatarPath, compressedPhoto, {
             cacheControl: "3600",
             upsert: true,
-            contentType: selectedPhoto.type
+            contentType: "image/jpeg"
           });
 
       if (uploadError) throw uploadError;
@@ -2484,9 +2556,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     } finally {
 
-      uploadPhotoBtn.disabled = true;
+      // Re-enable Upload Photo when an upload fails.
+      uploadPhotoBtn.disabled = !selectedPhoto;
+
       choosePhotoBtn.disabled = false;
       removePhotoBtn.disabled = false;
+
       uploadPhotoBtn.textContent = originalButtonText;
 
     }

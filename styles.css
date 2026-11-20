@@ -3955,3 +3955,30 @@ body.about-page {
     width: 115px;
   }
 }
+
+
+/* KERJIVA MALAYSIA - AUTH PAGE LOGO */
+.auth-logo-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  gap: 2px;
+}
+
+.auth-logo-image {
+  display: block;
+  width: clamp(115px, 32vw, 165px);
+  height: auto;
+  object-fit: contain;
+}
+
+.auth-logo-country {
+  display: block;
+  color: #f28c28;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+

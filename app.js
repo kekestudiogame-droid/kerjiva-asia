@@ -9428,6 +9428,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const dashboard = document.getElementById(
     "jobseekerDashboard"
   );
+   const supabase = window.supabaseAuth;
 
   const interviewList = document.getElementById(
     "jobseekerInterviewList"
@@ -9436,7 +9437,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     "totalInterviews"
   );
 
-  if (!dashboard || !interviewList) return;
+ if (!dashboard || !interviewList || !supabase) return;
    const sync = window.kerjivaMalaysiaSync;
 
  if (!sync) {
@@ -9909,7 +9910,7 @@ async function loadJobseekerInterviews() {
     // SUPABASE REALTIME SUBSCRIPTION
     // =========================================
 
-    interviewChannel = supabaseAuth
+   interviewChannel = supabase
       .channel("jobseeker-interviews-" + currentUser.id)
       .on(
         "postgres_changes",

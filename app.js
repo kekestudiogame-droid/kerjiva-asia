@@ -1452,7 +1452,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const jobseekerDashboard = document.getElementById("jobseekerDashboard");
     const companyDashboard = document.getElementById("companyDashboard");
 
- 
+      try {
       const sync = window.kerjivaMalaysiaSync;
 
       if (!sync) {

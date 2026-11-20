@@ -4381,9 +4381,30 @@ async function loadDashboardApplicationDocuments() {
     }
 
     // Reuse the same document cache as My Documents.
-    const documents = await sync.get(
-      "jobseeker-documents"
-    );
+   const documents = await sync.get(
+  "jobseeker-documents",
+  async function ({ supabase, userId }) {
+
+    const { data: documents, error } = await supabase
+      .from("jobseeker_documents")
+      .select(`
+        id,
+        document_type,
+        file_name,
+        storage_path,
+        file_size,
+        mime_type,
+        created_at
+      `)
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    return documents || [];
+
+  }
+);
 
     dashboardApplicationDocuments = documents || [];
 

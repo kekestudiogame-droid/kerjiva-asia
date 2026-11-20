@@ -6742,6 +6742,9 @@ if (applyNowButton) {
     const documentsModal = document.getElementById(
       "homepageApplyDocumentsModal"
     );
+     const jobDetailsModal = document.getElementById(
+     "homepageJobDetailsModal"
+   );
     const documentList = document.getElementById(
       "homepageApplyDocumentList"
     );
@@ -6908,9 +6911,14 @@ if (applyNowButton) {
 
       submitButton.disabled = !documents || documents.length === 0;
 
-      // 5. OPEN DOCUMENT SELECTION MODAL
-      documentsModal.hidden = false;
-      documentsModal.style.display = "flex";
+    // 5. OPEN DOCUMENT SELECTION MODAL
+     if (jobDetailsModal) {
+     jobDetailsModal.hidden = true;
+     jobDetailsModal.style.display = "none";
+     }
+
+    documentsModal.hidden = false;
+    documentsModal.style.display = "flex";
 
       // CLOSE DOCUMENT MODAL
       if (closeDocumentsButton) {

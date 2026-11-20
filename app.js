@@ -6312,20 +6312,23 @@ async function saveCompanyJob(status) {
       result = data;
     }
      
+  
     // ===============================================
-    // UPDATE CENTRAL COMPANY JOBS CACHE
+    // UPDATE CENTRAL SYNC JOB CACHES
     // ===============================================
 
     try {
 
       const sync = window.kerjivaMalaysiaSync;
 
-      if (sync) {
+      if (sync && typeof sync.invalidate === "function") {
 
         sync.invalidate("company-jobs");
+        sync.invalidate("published-jobs-with-companies");
+        sync.invalidate("homepage-published-jobs-with-companies");
 
         console.log(
-          "Company Jobs Cache Invalidated After Save."
+          "Company and Public Job Caches Invalidated After Save."
         );
 
       }
@@ -6333,12 +6336,11 @@ async function saveCompanyJob(status) {
     } catch (syncError) {
 
       console.warn(
-        "Company Jobs Cache Update Warning:",
+        "Central Sync Cache Invalidation Warning:",
         syncError
       );
 
     }
-
 
 
   const successMessage =

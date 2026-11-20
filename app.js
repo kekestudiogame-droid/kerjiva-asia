@@ -9333,6 +9333,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   );
 
   if (!dashboard || !interviewList) return;
+   const sync = window.kerjivaMalaysiaSync;
+
+ if (!sync) {
+  console.error("Kerjiva Malaysia Central Sync is unavailable.");
+  return;
+ }
 
   let currentUser = null;
   let interviewChannel = null;

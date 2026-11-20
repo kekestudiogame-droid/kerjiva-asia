@@ -8052,6 +8052,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (params.has("preview")) return;
 
   const supabase = window.supabaseAuth;
+   const sync = window.kerjivaMalaysiaSync;
 
   const applicantsList = document.getElementById(
     "companyApplicantsList"
@@ -8069,306 +8070,342 @@ document.addEventListener("DOMContentLoaded", function () {
     "companyApplicantDocuments"
   );
 
-  if (
-    !supabase ||
-    !applicantsList ||
-    !applicantDetails ||
-    !applicantProfile ||
-    !applicantDocuments
-  ) return;
+ if (
+  !supabase ||
+  !sync ||
+  !applicantsList ||
+  !applicantDetails ||
+  !applicantProfile ||
+  !applicantDocuments
+) return;
 
   let applicationsCache = [];
   let profilesCache = [];
   let jobsCache = [];
   let documentsCache = [];
 
-  async function loadIncomingApplicants() {
+ 
+async function loadIncomingApplicants() {
 
-    applicantsList.textContent = "Loading incoming applicants...";
+  applicantsList.textContent = "Loading incoming applicants...";
+  applicantDetails.hidden = true;
 
-    applicantDetails.hidden = true;
+  try {
 
-    try {
+    // 1. Get current authenticated user.
+    const identity = await sync.getSession();
 
-      // 1. Get logged-in company user
-      const {
-        data: sessionData,
-        error: sessionError
-      } = await supabase.auth.getSession();
-
-      if (sessionError) throw sessionError;
-
-      const user = sessionData?.session?.user;
-
-      if (!user) {
-        applicantsList.textContent =
-          "Please log in to view incoming applicants.";
-        return;
-      }
-
-      // 2. Get company ID
-      const {
-        data: company,
-        error: companyError
-      } = await supabase
-        .from("companies")
-        .select("id")
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-      if (companyError) throw companyError;
-
-      if (!company) {
-        applicantsList.textContent =
-          "Company profile not found.";
-        return;
-      }
-
-      // 3. Get company jobs
-      const {
-        data: jobs,
-        error: jobsError
-      } = await supabase
-        .from("jobs")
-        .select("id, title, city, state")
-        .eq("company_id", company.id);
-
-      if (jobsError) throw jobsError;
-
-      jobsCache = jobs || [];
-
-      if (jobsCache.length === 0) {
-        applicantsList.textContent =
-          "No job postings found.";
-        return;
-      }
-
-      const jobIds = jobsCache.map(job => job.id);
-
-      // 4. Get applications for company jobs
-      const {
-        data: applications,
-        error: applicationsError
-      } = await supabase
-        .from("applications")
-        .select(`
-          id,
-          job_id,
-          user_id,
-          cover_letter,
-          status,
-          applied_at
-        `)
-        .in("job_id", jobIds)
-        .order("applied_at", { ascending: false });
-
-      if (applicationsError) throw applicationsError;
-
-      applicationsCache = applications || [];
-
-      if (applicationsCache.length === 0) {
-        applicantsList.textContent =
-          "No applicants yet.";
-        return;
-      }
-
-      // 5. Get applicant profiles
-      const applicantUserIds = [
-        ...new Set(
-          applicationsCache.map(app => app.user_id)
-        )
-      ];
-
-      const {
-        data: profiles,
-        error: profilesError
-      } = await supabase
-        .from("jobseeker_profiles")
-        .select(`
-          user_id,
-          full_name,
-          email,
-          phone,
-          headline,
-          about_me,
-          education_level,
-          field_of_study,
-          institution,
-          graduation_year,
-          experience_years,
-          skills,
-          city,
-          state,
-          linkedin_url,
-          portfolio_url,
-          avatar_url
-        `)
-        .in("user_id", applicantUserIds);
-
-      if (profilesError) throw profilesError;
-
-      profilesCache = profiles || [];
-
-      // 6. Get application documents
-      const applicationIds = applicationsCache.map(
-        app => app.id
-      );
-
-      const {
-        data: documents,
-        error: documentsError
-      } = await supabase
-        .from("application_documents")
-        .select(`
-          id,
-          application_id,
-          file_name,
-          storage_path,
-          file_size,
-          mime_type,
-          created_at
-        `)
-        .in("application_id", applicationIds)
-        .order("created_at", { ascending: true });
-
-      if (documentsError) throw documentsError;
-
-      documentsCache = documents || [];
-
-      // 7. Render incoming applicants
-      applicantsList.replaceChildren();
-
-      applicationsCache.forEach(function (application) {
-
-        const job = jobsCache.find(
-          item => item.id === application.job_id
-        );
-
-        const profile = profilesCache.find(
-          item => item.user_id === application.user_id
-        );
-
-        const card = document.createElement("div");
-        card.className = "company-applicant-card";
-
-        const name = document.createElement("h3");
-        name.textContent =
-          profile?.full_name || "Applicant";
-
-        const position = document.createElement("p");
-        position.textContent =
-          "Position: " + (job?.title || "Unknown Job");
-
-        const location = document.createElement("p");
-        location.textContent =
-          [job?.city, job?.state]
-            .filter(Boolean)
-            .join(", ");
-
-        const status = document.createElement("p");
-        status.textContent =
-          "Status: " +
-          (application.status || "pending").toUpperCase();
-
-        const date = document.createElement("p");
-        date.textContent = application.applied_at
-          ? "Applied: " +
-            new Date(application.applied_at).toLocaleDateString(
-              "en-MY"
-            )
-          : "Application date unavailable";
-
-     
-const viewButton = document.createElement("button");
-viewButton.type = "button";
-viewButton.className = "company-applicant-action";
-viewButton.textContent = "View Details";
-         
-viewButton.addEventListener("click", function () {
-  showApplicantDetails(application.id);
-});
-
-// Invite to Interview button
-const inviteButton = document.createElement("button");
-inviteButton.type = "button";
-inviteButton.className = "company-applicant-action";
-inviteButton.textContent = "Invite to Interview";
-
-inviteButton.addEventListener("click", function () {
-
-  const applicationInput = document.getElementById(
-    "companyInterviewApplicationId"
-  );
-
-  const interviewStatus = document.getElementById(
-    "companyInterviewStatus"
-  );
-
-  const interviewLink = document.querySelector(
-    '#companyDashboard .dashboard-nav a[href="#companyInterviews"]'
-  );
-
-  if (!applicationInput || !interviewLink) {
-    console.error("Interview form or navigation link not found.");
-    return;
-  }
-
-  // Store the selected applicant's application ID
-  applicationInput.value = application.id;
-
-  if (interviewStatus) {
-    interviewStatus.textContent =
-      "Creating interview invitation for " +
-      (profile?.full_name || "Applicant");
-  }
-
-  // Open Interview Invitations section
-  interviewLink.click();
-
-  // Scroll to the invitation form
-  document.getElementById("companyInterviewForm")?.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-
-});
-
-       card.append(
-       name,
-       position,
-       location,
-       status,
-       date,
-       viewButton,
-       inviteButton
-      );
-        applicantsList.appendChild(card);
-
-      });
-       
-     if (typeof window.applyKerjivaTranslations === "function") {
-      window.applyKerjivaTranslations();
-       }
-
-      console.log(
-        "Company Incoming Applicants Loaded:",
-        applicationsCache.length
-      );
-
-    } catch (error) {
-
-      console.error(
-        "Company Incoming Applicants Error:",
-        error
-      );
-
+    if (!identity || !identity.user) {
       applicantsList.textContent =
-        "Unable to load incoming applicants. Please try again.";
-
+        "Please log in to view incoming applicants.";
+      return;
     }
 
+    // 2. Reuse the company profile from Central Sync.
+    const company = await sync.get(
+      "company-profile",
+      async function ({ supabase, userId }) {
+
+        const { data, error } = await supabase
+          .from("companies")
+          .select("*")
+          .eq("user_id", userId)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        return data;
+
+      }
+    );
+
+    if (!company) {
+      applicantsList.textContent =
+        "Company profile not found.";
+      return;
+    }
+
+    // 3. Load all incoming applicant data through one cache bundle.
+    const applicantData = await sync.get(
+      "company-incoming-applicants",
+      async function ({ supabase }) {
+
+        // Get jobs owned by this company.
+        const { data: jobs, error: jobsError } = await supabase
+          .from("jobs")
+          .select("id, title, city, state")
+          .eq("company_id", company.id);
+
+        if (jobsError) throw jobsError;
+
+        const jobRows = jobs || [];
+
+        if (jobRows.length === 0) {
+          return {
+            jobs: [],
+            applications: [],
+            profiles: [],
+            documents: []
+          };
+        }
+
+        const jobIds = jobRows.map(job => job.id);
+
+        // Get applications belonging to these company jobs.
+        const { data: applications, error: applicationsError } =
+          await supabase
+            .from("applications")
+            .select(`
+              id,
+              job_id,
+              user_id,
+              cover_letter,
+              status,
+              applied_at
+            `)
+            .in("job_id", jobIds)
+            .order("applied_at", { ascending: false });
+
+        if (applicationsError) throw applicationsError;
+
+        const applicationRows = applications || [];
+
+        if (applicationRows.length === 0) {
+          return {
+            jobs: jobRows,
+            applications: [],
+            profiles: [],
+            documents: []
+          };
+        }
+
+        const applicantUserIds = [
+          ...new Set(
+            applicationRows
+              .map(app => app.user_id)
+              .filter(Boolean)
+          )
+        ];
+
+        const applicationIds = applicationRows.map(
+          app => app.id
+        );
+
+        // Load applicant profiles and documents in parallel.
+        const [profileResult, documentResult] =
+          await Promise.all([
+
+            applicantUserIds.length
+              ? supabase
+                  .from("jobseeker_profiles")
+                  .select(`
+                    user_id,
+                    full_name,
+                    email,
+                    phone,
+                    headline,
+                    about_me,
+                    education_level,
+                    field_of_study,
+                    institution,
+                    graduation_year,
+                    experience_years,
+                    skills,
+                    city,
+                    state,
+                    linkedin_url,
+                    portfolio_url,
+                    avatar_url
+                  `)
+                  .in("user_id", applicantUserIds)
+              : Promise.resolve({
+                  data: [],
+                  error: null
+                }),
+
+            applicationIds.length
+              ? supabase
+                  .from("application_documents")
+                  .select(`
+                    id,
+                    application_id,
+                    file_name,
+                    storage_path,
+                    file_size,
+                    mime_type,
+                    created_at
+                  `)
+                  .in("application_id", applicationIds)
+                  .order("created_at", { ascending: true })
+              : Promise.resolve({
+                  data: [],
+                  error: null
+                })
+
+          ]);
+
+        if (profileResult.error) {
+          throw profileResult.error;
+        }
+
+        if (documentResult.error) {
+          throw documentResult.error;
+        }
+
+        return {
+          jobs: jobRows,
+          applications: applicationRows,
+          profiles: profileResult.data || [],
+          documents: documentResult.data || []
+        };
+
+      }
+    );
+
+    // 4. Reuse bundle data for applicant details.
+    jobsCache = applicantData.jobs || [];
+    applicationsCache = applicantData.applications || [];
+    profilesCache = applicantData.profiles || [];
+    documentsCache = applicantData.documents || [];
+
+    if (jobsCache.length === 0) {
+      applicantsList.textContent = "No job postings found.";
+      return;
+    }
+
+    if (applicationsCache.length === 0) {
+      applicantsList.textContent = "No applicants yet.";
+      return;
+    }
+
+    // 5. Render incoming applicants.
+    applicantsList.replaceChildren();
+
+    applicationsCache.forEach(function (application) {
+
+      const job = jobsCache.find(
+        item => item.id === application.job_id
+      );
+
+      const profile = profilesCache.find(
+        item => item.user_id === application.user_id
+      );
+
+      const card = document.createElement("div");
+      card.className = "company-applicant-card";
+
+      const name = document.createElement("h3");
+      name.textContent =
+        profile?.full_name || "Applicant";
+
+      const position = document.createElement("p");
+      position.textContent =
+        "Position: " + (job?.title || "Unknown Job");
+
+      const location = document.createElement("p");
+      location.textContent =
+        [job?.city, job?.state]
+          .filter(Boolean)
+          .join(", ");
+
+      const status = document.createElement("p");
+      status.textContent =
+        "Status: " +
+        (application.status || "pending").toUpperCase();
+
+      const date = document.createElement("p");
+      date.textContent = application.applied_at
+        ? "Applied: " +
+          new Date(application.applied_at).toLocaleDateString("en-MY")
+        : "Application date unavailable";
+
+      const viewButton = document.createElement("button");
+      viewButton.type = "button";
+      viewButton.className = "company-applicant-action";
+      viewButton.textContent = "View Details";
+
+      viewButton.addEventListener("click", function () {
+        showApplicantDetails(application.id);
+      });
+
+      // Invite to Interview button.
+      const inviteButton = document.createElement("button");
+      inviteButton.type = "button";
+      inviteButton.className = "company-applicant-action";
+      inviteButton.textContent = "Invite to Interview";
+
+      inviteButton.addEventListener("click", function () {
+
+        const applicationInput = document.getElementById(
+          "companyInterviewApplicationId"
+        );
+
+        const interviewStatus = document.getElementById(
+          "companyInterviewStatus"
+        );
+
+        const interviewLink = document.querySelector(
+          '#companyDashboard .dashboard-nav a[href="#companyInterviews"]'
+        );
+
+        if (!applicationInput || !interviewLink) {
+          console.error("Interview form or navigation link not found.");
+          return;
+        }
+
+        applicationInput.value = application.id;
+
+        if (interviewStatus) {
+          interviewStatus.textContent =
+            "Creating interview invitation for " +
+            (profile?.full_name || "Applicant");
+        }
+
+        interviewLink.click();
+
+        document.getElementById("companyInterviewForm")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+      });
+
+      card.append(
+        name,
+        position,
+        location,
+        status,
+        date,
+        viewButton,
+        inviteButton
+      );
+
+      applicantsList.appendChild(card);
+
+    });
+
+    if (typeof window.applyKerjivaTranslations === "function") {
+      window.applyKerjivaTranslations();
+    }
+
+    console.log(
+      "Company Incoming Applicants Loaded From Central Sync:",
+      applicationsCache.length
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Company Incoming Applicants Error:",
+      error
+    );
+
+    applicantsList.textContent =
+      "Unable to load incoming applicants. Please try again.";
+
   }
 
+}
 
   // 8. Show applicant profile and application documents
   async function showApplicantDetails(applicationId) {

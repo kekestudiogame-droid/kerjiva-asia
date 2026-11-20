@@ -2477,8 +2477,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   }
 
+
   // =========================================
   // UPLOAD PHOTO
+  // UNIQUE STORAGE PATH - NO OVERWRITE
   // =========================================
 
   uploadPhotoBtn.addEventListener("click", async function () {
@@ -2486,6 +2488,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!selectedPhoto || !currentUser) return;
 
     const originalButtonText = uploadPhotoBtn.textContent;
+
+    const oldAvatarPath = currentAvatarPath;
+
+    let newAvatarPath = null;
+    let profileUpdated = false;
 
     uploadPhotoBtn.disabled = true;
     choosePhotoBtn.disabled = true;
@@ -2499,40 +2506,47 @@ document.addEventListener("DOMContentLoaded", async function () {
       // Compress image before uploading.
       const compressedPhoto = await compressProfilePhoto(selectedPhoto);
 
-      const avatarPath = `${currentUser.id}/profile`;
+      // Generate a unique filename, like document uploads.
+      newAvatarPath =
+        `${currentUser.id}/${crypto.randomUUID()}-profile.jpg`;
 
       photoStatus.textContent = "Uploading profile photo...";
 
+      // Upload as a new object without overwriting.
       const { error: uploadError } =
         await supabaseAuth.storage
           .from(BUCKET_NAME)
-          .upload(avatarPath, compressedPhoto, {
+          .upload(newAvatarPath, compressedPhoto, {
             cacheControl: "3600",
-            upsert: true,
+            upsert: false,
             contentType: "image/jpeg"
           });
 
       if (uploadError) throw uploadError;
 
+      // Update profile with the new storage path.
       const { error: updateError } =
         await supabaseAuth
           .from("jobseeker_profiles")
           .update({
-            avatar_url: avatarPath,
+            avatar_url: newAvatarPath,
             updated_at: new Date().toISOString()
           })
           .eq("user_id", currentUser.id);
 
       if (updateError) throw updateError;
 
-      currentAvatarPath = avatarPath;
+      profileUpdated = true;
+      currentAvatarPath = newAvatarPath;
 
-      await updateProfileCache(avatarPath);
+      // Update Central Sync cache.
+      await updateProfileCache(newAvatarPath);
 
+      // Generate a fresh signed URL.
       const { data: signedData, error: signedError } =
         await supabaseAuth.storage
           .from(BUCKET_NAME)
-          .createSignedUrl(avatarPath, 3600);
+          .createSignedUrl(newAvatarPath, 3600);
 
       if (signedError) throw signedError;
 
@@ -2543,7 +2557,25 @@ document.addEventListener("DOMContentLoaded", async function () {
       selectedPhoto = null;
       photoFileInput.value = "";
 
-      photoStatus.textContent = "Profile photo uploaded successfully.";
+      // Remove old photo only after the new photo is saved.
+      if (oldAvatarPath && oldAvatarPath !== newAvatarPath) {
+
+        const { error: deleteError } =
+          await supabaseAuth.storage
+            .from(BUCKET_NAME)
+            .remove([oldAvatarPath]);
+
+        if (deleteError) {
+          console.warn(
+            "Old Profile Photo Cleanup Error:",
+            deleteError
+          );
+        }
+
+      }
+
+      photoStatus.textContent =
+        "Profile photo uploaded successfully.";
 
       console.log("Jobseeker Photo Cache Updated.");
 
@@ -2551,12 +2583,28 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       console.error("Upload Jobseeker Photo Error:", error);
 
+      // Clean up the new file only if the database was not updated.
+      if (newAvatarPath && !profileUpdated) {
+
+        const { error: cleanupError } =
+          await supabaseAuth.storage
+            .from(BUCKET_NAME)
+            .remove([newAvatarPath]);
+
+        if (cleanupError) {
+          console.error(
+            "New Profile Photo Cleanup Error:",
+            cleanupError
+          );
+        }
+
+      }
+
       photoStatus.textContent =
         error.message || "Unable to upload profile photo.";
 
     } finally {
 
-      // Re-enable Upload Photo when an upload fails.
       uploadPhotoBtn.disabled = !selectedPhoto;
 
       choosePhotoBtn.disabled = false;

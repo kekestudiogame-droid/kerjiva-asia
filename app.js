@@ -3286,10 +3286,11 @@ if (typeof window.applyKerjivaTranslations === "function") {
   }
    });
 
+
 /* =====================================================
    KERJIVA MALAYSIA
    JOBSEEKER MY APPLICATIONS
-   LOAD APPLICATION HISTORY
+   CENTRAL SYNC
    SUPABASE REALTIME
    ===================================================== */
 
@@ -3297,7 +3298,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const params = new URLSearchParams(window.location.search);
 
-  // Jalankan hanya pada dashboard Jobseeker sebenarnya.
   if (
     params.get("dashboard") !== "jobseeker" ||
     params.has("preview")
@@ -3306,53 +3306,64 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   const dashboard = document.getElementById("jobseekerDashboard");
+
   const applicationList = document.getElementById(
     "jobseekerApplicationsList"
   );
-   const totalApplicationsElement = document.getElementById(
+
+  const totalApplicationsElement = document.getElementById(
     "totalApplications"
   );
 
   if (!dashboard || !applicationList) return;
 
+  const sync = window.kerjivaMalaysiaSync;
+
   let currentUser = null;
   let applicationChannel = null;
   let isLoading = false;
-  let loadRequestId = 0;
+  let refreshRequested = false;
+
+  if (!sync) {
+    applicationList.textContent =
+      "Kerjiva Malaysia Sync is unavailable.";
+    return;
+  }
 
   // =========================================
   // EMPTY STATE
   // =========================================
 
-function showEmptyState() {
+  function showEmptyState() {
 
-  applicationList.replaceChildren();
+    applicationList.replaceChildren();
 
-  const emptyState = document.createElement("div");
-  emptyState.className = "dashboard-empty-state";
+    const emptyState = document.createElement("div");
+    emptyState.className = "dashboard-empty-state";
 
-  const heading = document.createElement("h3");
-  heading.setAttribute("data-i18n", "applications_empty_title");
-  heading.textContent = "No Applications Yet";
+    const heading = document.createElement("h3");
+    heading.setAttribute("data-i18n", "applications_empty_title");
+    heading.textContent = "No Applications Yet";
 
-  const description = document.createElement("p");
-  description.setAttribute(
-    "data-i18n",
-    "applications_empty_description"
-  );
-  description.textContent =
-    "You have not submitted any job applications.";
+    const description = document.createElement("p");
+    description.setAttribute(
+      "data-i18n",
+      "applications_empty_description"
+    );
 
-  emptyState.append(heading, description);
-  applicationList.appendChild(emptyState);
+    description.textContent =
+      "You have not submitted any job applications.";
 
- if (typeof window.applyKerjivaTranslations === "function") {
-  window.applyKerjivaTranslations(
-    window.currentKerjivaLanguage || "en"
-  );
-}
+    emptyState.append(heading, description);
+    applicationList.appendChild(emptyState);
 
-}
+    if (typeof window.applyKerjivaTranslations === "function") {
+      window.applyKerjivaTranslations(
+        window.currentKerjivaLanguage || "en"
+      );
+    }
+  }
+
   // =========================================
   // FORMAT APPLICATION STATUS
   // =========================================
@@ -3364,118 +3375,164 @@ function showEmptyState() {
     return String(status)
       .replace(/[_-]+/g, " ")
       .replace(/\b\w/g, character => character.toUpperCase());
-
   }
 
   // =========================================
-  // LOAD APPLICATIONS
+  // LOAD APPLICATIONS FROM CENTRAL SYNC
   // =========================================
 
   async function loadJobseekerApplications() {
 
-    if (!currentUser || isLoading) return;
+    if (!currentUser) return;
+
+    if (isLoading) {
+      refreshRequested = true;
+      return;
+    }
 
     isLoading = true;
-
-    const requestId = ++loadRequestId;
 
     applicationList.textContent = "Loading applications...";
 
     try {
 
-      // 1. Get applications belonging to this Jobseeker.
-      const { data: applications, error: applicationError } =
-        await supabaseAuth
-          .from("applications")
-          .select(`
-            id,
-            job_id,
-            status,
-            applied_at
-          `)
-          .eq("user_id", currentUser.id)
-          .order("applied_at", { ascending: false });
+      const result = await sync.get(
+        "jobseeker-applications",
+        async function ({ supabase, userId }) {
 
-      if (applicationError) throw applicationError;
+          // 1. Get Jobseeker applications.
 
-      if (requestId !== loadRequestId) return;
-       
-       // Update Total Applications for the current Jobseeker.
+          const {
+            data: applications,
+            error: applicationError
+          } = await supabase
+            .from("applications")
+            .select(`
+              id,
+              job_id,
+              status,
+              applied_at
+            `)
+            .eq("user_id", userId)
+            .order("applied_at", { ascending: false });
+
+          if (applicationError) throw applicationError;
+
+          const applicationData = applications || [];
+
+          if (applicationData.length === 0) {
+            return {
+              applications: [],
+              jobs: [],
+              companies: []
+            };
+          }
+
+          // 2. Get related jobs.
+
+          const jobIds = [
+            ...new Set(
+              applicationData
+                .map(item => item.job_id)
+                .filter(Boolean)
+            )
+          ];
+
+          let jobs = [];
+
+          if (jobIds.length > 0) {
+
+            const {
+              data: jobData,
+              error: jobsError
+            } = await supabase
+              .from("jobs")
+              .select(`
+                id,
+                title,
+                job_type,
+                category,
+                city,
+                state,
+                company_id
+              `)
+              .in("id", jobIds);
+
+            if (jobsError) throw jobsError;
+
+            jobs = jobData || [];
+          }
+
+          // 3. Get related companies.
+
+          const companyIds = [
+            ...new Set(
+              jobs
+                .map(job => job.company_id)
+                .filter(Boolean)
+            )
+          ];
+
+          let companies = [];
+
+          if (companyIds.length > 0) {
+
+            const {
+              data: companyData,
+              error: companyError
+            } = await supabase
+              .from("companies")
+              .select("id, company_name")
+              .in("id", companyIds);
+
+            if (companyError) throw companyError;
+
+            companies = companyData || [];
+          }
+
+          return {
+            applications: applicationData,
+            jobs: jobs,
+            companies: companies
+          };
+        }
+      );
+
+      const applications = result.applications || [];
+      const jobs = result.jobs || [];
+      const companies = result.companies || [];
+
+      // Update total applications.
+
       if (totalApplicationsElement) {
-         totalApplicationsElement.textContent = String(
-         applications?.length || 0
-        );
-       }
+        totalApplicationsElement.textContent =
+          String(applications.length);
+      }
 
-      if (!applications || applications.length === 0) {
+      if (applications.length === 0) {
         showEmptyState();
+        console.log(
+          "Jobseeker Applications Loaded From Central Sync: 0"
+        );
         return;
       }
 
-      // 2. Get related job information.
-      const jobIds = [
-        ...new Set(applications.map(item => item.job_id))
-      ];
-
-      const { data: jobs, error: jobsError } =
-        await supabaseAuth
-          .from("jobs")
-          .select(`
-            id,
-            title,
-            job_type,
-            category,
-            city,
-            state,
-            company_id
-          `)
-          .in("id", jobIds);
-
-      if (jobsError) throw jobsError;
-
-      if (requestId !== loadRequestId) return;
-
       const jobMap = new Map(
-        (jobs || []).map(job => [job.id, job])
+        jobs.map(job => [job.id, job])
       );
-
-      // 3. Get related company information.
-      const companyIds = [
-        ...new Set(
-          (jobs || [])
-            .map(job => job.company_id)
-            .filter(Boolean)
-        )
-      ];
-
-      let companies = [];
-
-      if (companyIds.length > 0) {
-
-        const { data: companyData, error: companyError } =
-          await supabaseAuth
-            .from("companies")
-            .select("id, company_name")
-            .in("id", companyIds);
-
-        if (companyError) throw companyError;
-
-        companies = companyData || [];
-
-      }
-
-      if (requestId !== loadRequestId) return;
 
       const companyMap = new Map(
         companies.map(company => [company.id, company])
       );
 
       // 4. Display application history.
+
       applicationList.replaceChildren();
 
       for (const application of applications) {
 
         const job = jobMap.get(application.job_id);
+
         const company = job
           ? companyMap.get(job.company_id)
           : null;
@@ -3484,17 +3541,20 @@ function showEmptyState() {
         card.className = "jobseeker-application-card";
 
         const heading = document.createElement("h3");
+
         heading.textContent = job
           ? job.title
           : "Job details unavailable";
 
         const companyName = document.createElement("p");
+
         companyName.textContent = company
           ? company.company_name
           : "Company information unavailable";
 
         const status = document.createElement("p");
         status.className = "application-status";
+
         status.textContent =
           "Status: " +
           formatApplicationStatus(application.status);
@@ -3515,6 +3575,7 @@ function showEmptyState() {
         location.textContent = locationParts.join(", ");
 
         const appliedDate = document.createElement("p");
+
         appliedDate.textContent = application.applied_at
           ? "Applied on: " +
             new Date(application.applied_at).toLocaleDateString("en-MY")
@@ -3526,15 +3587,27 @@ function showEmptyState() {
           status
         );
 
-        if (jobType.textContent) card.appendChild(jobType);
-        if (category.textContent) card.appendChild(category);
-        if (location.textContent) card.appendChild(location);
+        if (jobType.textContent) {
+          card.appendChild(jobType);
+        }
+
+        if (category.textContent) {
+          card.appendChild(category);
+        }
+
+        if (location.textContent) {
+          card.appendChild(location);
+        }
 
         card.appendChild(appliedDate);
 
         applicationList.appendChild(card);
-
       }
+
+      console.log(
+        "Jobseeker Applications Loaded From Central Sync:",
+        applications.length
+      );
 
     } catch (error) {
 
@@ -3543,19 +3616,20 @@ function showEmptyState() {
         error
       );
 
-      if (requestId === loadRequestId) {
-
-        applicationList.textContent =
-          "Unable to load your applications. Please try again.";
-
-      }
+      applicationList.textContent =
+        "Unable to load your applications. Please try again.";
 
     } finally {
 
       isLoading = false;
 
-    }
+      // Do not lose a refresh requested during loading.
 
+      if (refreshRequested) {
+        refreshRequested = false;
+        loadJobseekerApplications();
+      }
+    }
   }
 
   // =========================================
@@ -3575,29 +3649,23 @@ function showEmptyState() {
       ) {
         loadJobseekerApplications();
       }
-
     });
-
   });
 
   // =========================================
-  // INITIALIZE SESSION
+  // INITIALIZE SESSION FROM CENTRAL SYNC
   // =========================================
 
   try {
 
-    const { data: sessionData, error: sessionError } =
-      await supabaseAuth.auth.getSession();
+    const identity = await sync.getSession();
 
-    if (sessionError) throw sessionError;
-
-    if (!sessionData.session?.user) {
+    if (!identity || !identity.user) {
       throw new Error("Please sign in again.");
     }
 
-    currentUser = sessionData.session.user;
+    currentUser = identity.user;
 
-    // Load application history when dashboard opens.
     await loadJobseekerApplications();
 
     // =========================================
@@ -3615,22 +3683,30 @@ function showEmptyState() {
           filter: "user_id=eq." + currentUser.id
         },
         function () {
+
+          // Invalidate cached application and related data.
+
+          sync.invalidate("jobseeker-applications");
+
           loadJobseekerApplications();
         }
       )
       .subscribe(function (status) {
 
-        if (status === "CHANNEL_ERROR" ||
-            status === "TIMED_OUT") {
-
+        if (
+          status === "CHANNEL_ERROR" ||
+          status === "TIMED_OUT"
+        ) {
           console.warn(
             "My Applications Realtime is unavailable:",
             status
           );
-
         }
-
       });
+
+    console.log(
+      "Jobseeker My Applications Central Sync Active."
+    );
 
   } catch (error) {
 
@@ -3641,10 +3717,11 @@ function showEmptyState() {
 
     applicationList.textContent =
       error.message || "Unable to initialize My Applications.";
-
   }
 
 });
+
+
 
 
 /* =====================================================

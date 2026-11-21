@@ -3599,7 +3599,7 @@ document.addEventListener("DOMContentLoaded", async function () {
               data: companyData,
               error: companyError
             } = await supabase
-              .from("companies")
+             .from("company_public_info")
               .select("id, company_name")
               .in("id", companyIds);
 

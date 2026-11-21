@@ -2233,6 +2233,9 @@
           </h3>
 
           <form id="companyInterviewForm">
+            <div id="companyInterviewNotification" class="interview-notification" hidden>
+              <p id="companyInterviewStatus" role="status" aria-live="polite"></p>
+            </div>
 
             <input type="hidden" id="companyInterviewApplicationId">
 
@@ -2292,8 +2295,6 @@
             >
               Send Invitation
             </button>
-
-            <p id="companyInterviewStatus"></p>
 
           </form>
 

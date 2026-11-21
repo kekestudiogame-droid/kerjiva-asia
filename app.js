@@ -3403,36 +3403,85 @@ document.addEventListener("DOMContentLoaded", async function () {
   // EMPTY STATE
   // =========================================
 
-  function showEmptyState() {
+ function showEmptyState() {
 
-    applicationList.replaceChildren();
+  // EMPTY STATE - MY APPLICATIONS
+  applicationList.replaceChildren();
 
-    const emptyState = document.createElement("div");
-    emptyState.className = "dashboard-empty-state";
+  const applicationEmpty = document.createElement("div");
+  applicationEmpty.className = "dashboard-empty-state";
 
-    const heading = document.createElement("h3");
-    heading.setAttribute("data-i18n", "applications_empty_title");
-    heading.textContent = "No Applications Yet";
+  const applicationHeading = document.createElement("h3");
+  applicationHeading.setAttribute("data-i18n", "applications_empty_title");
+  applicationHeading.textContent = "No Applications Yet";
 
-    const description = document.createElement("p");
-    description.setAttribute(
+  const applicationDescription = document.createElement("p");
+  applicationDescription.setAttribute(
+    "data-i18n",
+    "applications_empty_description"
+  );
+  applicationDescription.textContent =
+    "You have not submitted any job applications.";
+
+  applicationEmpty.append(
+    applicationHeading,
+    applicationDescription
+  );
+
+  applicationList.appendChild(applicationEmpty);
+
+
+  // EMPTY STATE - DASHBOARD RECENT APPLICATIONS
+  if (dashboardRecentApplications) {
+
+    dashboardRecentApplications.replaceChildren();
+
+    const dashboardEmpty = document.createElement("div");
+    dashboardEmpty.className = "dashboard-empty-state";
+
+    const dashboardHeading = document.createElement("h3");
+    dashboardHeading.setAttribute(
       "data-i18n",
-      "applications_empty_description"
+      "recent_applications_empty_title"
+    );
+    dashboardHeading.textContent = "No Applications Yet";
+
+    const dashboardDescription = document.createElement("p");
+    dashboardDescription.setAttribute(
+      "data-i18n",
+      "recent_applications_empty_description"
+    );
+    dashboardDescription.textContent =
+      "Your submitted job applications will appear here.";
+
+    const exploreButton = document.createElement("a");
+    exploreButton.href = "#jobs";
+    exploreButton.className = "primary-btn";
+    exploreButton.id = "dashboardExploreJobsBtn";
+    exploreButton.setAttribute(
+      "data-i18n",
+      "recent_applications_explore"
+    );
+    exploreButton.textContent = "Explore Jobs";
+
+    dashboardEmpty.append(
+      dashboardHeading,
+      dashboardDescription,
+      exploreButton
     );
 
-    description.textContent =
-      "You have not submitted any job applications.";
-
-    emptyState.append(heading, description);
-    applicationList.appendChild(emptyState);
-
-    if (typeof window.applyKerjivaTranslations === "function") {
-      window.applyKerjivaTranslations(
-        window.currentKerjivaLanguage || "en"
-      );
-    }
+    dashboardRecentApplications.appendChild(dashboardEmpty);
   }
 
+
+  // APPLY CURRENT LANGUAGE
+  if (typeof window.applyKerjivaTranslations === "function") {
+    window.applyKerjivaTranslations(
+      window.currentKerjivaLanguage || "en"
+    );
+  }
+
+}
   // =========================================
   // FORMAT APPLICATION STATUS
   // =========================================
@@ -3594,9 +3643,15 @@ document.addEventListener("DOMContentLoaded", async function () {
         companies.map(company => [company.id, company])
       );
 
+    
       // 4. Display application history.
 
       applicationList.replaceChildren();
+
+      // Prepare Dashboard Recent Applications.
+      if (dashboardRecentApplications) {
+        dashboardRecentApplications.replaceChildren();
+      }
 
       for (const application of applications) {
 
@@ -3605,6 +3660,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         const company = job
           ? companyMap.get(job.company_id)
           : null;
+
+        // =========================================
+        // FULL CARD - MY APPLICATIONS
+        // =========================================
 
         const card = document.createElement("div");
         card.className = "jobseeker-application-card";
@@ -3671,6 +3730,35 @@ document.addEventListener("DOMContentLoaded", async function () {
         card.appendChild(appliedDate);
 
         applicationList.appendChild(card);
+
+
+        // =========================================
+        // COMPACT CARD - DASHBOARD RECENT APPLICATIONS
+        // =========================================
+
+        if (dashboardRecentApplications) {
+
+          const dashboardCard = document.createElement("div");
+          dashboardCard.className = "jobseeker-application-card";
+
+          const dashboardJobTitle = document.createElement("h3");
+          dashboardJobTitle.textContent = job
+            ? job.title
+            : "Job details unavailable";
+
+          const dashboardCompanyName = document.createElement("p");
+          dashboardCompanyName.textContent = company
+            ? company.company_name
+            : "Company information unavailable";
+
+          dashboardCard.append(
+            dashboardJobTitle,
+            dashboardCompanyName
+          );
+
+          dashboardRecentApplications.appendChild(dashboardCard);
+        }
+
       }
 
       console.log(
@@ -3678,16 +3766,22 @@ document.addEventListener("DOMContentLoaded", async function () {
         applications.length
       );
 
-    } catch (error) {
+  } catch (error) {
 
-      console.error(
-        "Load Jobseeker Applications Error:",
-        error
-      );
+  console.error(
+    "Load Jobseeker Applications Error:",
+    error
+  );
 
-      applicationList.textContent =
-        "Unable to load your applications. Please try again.";
+  applicationList.textContent =
+    "Unable to load your applications. Please try again.";
 
+  if (dashboardRecentApplications) {
+    dashboardRecentApplications.textContent =
+      "Unable to load your applications. Please try again.";
+  }
+
+}
     } finally {
 
       isLoading = false;

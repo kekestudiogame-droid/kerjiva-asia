@@ -3766,22 +3766,21 @@ document.addEventListener("DOMContentLoaded", async function () {
         applications.length
       );
 
-  } catch (error) {
+     } catch (error) {
 
-  console.error(
-    "Load Jobseeker Applications Error:",
-    error
-  );
+      console.error(
+        "Load Jobseeker Applications Error:",
+        error
+      );
 
-  applicationList.textContent =
-    "Unable to load your applications. Please try again.";
+      applicationList.textContent =
+        "Unable to load your applications. Please try again.";
 
-  if (dashboardRecentApplications) {
-    dashboardRecentApplications.textContent =
-      "Unable to load your applications. Please try again.";
-  }
+      if (dashboardRecentApplications) {
+        dashboardRecentApplications.textContent =
+          "Unable to load your applications. Please try again.";
+      }
 
-}
     } finally {
 
       isLoading = false;
@@ -3792,13 +3791,13 @@ document.addEventListener("DOMContentLoaded", async function () {
         refreshRequested = false;
         loadJobseekerApplications();
       }
+
     }
   }
 
   // =========================================
   // REFRESH WHEN OPENING MY APPLICATIONS
   // =========================================
-
   const menuLinks = dashboard.querySelectorAll(
     ".dashboard-menu .dashboard-menu-link"
   );

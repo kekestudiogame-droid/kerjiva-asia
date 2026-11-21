@@ -9660,12 +9660,17 @@ document.addEventListener("DOMContentLoaded", async function () {
   );
    const supabase = window.supabaseAuth;
 
-  const interviewList = document.getElementById(
-    "jobseekerInterviewList"
-  );
-   const totalInterviewsElement = document.getElementById(
-    "totalInterviews"
-  );
+ const interviewList = document.getElementById(
+  "jobseekerInterviewList"
+);
+
+const totalInterviewsElement = document.getElementById(
+  "totalInterviews"
+);
+
+const dashboardUpcomingInterviews = document.getElementById(
+  "dashboardUpcomingInterviews"
+);
 
  if (!dashboard || !interviewList || !supabase) return;
    const sync = window.kerjivaMalaysiaSync;
@@ -9683,7 +9688,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   // EMPTY STATE
   // =========================================
 
- function showInterviewEmptyState() {
+
+function showInterviewEmptyState() {
 
   interviewList.replaceChildren();
 
@@ -9705,6 +9711,38 @@ document.addEventListener("DOMContentLoaded", async function () {
   emptyState.append(heading, description);
   interviewList.appendChild(emptyState);
 
+  if (dashboardUpcomingInterviews) {
+
+    dashboardUpcomingInterviews.replaceChildren();
+
+    const upcomingEmptyState = document.createElement("div");
+    upcomingEmptyState.className = "dashboard-empty-state";
+
+    const upcomingHeading = document.createElement("h3");
+    upcomingHeading.setAttribute(
+      "data-i18n",
+      "upcoming_interviews_empty_title"
+    );
+    upcomingHeading.textContent = "No Upcoming Interviews";
+
+    const upcomingDescription = document.createElement("p");
+    upcomingDescription.setAttribute(
+      "data-i18n",
+      "upcoming_interviews_empty_description"
+    );
+    upcomingDescription.textContent =
+      "Your interview invitations will appear here.";
+
+    upcomingEmptyState.append(
+      upcomingHeading,
+      upcomingDescription
+    );
+
+    dashboardUpcomingInterviews.appendChild(
+      upcomingEmptyState
+    );
+  }
+
   if (typeof window.applyKerjivaTranslations === "function") {
     window.applyKerjivaTranslations(
       window.currentKerjivaLanguage || "en"
@@ -9712,6 +9750,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
 }
+
   // =========================================
   // FORMAT INTERVIEW DATE AND TIME
   // MALAYSIA TIMEZONE (GMT+8)
@@ -10049,9 +10088,31 @@ async function loadJobseekerInterviews() {
       companies.map(item => [item.id, item])
     );
 
-    // Display invitations.
+  
+    // Display all interview invitations.
     interviewList.replaceChildren();
 
+    // Prepare upcoming interviews panel.
+    if (dashboardUpcomingInterviews) {
+      dashboardUpcomingInterviews.replaceChildren();
+    }
+
+    const now = Date.now();
+
+    const upcomingInterviews = interviews.filter(interview => {
+      if (!interview.interview_date) return false;
+
+      const interviewTime = new Date(
+        interview.interview_date
+      ).getTime();
+
+      return (
+        !Number.isNaN(interviewTime) &&
+        interviewTime > now
+      );
+    });
+
+    // Display every invitation in the main Interview Invitations section.
     interviews.forEach(interview => {
 
       const application = applicationMap.get(
@@ -10072,12 +10133,78 @@ async function loadJobseekerInterviews() {
 
     });
 
+    // Display only future interviews on the Dashboard.
+    if (dashboardUpcomingInterviews) {
+
+      if (upcomingInterviews.length === 0) {
+
+        const emptyState = document.createElement("div");
+        emptyState.className = "dashboard-empty-state";
+
+        const heading = document.createElement("h3");
+        heading.setAttribute(
+          "data-i18n",
+          "upcoming_interviews_empty_title"
+        );
+        heading.textContent = "No Upcoming Interviews";
+
+        const description = document.createElement("p");
+        description.setAttribute(
+          "data-i18n",
+          "upcoming_interviews_empty_description"
+        );
+        description.textContent =
+          "Your interview invitations will appear here.";
+
+        emptyState.append(heading, description);
+
+        dashboardUpcomingInterviews.appendChild(
+          emptyState
+        );
+
+      } else {
+
+        upcomingInterviews.forEach(interview => {
+
+          const application = applicationMap.get(
+            interview.application_id
+          );
+
+          const job = application
+            ? jobMap.get(application.job_id)
+            : null;
+
+          const company = companyMap.get(
+            interview.company_id
+          );
+
+          dashboardUpcomingInterviews.appendChild(
+            createInterviewCard(interview, job, company)
+          );
+
+        });
+
+      }
+
+    }
+
+    // Apply current language to dashboard empty state.
+    if (typeof window.applyKerjivaTranslations === "function") {
+      window.applyKerjivaTranslations(
+        window.currentKerjivaLanguage || "en"
+      );
+    }
+
     console.log(
       "Jobseeker Interview Invitations Loaded From Central Sync:",
       interviews.length
     );
 
-  } catch (error) {
+    console.log(
+      "Upcoming Interviews Displayed:",
+      upcomingInterviews.length
+    );
+       } catch (error) {
 
     console.error(
       "Load Jobseeker Interview Invitations Error:",

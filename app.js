@@ -3379,16 +3379,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     return;
   }
 
-  const dashboard = document.getElementById("jobseekerDashboard");
-
-  const applicationList = document.getElementById(
-    "jobseekerApplicationsList"
-  );
-
-  const totalApplicationsElement = document.getElementById(
-    "totalApplications"
-  );
-
+ const dashboard = document.getElementById("jobseekerDashboard");
+ const applicationList = document.getElementById("jobseekerApplicationsList");
+ const dashboardRecentApplications = document.getElementById("dashboardRecentApplications");
+ const totalApplicationsElement = document.getElementById("totalApplications");
+   
   if (!dashboard || !applicationList) return;
 
   const sync = window.kerjivaMalaysiaSync;

@@ -4133,11 +4133,24 @@ body.about-page {
   display: none;
 }
 
+/* SUCCESS - GREEN */
+#companyInterviewNotification.success {
+  background: #ecfdf5;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+
+/* ERROR - RED */
+#companyInterviewNotification.error {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+
 #companyInterviewStatus {
   margin: 0;
   font-size: 14px;
   line-height: 1.5;
   font-weight: 500;
 }
-
 

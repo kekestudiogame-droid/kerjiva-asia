@@ -4116,3 +4116,28 @@ body.about-page {
   text-transform: uppercase;
 }
 
+
+/* =========================================================
+   KERJIVA MALAYSIA - INTERVIEW NOTIFICATION
+========================================================= */
+
+#companyInterviewNotification {
+  margin: 0 0 18px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #f8fafc;
+}
+
+#companyInterviewNotification[hidden] {
+  display: none;
+}
+
+#companyInterviewStatus {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+

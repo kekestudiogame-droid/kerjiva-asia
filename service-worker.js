@@ -6,7 +6,7 @@
 
 "use strict";
 
-const CACHE_VERSION = "kerjiva-malaysia-v1";
+const CACHE_VERSION = "kerjiva-malaysia-v2";
 
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PAGE_CACHE = `${CACHE_VERSION}-pages`;
@@ -59,10 +59,10 @@ self.addEventListener("fetch", function (event) {
 
   const url = new URL(request.url);
 
-  // Jangan cache permintaan lintas domain
+  // Jangan cache permintaan lintas domain.
   if (url.origin !== self.location.origin) return;
 
-  // Jangan cache API, autentikasi, atau penyimpanan Supabase
+  // Jangan cache API, autentikasi, atau penyimpanan Supabase.
   if (
     url.hostname.includes("supabase.co") ||
     url.pathname.includes("/auth/") ||
@@ -73,7 +73,7 @@ self.addEventListener("fetch", function (event) {
     return;
   }
 
-  // HTML: Network First
+  // HTML: Network First.
   if (request.mode === "navigate") {
     event.respondWith(
       fetch(request)
@@ -91,7 +91,9 @@ self.addEventListener("fetch", function (event) {
         .catch(async function () {
           return (
             await caches.match(request) ||
-            await caches.match(new URL("./index.html", self.registration.scope).href)
+            await caches.match(
+              new URL("./index.html", self.registration.scope).href
+            )
           );
         })
     );
@@ -99,7 +101,38 @@ self.addEventListener("fetch", function (event) {
     return;
   }
 
-  // Aset statis: Cache First
+  // JavaScript dan CSS: Network First.
+  const isCodeAsset =
+    request.destination === "script" ||
+    request.destination === "style";
+
+  if (isCodeAsset) {
+    event.respondWith(
+      fetch(request)
+        .then(function (response) {
+          if (response.ok) {
+            const copy = response.clone();
+
+            caches.open(STATIC_CACHE).then(function (cache) {
+              cache.put(request, copy);
+            });
+          }
+
+          return response;
+        })
+        .catch(async function () {
+          const cachedResponse = await caches.match(request);
+
+          if (cachedResponse) return cachedResponse;
+
+          return Response.error();
+        })
+    );
+
+    return;
+  }
+
+  // Aset lainnya: Cache First.
   event.respondWith(
     caches.match(request)
       .then(function (cachedResponse) {

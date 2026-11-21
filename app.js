@@ -9253,6 +9253,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("companyInterviewForm");
   const statusEl = document.getElementById("companyInterviewStatus");
   const interviewList = document.getElementById("companyInterviewList");
+   const notificationEl = document.getElementById(
+   "companyInterviewNotification"
+  );
 
   const applicationInput = document.getElementById(
     "companyInterviewApplicationId"
@@ -9270,9 +9273,19 @@ if (
   !sync ||
   !form ||
   !statusEl ||
+  !notificationEl ||
   !interviewList ||
   !applicationInput
 ) return;
+
+   function showInterviewNotification(message, type = "error") {
+  statusEl.textContent = message;
+
+  notificationEl.className =
+    `interview-notification ${type}`;
+
+  notificationEl.hidden = false;
+}
 
  
 async function loadCompanyInterviews(companyId) {
@@ -9430,7 +9443,9 @@ async function loadCompanyInterviews(companyId) {
 
     event.preventDefault();
 
-    statusEl.textContent = "";
+   statusEl.textContent = "";
+   notificationEl.hidden = true;
+   notificationEl.className = "interview-notification";
 
     const applicationId = applicationInput.value.trim();
     const interviewType = typeInput.value;
@@ -9559,9 +9574,11 @@ if (!company) {
           sync.invalidate("company-interviews");
           sync.invalidate("jobseeker-interviews");
 
-      statusEl.textContent =
-        "Interview invitation sent successfully!";
-
+     showInterviewNotification(
+       "Interview invitation sent successfully!",
+       "success"
+       );
+       
       form.reset();
       applicationInput.value = "";
 
@@ -9573,9 +9590,11 @@ if (!company) {
 
       console.error("Send Interview Invitation Error:", error);
 
-      statusEl.textContent =
-        error.message || "Unable to send interview invitation.";
-
+     showInterviewNotification(
+       error.message || "Unable to send interview invitation.",
+      "error"
+     );
+       
     } finally {
 
       sendButton.disabled = false;

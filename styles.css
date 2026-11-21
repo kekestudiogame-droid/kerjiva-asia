@@ -222,6 +222,140 @@ select {
 }
 
 
+/* =====================================================
+   KERJIVA MALAYSIA
+   COMPANY POST JOB BANNER & ADSENSE SPACE
+===================================================== */
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: 45px;
+}
+
+.hero-text {
+  max-width: 680px;
+  min-width: 0;
+}
+
+.hero-company-area {
+  width: 100%;
+  max-width: 390px;
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.company-post-banner {
+  padding: 25px 22px;
+  background: var(--white);
+  color: var(--primary);
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  border-top: 5px solid var(--secondary);
+}
+
+.company-banner-label {
+  display: inline-block;
+  color: var(--secondary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.company-post-banner h2 {
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.company-post-banner h3 {
+  color: var(--secondary);
+  font-size: 38px;
+  line-height: 1.2;
+  font-weight: 900;
+  margin: 3px 0 8px;
+}
+
+.company-post-banner p {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.company-post-banner-btn {
+  display: block;
+  width: 100%;
+  padding: 13px 16px;
+  background: var(--secondary);
+  color: var(--white);
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.company-post-banner-btn:hover {
+  background: #df7818;
+  transform: translateY(-2px);
+}
+
+.hero-ad-space {
+  min-height: 105px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  border: 1px dashed rgba(255, 255, 255, 0.65);
+  border-radius: 9px;
+  color: #e1eaf5;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 12px;
+}
+
+/* TABLET */
+@media (max-width: 900px) {
+  .hero-content {
+    grid-template-columns: 1fr 0.85fr;
+    gap: 25px;
+  }
+
+  .company-post-banner {
+    padding: 20px 16px;
+  }
+
+  .company-post-banner h2 {
+    font-size: 27px;
+  }
+
+  .company-post-banner h3 {
+    font-size: 33px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .hero-company-area {
+    max-width: 100%;
+    justify-self: stretch;
+  }
+
+  .hero-ad-space {
+    min-height: 90px;
+  }
+}
+
 /* JOB SEARCH */
 
 .search-section {

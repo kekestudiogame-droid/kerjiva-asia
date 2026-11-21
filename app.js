@@ -9455,52 +9455,66 @@ async function loadCompanyInterviews(companyId) {
     const meetingLink = meetingLinkInput.value.trim();
     const message = messageInput.value.trim();
 
-    if (!applicationId) {
-      statusEl.textContent =
-        "Please select an applicant first.";
-      return;
-    }
+  
+if (!applicationId) {
+  showInterviewNotification(
+    "Please select an applicant first.",
+    "error"
+  );
+  return;
+}
 
-    if (!interviewType || !interviewDate || !interviewTime) {
-      statusEl.textContent =
-        "Please complete interview type, date and time.";
-      return;
-    }
+if (!interviewType || !interviewDate || !interviewTime) {
+  showInterviewNotification(
+    "Please complete interview type, date and time.",
+    "error"
+  );
+  return;
+}
 
-    if (
-      interviewType === "In-person" &&
-      !interviewLocation
-    ) {
-      statusEl.textContent =
-        "Please enter the interview location.";
-      return;
-    }
+if (
+  interviewType === "In-person" &&
+  !interviewLocation
+) {
+  showInterviewNotification(
+    "Please enter the interview location.",
+    "error"
+  );
+  return;
+}
 
-    if (
-      interviewType === "Online" &&
-      !meetingLink
-    ) {
-      statusEl.textContent =
-        "Please enter the online meeting link.";
-      return;
-    }
+if (
+  interviewType === "Online" &&
+  !meetingLink
+) {
+  showInterviewNotification(
+    "Please enter the online meeting link.",
+    "error"
+  );
+  return;
+}
 
-    // Malaysia uses UTC+08:00
-    const interviewDateTime = new Date(
-      `${interviewDate}T${interviewTime}:00+08:00`
-    );
+// Malaysia uses UTC+08:00
+const interviewDateTime = new Date(
+  `${interviewDate}T${interviewTime}:00+08:00`
+);
 
-    if (Number.isNaN(interviewDateTime.getTime())) {
-      statusEl.textContent =
-        "Invalid interview date or time.";
-      return;
-    }
+if (Number.isNaN(interviewDateTime.getTime())) {
+  showInterviewNotification(
+    "Invalid interview date or time.",
+    "error"
+  );
+  return;
+}
 
-    if (interviewDateTime.getTime() <= Date.now()) {
-      statusEl.textContent =
-        "Interview date and time must be in the future.";
-      return;
-    }
+if (interviewDateTime.getTime() <= Date.now()) {
+  showInterviewNotification(
+    "Interview date and time must be in the future.",
+    "error"
+  );
+  return;
+}
+
 
     const sendButton = document.getElementById(
       "sendCompanyInterviewBtn"

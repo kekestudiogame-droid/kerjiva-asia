@@ -10317,13 +10317,32 @@ async function loadJobseekerInterviews() {
           filter: "jobseeker_id=eq." + currentUser.id
         },
          
-         function () {
+       
+function (payload) {
 
-         sync.invalidate("jobseeker-interviews");
+  // Notify only when a new interview invitation is inserted.
+  if (
+    payload &&
+    payload.eventType === "INSERT" &&
+    payload.new
+  ) {
 
-         loadJobseekerInterviews();
+    if (typeof showKerjivaNotification === "function") {
+      showKerjivaNotification(
+        "You have received a new interview invitation!",
+        "success"
+      );
+    }
 
-       }
+  }
+
+  // Keep Central Sync and the interview list updated.
+  sync.invalidate("jobseeker-interviews");
+
+  loadJobseekerInterviews();
+
+}
+
       )
       .subscribe(function (status) {
 

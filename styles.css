@@ -4153,4 +4153,8 @@ body.about-page {
   line-height: 1.5;
   font-weight: 500;
 }
+/* Prevent notifications from blocking page interactions */
+#kerjivaNotification {
+  pointer-events: none;
+}
 

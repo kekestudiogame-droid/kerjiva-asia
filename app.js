@@ -9278,12 +9278,18 @@ if (
   !applicationInput
 ) return;
 
-   function showInterviewNotification(message, type = "error") {
-  statusEl.textContent = message;
+ 
+function showInterviewNotification(message, type = "error") {
+  if (typeof showKerjivaNotification === "function") {
+    showKerjivaNotification(message, type);
+    notificationEl.hidden = true;
+    return;
+  }
 
+  // Fallback jika fungsi notifikasi global belum tersedia
+  statusEl.textContent = message;
   notificationEl.className =
     `interview-notification ${type}`;
-
   notificationEl.hidden = false;
 }
 

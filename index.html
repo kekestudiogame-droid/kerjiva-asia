@@ -185,6 +185,36 @@
 
   <div class="hamburger-divider"></div>
 
+  
+  <!-- COUNTRY SWITCHER -->
+  <div class="language-switcher country-switcher">
+
+    <label
+      for="countrySelect"
+      class="language-switcher-label"
+    >
+      Country / Negara
+    </label>
+
+    <select
+      id="countrySelect"
+      class="language-select"
+      aria-label="Select country"
+      onchange="if (this.value) window.location.href = this.value;"
+    >
+      <option value="https://my.kerjiva.com/" selected>
+        🇲🇾 Malaysia
+      </option>
+
+      <option value="https://kerjiva.com/">
+        🇮🇩 Indonesia
+      </option>
+
+    </select>
+
+  </div>
+
+
   <!-- LANGUAGE -->
   <div class="language-switcher">
     <label

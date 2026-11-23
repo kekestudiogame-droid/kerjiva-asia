@@ -779,7 +779,7 @@ rights_footer: "© Kerjiva - Platform Kerjaya Malaysia",
 // ================= INFORMATION CENTER - ARTICLE 6 =================
 
 scam_menu_title: "Panduan Mengelakkan Penipuan Pekerjaan",
-
+     
 scam_back_home: "← Kembali ke Kerjiva",
 
 scam_banner_alt: "Panduan Mengelakkan Penipuan Pekerjaan - Kerjiva",

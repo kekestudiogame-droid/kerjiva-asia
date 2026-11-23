@@ -33,6 +33,7 @@
     menuCommunity: "Komuniti Kerjiva Malaysia",
     menuJobs: "Pekerjaan",
     menuContactUs: "Hubungi Kami",
+    menuCountry: "Negara",
     menuHelp: "Bantuan",
     menuSettings: "Tetapan",
     menuLogout: "Log Keluar",

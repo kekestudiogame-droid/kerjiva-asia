@@ -859,6 +859,78 @@ scam_conclusion: "Berhati-hati ketika mencari pekerjaan merupakan langkah pentin
 scam_closing: "Kerjiva — Kerjaya Anda, Masa Depan Anda.",
 
 scam_footer: "© Kerjiva - Platform Kerjaya Malaysia",
+     
+
+// ================= INFORMATION CENTER - ARTICLE 7 =================
+
+kerjiva_features_menu_title: "Mengapa Memilih Kerjiva?",
+
+kcp_back_home: "← Kembali ke Kerjiva",
+kcp_category: "MENGENAI KERJIVA",
+kcp_title: "Mengapa Memilih Kerjiva? Platform Kerjaya untuk Pencari Kerja dan Syarikat di Malaysia",
+kcp_subtitle: "Kenali Kerjiva, platform kerjaya Malaysia yang membantu pencari kerja meneroka peluang pekerjaan dan syarikat menguruskan proses pengambilan pekerja melalui pelbagai ciri dalam satu platform.",
+
+kcp_intro_1: "Mencari pekerjaan dan mengenal pasti calon yang sesuai merupakan dua perkara penting dalam dunia pekerjaan. Pencari kerja memerlukan akses kepada maklumat jawatan kosong yang relevan, manakala syarikat memerlukan cara yang praktikal untuk memperkenalkan peluang pekerjaan dan menjangkau bakal pekerja.",
+kcp_intro_2: "Kerjiva menghimpunkan keperluan pencari kerja dan syarikat di satu tempat.",
+kcp_intro_3: "Melalui ciri-ciri yang tersedia, Kerjiva bertujuan membantu pencari kerja meneroka peluang kerjaya serta membantu syarikat menguruskan maklumat jawatan kosong dan pengambilan calon.",
+kcp_intro_4: "Kerjiva dibangunkan untuk memudahkan pencarian pekerjaan dan pengurusan pengambilan pekerja melalui komputer serta peranti mudah alih.",
+
+kcp_jobseeker_heading: "Manfaat untuk Pencari Kerja",
+kcp_jobseeker_intro: "Kerjiva menyediakan beberapa ciri untuk membantu pencari kerja meneroka peluang dan menguruskan aktiviti pencarian pekerjaan.",
+kcp_jobseeker_1_heading: "1. Mencari Maklumat Jawatan Kosong",
+kcp_jobseeker_1_text: "Gunakan ciri carian pekerjaan untuk meneroka peluang yang diiklankan oleh syarikat. Semak butiran pekerjaan dan pertimbangkan sama ada jawatan tersebut sesuai dengan minat serta kelayakan anda.",
+kcp_jobseeker_2_heading: "2. Menguruskan Profil Anda",
+kcp_jobseeker_2_text: "Lengkapkan profil peribadi anda untuk membantu syarikat mengetahui latar belakang dan maklumat diri anda. Profil yang tepat dan sentiasa dikemas kini membantu anda menyampaikan maklumat secara lebih teratur.",
+kcp_jobseeker_3_heading: "3. Menyimpan dan Menguruskan Dokumen",
+kcp_jobseeker_3_text: "Dokumen Saya membolehkan anda menyimpan dan menguruskan dokumen yang diperlukan untuk permohonan pekerjaan. Menyimpan fail di satu tempat memudahkan anda membuat persediaan semasa memohon pekerjaan.",
+kcp_jobseeker_4_heading: "4. Menguruskan Permohonan Pekerjaan",
+kcp_jobseeker_4_text: "Permohonan Saya memaparkan permohonan pekerjaan yang telah anda hantar, sekali gus membolehkan anda memantau aktiviti permohonan di satu tempat.",
+kcp_jobseeker_5_heading: "5. Menerima Maklumat Jemputan Temu Duga",
+kcp_jobseeker_5_text: "Jemputan Temu Duga membolehkan anda melihat jemputan temu duga daripada syarikat serta mengikuti jadual dan maklumat berkaitan.",
+kcp_jobseeker_6_heading: "6. Berkongsi Pengalaman Melalui Komuniti",
+kcp_jobseeker_6_text_1: "Dunia pekerjaan bukan sekadar tentang mencari pekerjaan. Pengalaman, pengetahuan dan cerita yang dikongsi juga mempunyai nilai tersendiri.",
+kcp_jobseeker_6_text_2: "Melalui Komuniti, pengguna boleh berkongsi pengalaman, cerita, soalan dan pendapat, bertukar maklumat serta membina hubungan positif dengan orang lain.",
+
+kcp_company_heading: "Manfaat untuk Syarikat",
+kcp_company_intro: "Kerjiva turut menyediakan ciri-ciri untuk membantu syarikat memperkenalkan peluang pekerjaan dan menguruskan aktiviti pengambilan pekerja.",
+kcp_company_1_heading: "1. Mengiklankan Jawatan Kosong",
+kcp_company_1_text: "Iklankan Jawatan membolehkan syarikat mencipta dan menguruskan maklumat jawatan kosong. Butiran pekerjaan yang jelas membantu calon memahami jawatan, tanggungjawab dan kelayakan yang diperlukan.",
+kcp_company_2_heading: "2. Menguruskan Jawatan Kosong",
+kcp_company_2_text: "Jawatan Saya membolehkan syarikat melihat dan menguruskan jawatan kosong yang telah dicipta, termasuk memantau iklan yang masih dalam draf atau persediaan serta iklan yang telah diterbitkan.",
+kcp_company_3_heading: "3. Melihat Pemohon",
+kcp_company_3_text: "Pemohon Masuk membolehkan syarikat melihat calon yang telah memohon jawatan kosong dan menilai permohonan berdasarkan keperluan pengambilan pekerja.",
+kcp_company_4_heading: "4. Menguruskan Dokumen Permohonan",
+kcp_company_4_text: "Dokumen yang dihantar bersama permohonan membantu syarikat memahami maklumat dan kelayakan calon. Kerjiva menyokong pengurusan dokumen permohonan supaya syarikat dapat menyemak fail yang berkaitan dengan proses pengambilan pekerja.",
+kcp_company_5_heading: "5. Menghantar Jemputan Temu Duga",
+kcp_company_5_text: "Hantar Jemputan Temu Duga membolehkan syarikat menjemput calon menghadiri temu duga serta berkongsi jadual dan maklumat yang berkaitan.",
+
+kcp_access_heading: "Akses Mudah Melalui Pelbagai Peranti",
+kcp_access_text_1: "Kerjiva ialah platform berasaskan web yang boleh diakses melalui komputer meja, komputer riba, tablet dan peranti mudah alih dengan sambungan internet.",
+kcp_access_text_2: "Susun atur responsif membantu pengguna mengakses platform dengan lebih fleksibel melalui pelbagai saiz skrin dan peranti.",
+
+kcp_why_heading: "Mengapa Memilih Kerjiva?",
+kcp_why_text_1: "Pencari kerja mempunyai keperluan yang berbeza, sama ada mencari pekerjaan pertama, membangunkan kerjaya atau meneroka peluang berdasarkan pengalaman profesional. Sementara itu, syarikat memerlukan cara untuk menjangkau calon yang sesuai.",
+kcp_why_text_2: "Kerjiva menyokong kedua-dua keperluan ini dalam satu platform melalui ciri seperti carian pekerjaan, pengurusan profil dan dokumen, pemantauan permohonan, maklumat temu duga, pengiklanan jawatan kosong dan pengurusan pengambilan pekerja.",
+kcp_why_text_3: "Kerjiva terus dibangunkan untuk menyediakan pengalaman yang lebih mudah, praktikal dan berguna kepada pencari kerja serta syarikat di Malaysia.",
+
+kcp_commitment_heading: "Komitmen Kami",
+kcp_commitment_text_1: "Kerjiva berhasrat menjadi platform kerjaya yang berguna di Malaysia dengan menyediakan akses kepada maklumat pekerjaan dan menyokong proses pengambilan pekerja yang lebih lancar.",
+kcp_commitment_text_2: "Kami komited untuk menambah baik perkhidmatan, pengalaman pengguna dan ciri-ciri yang relevan dari semasa ke semasa.",
+kcp_commitment_text_3: "Membina kerjaya dan mencari calon yang sesuai memerlukan masa serta usaha.",
+kcp_commitment_text_4: "Melalui Kerjiva, kami berhasrat menjadikan proses ini lebih mudah diakses oleh pencari kerja dan syarikat.",
+
+kcp_get_started_heading: "Mulakan Langkah Anda Bersama Kerjiva",
+kcp_get_started_text_1: "Adakah anda sedang mencari pekerjaan atau syarikat anda memerlukan calon yang sesuai? Kami menjemput pencari kerja dan syarikat di Malaysia untuk meneroka ciri-ciri yang tersedia di Kerjiva.",
+kcp_get_started_text_2: "Pilih bahagian yang sesuai dengan keperluan anda dan mula meneroka platform ini.",
+kcp_jobseekers_label: "Untuk Pencari Kerja",
+kcp_jobseekers_action: "Teroka peluang pekerjaan, lengkapkan profil, uruskan dokumen dan pantau permohonan anda.",
+kcp_companies_label: "Untuk Syarikat",
+kcp_companies_action: "Cipta iklan jawatan kosong, uruskan calon dan sokong proses pengambilan pekerja anda.",
+kcp_visit_text: "Lawati",
+kcp_visit_end: "untuk mengetahui lebih lanjut tentang Kerjiva dan meneroka ciri-ciri yang tersedia.",
+kcp_closing: "Kerjiva — Platform Kerjaya Malaysia.",
+kcp_footer: "© Kerjiva - Platform Kerjaya Malaysia",
+
 
 
 
